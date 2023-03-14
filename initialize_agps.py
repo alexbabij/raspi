@@ -6,7 +6,7 @@ PAUSE = 0.1
  
 def sendCommand(command):
     command = command + "\r\n"
-    ser.write(command)
+    ser.write(command.encode())
     #ser.flush()
     output = ser.read_until()   # default is \n
     print("Command sent:", output.rstrip())     #rstrip will remove any trailing new lines or carriage return, this makes the output more readable
