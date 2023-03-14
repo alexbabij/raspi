@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import serial, time
  
-port = "/dev/ttyGSM2"
+port = "/dev/ttyGSM1"
 PAUSE = 0.1
  
 def sendCommand(command):
@@ -57,7 +57,16 @@ AT+UGPS=[mode],[aid_mode],[GNSS_systems]
  AT+UGPS=0              Turn off GNSS
  AT+UGPS=1,2,67         Start the GNSS with GPS+SBAS+GLONASS systems and AssistNow Offline aiding
 '''
-#Turn on GNSS
+sendCommand("AT+CFUN=0")                                #Turn off radio
+ 
+sendCommand("AT+CGDCONT=1,\"IP\",\"hologram\"")         #Set the APN for network operator
+ 
+sendCommand("AT+CFUN=1")                                #Turn on radio
+time.sleep(2)
+sendCommand("AT+UPSD=0,0,0")                            #Set the PDP type to IPv4
+sendCommand("AT+UPSD=0,100,1")                          #Profile #0 is mapped on CID=1
+sendCommand("AT+UPSDA=0,3")                             #Activate the PSD profile
+time.sleep(2)
 sendCommand("AT+UGPS=1,1,67")  #Start the GNSS with GPS+SBAS+GLONASS systems and local aiding.
  
 '''
