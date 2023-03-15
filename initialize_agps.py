@@ -26,11 +26,14 @@ time.sleep(2)
 sendCommand("AT+CFUN=1")                                #Turn on radio
 time.sleep(2)
 sendCommand("AT+CGACT=1,1")
+time.sleep(2)
 sendCommand("AT+UPSD=0,0,0")                            #Set the PDP type to IPv4
+time.sleep(2)
 sendCommand("AT+UPSD=0,100,1")                          #Profile #0 is mapped on CID=1
+time.sleep(2)
 sendCommand("AT+UPSDA=0,3")                             #Activate the PSD profile
 time.sleep(2)
-sendCommand("AT+UGPS=1,4,67")  #Start the GNSS with GPS+SBAS+GLONASS systems and local aiding.
+#sendCommand("AT+UGPS=1,4,67")  #Start the GNSS with GPS+SBAS+GLONASS systems and local aiding.
  
 '''
 The above command will response with a response code indicating if there were any errors.
