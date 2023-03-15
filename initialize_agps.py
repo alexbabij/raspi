@@ -18,12 +18,13 @@ def sendCommand(command):
 ser = serial.Serial(port, baudrate = 115200, timeout = 0.2)
  
  
-
+'''
 sendCommand("AT+CFUN=0")                                #Turn off radio
 time.sleep(2)
 sendCommand("AT+CGDCONT=1,\"IP\",\"hologram\"")         #Set the APN for network operator
 time.sleep(2)
 sendCommand("AT+CFUN=1")                                #Turn on radio
+'''#Should be unnessecary.
 time.sleep(2)
 sendCommand("AT+CGACT=1,1")
 time.sleep(2)
