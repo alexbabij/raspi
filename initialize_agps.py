@@ -26,7 +26,7 @@ time.sleep(2)
 sendCommand("AT+CFUN=1")                                #Turn on radio
 '''#Should be unnessecary.
 time.sleep(2)
-sendCommand("AT+CGACT=1,1")
+#sendCommand("AT+CGACT=1,1") #Should be unnessecary?
 time.sleep(2)
 sendCommand("AT+UPSD=0,0,0")                            #Set the PDP type to IPv4
 time.sleep(2)
