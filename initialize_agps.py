@@ -15,7 +15,7 @@ def sendCommand(command):
     print("response", response)
     time.sleep(PAUSE)
  
-ser = serial.Serial(port, baudrate = 9600, timeout = 0.2)
+ser = serial.Serial(port, baudrate = 115200, timeout = 0.2)
  
  
 '''
