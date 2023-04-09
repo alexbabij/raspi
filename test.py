@@ -1,20 +1,22 @@
 #!/usr/bin/env python
+#requires python 2.7
 import serial, time
  
 port = "/dev/ttyGSM1"
-PAUSE = 0.1
+PAUSE = 0.5
  
 def sendCommand(command):
     command = command + "\r\n"
-    ser.write(command.encode())
+    ser.write(command)
     #ser.flush()
     output = ser.read_until()   # default is \n
-    print("Command sent:", output.rstrip())     #rstrip will remove any trailing new lines or carriage return, this makes the output more readable
-    response = ser.read_until()
-    #response = ser.read(80)
-    print("response", response)
+    print "Command sent:", output.rstrip()     #rstrip will remove any trailing new lines or carriage return, this makes the output more readable
+    #response = ser.read_until()
+    response = ser.read(120)
+    print "response", response
     time.sleep(PAUSE)
  
+
 ser = serial.Serial(port, baudrate = 115200, timeout = 0.2)
 sendCommand("AT+UGPS?")               #Query gps state
  
