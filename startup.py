@@ -19,11 +19,11 @@ def sendCheck(command):
 
 checkResult = '0'
 checkTime = 0
-checkTime5 = 5
+checkTime5 = 100
 
 while checkResult != '4':
 
-    print(f"Waiting for cellular connection ({checkTime:.1f}s)", "\r")
+    print(f"Waiting for cellular connection ({checkTime:.1f}s)", end="\r")
     
     if checkTime5 >= 7:
         checkResult = sendCheck("AT+UCGED?")
