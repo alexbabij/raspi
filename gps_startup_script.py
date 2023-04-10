@@ -44,8 +44,8 @@ def sendCommand(command):
     print("response", response.decode())
     respString = response.decode()
     startPos = respString.find("\n+UCGED: ") #starting position of response string (read_until doesnt clear the serial buffer, so running it twice in a row will detect our input twice)
-    substring = respString[startPos+9:startPos+16:1]
-    print("response 2", substring)
+    substring = respString[startPos+15]
+    print("response 2:",substring)
     time.sleep(PAUSE) # basically wait to send the next command
 
 
