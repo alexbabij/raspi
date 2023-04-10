@@ -25,10 +25,10 @@ while checkResult != '4':
 
     print("Waiting for cellular connection ({checkTime:.1f})s")
     
-    if checkTime5 >= 5:
+    if checkTime5 >= 8:
         checkResult = sendCheck("AT+UCGED?")
         checkTime += PAUSE*2 #running the function adds time (by design) so we actually need to include this
-        checkTime5 = PAUSE*2 
+        checkTime5 = 0 
     
     checkTime5 += 1
     checkTime += 1
