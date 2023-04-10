@@ -4,6 +4,13 @@ ser = serial.Serial(port, baudrate = 115200, timeout = 1) #make the timeout pret
 PAUSE = 0.1
 print("Startup\n")
 
+time.sleep(10.0) #Give it time to set up the multiplexing with cmux
+#Start by running our multipex configuration script
+
+with open("initialize_multiplex.py") as f:
+    exec(f.read())
+
+
 servStateDict = {'0': 'not known or not detectable', '1': 'radio off', '2': 'searching', '3': 'no service', '4': 'registered', '5': "string parsing or other error"}
 def sendCheck(command):
     command = command + "\r\n" #\r is carriage return which I think signals the end of the command
@@ -55,5 +62,7 @@ while checkResult != '4':
     
 print("\nReady, running assisted GPS setup")
 
-
+time.sleep(1.0)
+with open("initialize_agps.py") as f:
+    exec(f.read())
 #Need to make a second function to just send commands since sendCheck is its own thing
