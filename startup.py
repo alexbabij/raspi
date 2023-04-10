@@ -66,4 +66,28 @@ print("\nReady, running assisted GPS setup\n")
 time.sleep(1.0)
 with open("initialize_agps.py") as f:
     exec(f.read())
-#Need to make a second function to just send commands since sendCheck is its own thing
+#Running them like this doesnt check if they were truly successful, they just probably will be, but there is no actual check
+
+time.sleep(1.0)
+
+GPSParams = '1,4,71'
+print("\nTurning on GPS with AT+UGPS="+GPSParams)
+
+def sendCommand(command):
+    command = command + "\r\n"
+    ser.write(command.encode())
+    output = ser.read_until()   # default is \n
+    print("Command sent:", output.rstrip().decode())     #rstrip will remove any trailing new lines or carriage return, this makes the output more readable
+    response = ser.read_until()
+    #response = ser.read(80)
+    print("response", response.decode())
+    time.sleep(PAUSE)
+    return response
+
+sendCommand('AT+UGPS='+GPSParams)
+time.sleep(1.0)
+gpsPResp = sendCommand('AT+UGPS=?')
+#Check if the gps is turned on with our parameters
+if gpsPResp.decode()[7:] != GPSParams: #there is no "7:end" in python, just leave this blank
+    print("\nGPS setup failed, returned configuration of:", gpsPResp.decode())
+
