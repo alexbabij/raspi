@@ -3,6 +3,16 @@ import serial, time
  
 port = "/dev/ttyGSM1"
 PAUSE = 0.1
+
+
+# variable_to_chek = 0
+
+# while(variable_to_chek != 1):
+#     print("balls")
+#     variable_to_chek = gpsUpdate()
+#     x = 0 - 9
+
+# continuing = 1+ 1
  
 def sendCommand(command):
     command = command + "\r\n"
