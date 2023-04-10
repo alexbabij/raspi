@@ -28,7 +28,7 @@ import serial, time
 # # OK
 
 port = "/dev/ttyGSM1"
-ser = serial.Serial(port, baudrate = 115200, timeout = 0.2)
+ser = serial.Serial(port, baudrate = 115200, timeout = 1) #make the timeout pretty big because it takes a second for it to open the serial channel I think
 PAUSE = 0.1
  
 def sendCommand(command):
@@ -36,11 +36,12 @@ def sendCommand(command):
     ser.write(command.encode()) #.write sends the command over the serial port "ser"
     #ser.flush()
     cmdSent = ser.read_until('\n')   # default is \n
-    print("Command sent:", cmdSent.rstrip())     #rstrip will remove any trailing new lines or carriage return from what we just sent, this makes the output more readable
+    print("Command sent:", cmdSent.rstrip().decode())     #rstrip will remove any trailing new lines or carriage return from what we just sent, this makes the output more readable
     response = ser.read_until(b'OK')
     #response = ser.read(80) #This would read UP TO 80 bytes at which point it will stop, or it will stop if it reaches the timeout period before collecting 80 bytes
-    print("response", response)
+    print("response", response.decode())
     time.sleep(PAUSE) # basically wait to send the next command
 
 
+sendCommand("AT+UCGED?")
 sendCommand("AT+UCGED?")
