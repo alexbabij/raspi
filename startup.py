@@ -37,3 +37,4 @@ while checkResult != '4':
     if checkTime >= 60:
         break
     
+print("Ready")
