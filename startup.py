@@ -40,4 +40,4 @@ while checkResult != '4':
         print("Timeout no connection")
         break
     
-print("Ready")
+print("\nReady")
