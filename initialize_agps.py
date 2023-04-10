@@ -19,14 +19,14 @@ def sendCommand(command):
     ser.write(command.encode())
     #ser.flush()
     output = ser.read_until()   # default is \n
-    print("Command sent:", output.rstrip())     #rstrip will remove any trailing new lines or carriage return, this makes the output more readable
+    print("Command sent:", output.rstrip().decode())     #rstrip will remove any trailing new lines or carriage return, this makes the output more readable
     response = ser.read_until()
     #response = ser.read(80)
-    print("response", response)
+    print("response", response.decode())
     time.sleep(PAUSE)
  
 ser = serial.Serial(port, baudrate = 115200, timeout = 0.2)
- 
+time.sleep(1.0)
  
 '''
 sendCommand("AT+CFUN=0")                                #Turn off radio
