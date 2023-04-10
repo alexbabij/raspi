@@ -6,7 +6,6 @@ PAUSE = 0.1
 def sendCheck(command):
     command = command + "\r\n" #\r is carriage return which I think signals the end of the command
     ser.write(command.encode()) #.write sends the command over the serial port "ser"
-    time.sleep(PAUSE)
     #ser.flush()
     #rstrip will remove any trailing new lines or carriage return from what we just sent, this makes the output more readable
     response = ser.read_until(b'OK')
@@ -18,7 +17,7 @@ def sendCheck(command):
     return servState
 
 
-checkResult = sendCheck("AT+UCGED?")
+checkResult = 0
 checkTime = 0
 checkTime5 = 5
 
