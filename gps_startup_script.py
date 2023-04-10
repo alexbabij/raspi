@@ -27,6 +27,8 @@ import serial, time
 # # 67,11,255,0,255,255,0,0,0
 # # OK
 
+#b'AT+UCGED?\r\r\n+UCGED: 2\r\n6,4,fff,fff\r\n5110,13,50,50,ffff,0000000,254,d0fafd59,ff49,b1,27,15,0.50,1,255,255,28,255,255,0,255,255,0\r\n\r\nOK'
+
 port = "/dev/ttyGSM1"
 ser = serial.Serial(port, baudrate = 115200, timeout = 1) #make the timeout pretty big because it takes a second for it to open the serial channel I think
 PAUSE = 0.1
@@ -41,7 +43,8 @@ def sendCommand(command):
     #response = ser.read(80) #This would read UP TO 80 bytes at which point it will stop, or it will stop if it reaches the timeout period before collecting 80 bytes
     print("response", response.decode())
     respString = response.decode()
-    substring = respString[16:20:1]
+    startPos = respString.find("\n+UCGED: ") #starting position of response string (read_until doesnt clear the serial buffer, so running it twice in a row will detect our input twice)
+    substring = respString[startPos+9:startPos+16:1]
     print("response 2", substring)
     time.sleep(PAUSE) # basically wait to send the next command
 
