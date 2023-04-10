@@ -2,7 +2,7 @@ import serial, time
 port = "/dev/ttyGSM1"
 ser = serial.Serial(port, baudrate = 115200, timeout = 1) #make the timeout pretty big because it takes a second for it to open the serial channel I think
 PAUSE = 0.1
- 
+print("Start")
 def sendCheck(command):
     command = command + "\r\n" #\r is carriage return which I think signals the end of the command
     ser.write(command.encode()) #.write sends the command over the serial port "ser"
