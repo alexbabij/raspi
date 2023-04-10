@@ -23,9 +23,9 @@ checkTime5 = 5
 
 while checkResult != '4':
 
-    print("Waiting for cellular connection ({checkTime:.1f})s")
+    print(f"Waiting for cellular connection ({checkTime:.1f}s)", "\r")
     
-    if checkTime5 >= 8:
+    if checkTime5 >= 7:
         checkResult = sendCheck("AT+UCGED?")
         checkTime += PAUSE*2 #running the function adds time (by design) so we actually need to include this
         checkTime5 = 0 
@@ -34,7 +34,8 @@ while checkResult != '4':
     checkTime += 1
     time.sleep(1.0)
 
-    if checkTime >= 60:
+    if checkTime >= 120:
+        print("Timeout no connection")
         break
     
 print("Ready")
