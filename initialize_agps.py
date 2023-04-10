@@ -35,15 +35,15 @@ sendCommand("AT+CGDCONT=1,\"IP\",\"hologram\"")         #Set the APN for network
 time.sleep(2)
 sendCommand("AT+CFUN=1")                                #Turn on radio
 '''#Should be unnessecary.
-time.sleep(2)
+time.sleep(0.5)
 #sendCommand("AT+CGACT=1,1") #Should be unnessecary?
-time.sleep(2)
+time.sleep(0.5)
 sendCommand("AT+UPSD=0,0,0")                            #Set the PDP type to IPv4
-time.sleep(2)
+time.sleep(0.5)
 sendCommand("AT+UPSD=0,100,1")                          #Profile #0 is mapped on CID=1
-time.sleep(2)
+time.sleep(0.5)
 sendCommand("AT+UPSDA=0,3")                             #Activate the PSD profile
-time.sleep(2)
+time.sleep(0.5)
 #sendCommand("AT+UGPS=1,4,67")  #Start the GNSS with GPS+SBAS+GLONASS systems and local aiding.
  
 '''
