@@ -33,4 +33,7 @@ while checkResult != '4':
     checkTime5 += 1
     checkTime += 1
     time.sleep(1.0)
+
+    if checkTime >= 60:
+        break
     
