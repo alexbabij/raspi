@@ -17,7 +17,7 @@ def sendCheck(command):
     return servState
 
 
-checkResult = 0
+checkResult = '0'
 checkTime = 0
 checkTime5 = 5
 
