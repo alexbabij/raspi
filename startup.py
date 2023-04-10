@@ -21,7 +21,7 @@ def sendCheck(command):
 
 checkResult = '0'
 checkTime = 0
-checkTime5 = 100
+checkTime5 = 6
 
 while checkResult != '4':
 
