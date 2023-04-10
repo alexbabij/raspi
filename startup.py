@@ -45,8 +45,8 @@ checkTime = 0
 checkTime5 = 6
 
 while checkResult != '4':
-
-    print("Waiting for cellular connection. Status:" , servStateDict[checkResult], f"({checkTime:.1f}s)", end="\r")
+    print('\r', end='') #clear the previous line
+    print("Waiting for cellular connection. Status:" , servStateDict[checkResult], f"({checkTime:.1f}s)")
     
     if checkTime5 >= 7:
         checkResult = sendCheck("AT+UCGED?")
