@@ -15,7 +15,7 @@ def sendCommand(command):
     print("response", response.decode())
     time.sleep(PAUSE)
  
-ser = serial.Serial(port, baudrate = 115200, timeout = 0.2)
+ser = serial.Serial(port, baudrate = 115200, timeout = 0.4)
 time.sleep(1.0) 
  
 sendCommand("AT+UGPRF=2")               #Configure multiplexer
