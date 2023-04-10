@@ -47,7 +47,7 @@ def sendCommand(command):
     print("response", response.decode())
     respString = response.decode()
     startPos = respString.find("+UCGED: ") #starting position of response string (read_until doesnt clear the serial buffer, so running it twice in a row will detect our input twice)
-    servState = respString[startPos+14]
+    servState = respString[startPos+15]
     print("Radio Service State:",servState+":",servStateDict[servState])
     time.sleep(PAUSE) # basically wait to send the next command
 
