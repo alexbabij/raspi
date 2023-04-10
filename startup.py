@@ -23,7 +23,7 @@ checkTime5 = 5
 
 while checkResult != '4':
 
-    print("Waiting for cellular connection ("+checkTime+")s")
+    print("Waiting for cellular connection ({checkTime:.1f})s")
     
     if checkTime5 >= 5:
         checkResult = sendCheck("AT+UCGED?")
