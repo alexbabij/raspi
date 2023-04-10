@@ -87,6 +87,7 @@ def sendCommand(command):
 sendCommand('AT+UGPS='+GPSParams)
 time.sleep(1.0)
 gpsPResp = sendCommand('AT+UGPS?')
+print(gpsPResp.decode()[7:])
 #Check if the gps is turned on with our parameters
 if gpsPResp.decode()[7:] != GPSParams: #there is no "7:end" in python, just leave this blank
     print("\nGPS setup failed, returned configuration of:", gpsPResp.decode())
