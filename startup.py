@@ -12,7 +12,7 @@ def sendCheck(command):
     #response = ser.read(80) #This would read UP TO 80 bytes at which point it will stop, or it will stop if it reaches the timeout period before collecting 80 bytes
     respString = response.decode()
     with open("startup_log.txt", "w") as f: #save our output to a log file
-        f.write(str(respString))
+        f.write(repr(respString))
     startPos = respString.find("+UCGED: ") #starting position of response string (read_until doesnt clear the serial buffer, so running it twice in a row will detect our input twice)
     servState = respString[startPos+13]
     time.sleep(PAUSE) # basically wait to send the next command
