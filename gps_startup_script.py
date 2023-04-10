@@ -46,7 +46,7 @@ def sendCommand(command):
     #response = ser.read(80) #This would read UP TO 80 bytes at which point it will stop, or it will stop if it reaches the timeout period before collecting 80 bytes
     print("response", response.decode())
     respString = response.decode()
-    startPos = respString.find("\n+UCGED: ") #starting position of response string (read_until doesnt clear the serial buffer, so running it twice in a row will detect our input twice)
+    startPos = respString.find("+UCGED: ") #starting position of response string (read_until doesnt clear the serial buffer, so running it twice in a row will detect our input twice)
     servState = respString[startPos+14]
     print("Radio Service State:",servState+":",servStateDict[servState])
     time.sleep(PAUSE) # basically wait to send the next command
