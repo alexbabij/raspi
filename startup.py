@@ -10,6 +10,7 @@ time.sleep(10.0) #Give it time to set up the multiplexing with cmux
 with open("initialize_multiplex.py") as f:
     exec(f.read())
 
+print("\n")
 
 servStateDict = {'0': 'not known or not detectable', '1': 'radio off', '2': 'searching', '3': 'no service', '4': 'registered', '5': "string parsing or other error"}
 def sendCheck(command):
@@ -60,7 +61,7 @@ while checkResult != '4':
         print("Timeout no connection")
         break
     
-print("\nReady, running assisted GPS setup")
+print("\nReady, running assisted GPS setup\n")
 
 time.sleep(1.0)
 with open("initialize_agps.py") as f:
