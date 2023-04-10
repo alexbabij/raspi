@@ -40,8 +40,11 @@ def sendCommand(command):
     response = ser.read_until(b'OK')
     #response = ser.read(80) #This would read UP TO 80 bytes at which point it will stop, or it will stop if it reaches the timeout period before collecting 80 bytes
     print("response", response.decode())
+    respString = response.decode()
+    substring = respString[16:20:1]
+    print("response 2", substring)
     time.sleep(PAUSE) # basically wait to send the next command
 
 
 sendCommand("AT+UCGED?")
-sendCommand("AT+UCGED?")
+#+UCGED: 2\r\n6,4
