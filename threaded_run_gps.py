@@ -53,7 +53,7 @@ if __name__ == '__main__':
       print("\n")
       print('sats        ' , gpsd.satellites)
  
-      time.sleep(5) #set to whatever
+      time.sleep(0.1) #set to whatever
  
   except (KeyboardInterrupt, SystemExit): #when you press ctrl+c
     print("\nKilling Thread...")
