@@ -73,19 +73,22 @@ time.sleep(1.0)
 GPSParams = '1,4,71'
 print("\nTurning on GPS with AT+UGPS="+GPSParams)
 
-def sendCommand(command,timeout=1): #optional function input for timeout
+def sendCommand(command,readall=False): #optional function input for timeout
     command = command + "\r\n"
     ser.write(command.encode())
     output = ser.read_until(b'\n')   # default is \n
     print("Command sent:", output.rstrip().decode())     #rstrip will remove any trailing new lines or carriage return, this makes the output more readable
-    response = ser.read_until(b'\n')
+    if readall == False:
+        response = ser.read_until(b'\n')
+    else:
+        response = ser.read_all()
     #response = ser.read(80)
     print("response", response.decode())
     time.sleep(PAUSE)
     return response
 
 sendCommand('AT+UGPS='+GPSParams,timeout=3)
-ser.flush()
+ser.read_all()
 time.sleep(7.0)
 gpsPResp = sendCommand('AT+UGPS?')
 gpsPResp = gpsPResp.rstrip()
