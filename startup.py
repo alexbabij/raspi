@@ -87,7 +87,7 @@ def sendCommand(command,readall=False): #optional function input for timeout
     time.sleep(PAUSE)
     return response
 
-sendCommand('AT+UGPS='+GPSParams,timeout=3)
+sendCommand('AT+UGPS='+GPSParams,readall=True)
 ser.read_all()
 time.sleep(7.0)
 gpsPResp = sendCommand('AT+UGPS?')
