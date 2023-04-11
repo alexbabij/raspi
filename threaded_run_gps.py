@@ -22,8 +22,12 @@ class GpsPoller(threading.Thread):
  
   def run(self):
     global gpsd
+    global elapsed
     while gpsp.running:
+      start = time.time()
       gpsd.next() #this will continue to loop and grab EACH set of gpsd info to clear the buffer
+      end = time.time()
+      elapsed = (end-start)
  
 if __name__ == '__main__':
   gpsp = GpsPoller() # create the thread
@@ -51,6 +55,8 @@ if __name__ == '__main__':
       print('track       ' , gpsd.fix.track)
       print('mode        ' , gpsd.fix.mode)
       print("\n")
+      print('Time/refresh',elapsed)
+      print('\n')
       print('sats        ' , gpsd.satellites)
  
       time.sleep(0.1) #set to whatever
