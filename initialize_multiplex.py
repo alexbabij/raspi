@@ -30,8 +30,10 @@ sendCommand("AT+UGGGA=1")               #Activate storing of last value of $GGA
 sendCommand("AT+UGRMC=1")               #Activate storing of last value of $RMC
  
 #Ennable communication betweenn GPS and GSM
-sendCommand("AT+UGIND=1")               #Activate the unsolicited aiding result
+#sendCommand("AT+UGIND=1")               #Activate the unsolicited aiding result
     #Applying this in channel ttyGSM1 will not apply it in ttyGSM2
+
+    #Should do this last so we don't have to deal with it in the responses
  
  
 ''''

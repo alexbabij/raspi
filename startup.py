@@ -73,7 +73,7 @@ time.sleep(1.0)
 GPSParams = '1,4,71'
 print("\nTurning on GPS with AT+UGPS="+GPSParams)
 
-def sendCommand(command):
+def sendCommand(command): #optional function input for timeout
     command = command + "\r\n"
     ser.write(command.encode())
     output = ser.read_until()   # default is \n
@@ -85,7 +85,8 @@ def sendCommand(command):
     return response
 
 sendCommand('AT+UGPS='+GPSParams)
-time.sleep(1.0)
+ser.flush()
+time.sleep(5.0)
 gpsPResp = sendCommand('AT+UGPS?')
 gpsPResp = gpsPResp.rstrip()
 #Check if the gps is turned on with our parameters
@@ -94,3 +95,6 @@ if gpsPResp.decode()[7:] == GPSParams: #there is no "7:end" in python, just leav
 else:
     print("\nGPS setup failed, returned configuration of:", gpsPResp.decode())
 
+
+#Enable communication betweenn GPS and GSM by turning on unsolicited aiding 
+sendCommand("AT+UGIND=1")
