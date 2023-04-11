@@ -4,7 +4,7 @@ ser = serial.Serial(port, baudrate = 115200, timeout = 1) #make the timeout pret
 PAUSE = 0.1
 print("Startup\n")
 
-time.sleep(10.0) #Give it time to set up the multiplexing with cmux
+#time.sleep(10.0) #Give it time to set up the multiplexing with cmux
 #Start by running our multipex configuration script
 
 with open("initialize_multiplex.py") as f:
@@ -85,7 +85,7 @@ def sendCommand(command): #optional function input for timeout
     return response
 
 sendCommand('AT+UGPS='+GPSParams)
-time.sleep(5.0)
+time.sleep(10.0)
 gpsPResp = sendCommand('AT+UGPS?')
 gpsPResp = gpsPResp.rstrip()
 #Check if the gps is turned on with our parameters
@@ -94,6 +94,6 @@ if gpsPResp.decode()[7:] == GPSParams: #there is no "7:end" in python, just leav
 else:
     print("\nGPS setup failed, returned configuration of:", gpsPResp.decode())
 
-time.sleep(1.0)
+time.sleep(3.0)
 #Enable communication betweenn GPS and GSM by turning on unsolicited aiding 
 sendCommand("AT+UGIND=1")
