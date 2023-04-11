@@ -94,6 +94,6 @@ if gpsPResp.decode()[7:] == GPSParams: #there is no "7:end" in python, just leav
 else:
     print("\nGPS setup failed, returned configuration of:", gpsPResp.decode())
 
-
+time.sleep(1.0)
 #Enable communication betweenn GPS and GSM by turning on unsolicited aiding 
 sendCommand("AT+UGIND=1")
