@@ -20,15 +20,16 @@ def sendCommand(command,timeout=1): #optional function input for timeout
     return response
 
 sendCommand('AT+UGPS='+GPSParams,timeout=10)
-time.sleep(5.0)
-gpsPResp = sendCommand('AT+UGPS?')
-gpsPResp = gpsPResp.rstrip()
-#Check if the gps is turned on with our parameters
-if gpsPResp.decode()[7:] == GPSParams: #there is no "7:end" in python, just leave this blank
-    print("Success")
-else:
-    print("\nGPS setup failed, returned configuration of:", gpsPResp.decode())
 
-# time.sleep(3.0)
-# #Enable communication betweenn GPS and GSM by turning on unsolicited aiding 
-# sendCommand("AT+UGIND=1")
+# time.sleep(5.0)
+# gpsPResp = sendCommand('AT+UGPS?')
+# gpsPResp = gpsPResp.rstrip()
+# #Check if the gps is turned on with our parameters
+# if gpsPResp.decode()[7:] == GPSParams: #there is no "7:end" in python, just leave this blank
+#     print("Success")
+# else:
+#     print("\nGPS setup failed, returned configuration of:", gpsPResp.decode())
+
+# # time.sleep(3.0)
+# # #Enable communication betweenn GPS and GSM by turning on unsolicited aiding 
+# # sendCommand("AT+UGIND=1")
