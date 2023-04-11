@@ -11,9 +11,9 @@ print("\nTurning on GPS with AT+UGPS="+GPSParams)
 def sendCommand(command,timeout=1): #optional function input for timeout
     command = command + "\r\n"
     ser.write(command.encode())
-    output = ser.read_until('\n')   # default is \n
+    output = ser.read_until(b'\n')   # default is \n
     print("Command sent:", output.rstrip().decode())     #rstrip will remove any trailing new lines or carriage return, this makes the output more readable
-    response = ser.read_until('\n',timeout)
+    response = ser.read_until(b'\n',timeout)
     #response = ser.read(80)
     print("response", response.decode())
     time.sleep(PAUSE)
