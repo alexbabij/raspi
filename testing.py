@@ -13,13 +13,13 @@ def sendCommand(command,timeout=1): #optional function input for timeout
     ser.write(command.encode())
     output = ser.read_until(b'\n')   # default is \n
     print("Command sent:", output.rstrip().decode())     #rstrip will remove any trailing new lines or carriage return, this makes the output more readable
-    response = ser.read_until(b'\n',timeout)
+    response = ser.read_until(b'\n')
     #response = ser.read(80)
     print("response", response.decode())
     time.sleep(PAUSE)
     return response
 
-sendCommand('AT+UGPS='+GPSParams,timeout=3)
+sendCommand('AT+UGPS='+GPSParams,timeout=10)
 time.sleep(5.0)
 gpsPResp = sendCommand('AT+UGPS?')
 gpsPResp = gpsPResp.rstrip()
@@ -29,6 +29,6 @@ if gpsPResp.decode()[7:] == GPSParams: #there is no "7:end" in python, just leav
 else:
     print("\nGPS setup failed, returned configuration of:", gpsPResp.decode())
 
-time.sleep(3.0)
-#Enable communication betweenn GPS and GSM by turning on unsolicited aiding 
-sendCommand("AT+UGIND=1")
+# time.sleep(3.0)
+# #Enable communication betweenn GPS and GSM by turning on unsolicited aiding 
+# sendCommand("AT+UGIND=1")
