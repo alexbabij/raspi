@@ -136,3 +136,5 @@ if (updateRate != 1) & (updateRate in updateRDict):
     sendCommand("AT+UGUBX=\""+updateRDict[updateRate]+"\"")
 else:
     print("Invalid or already set update rate")
+
+print("\nEnd Setup")

@@ -1,2 +1,2 @@
-updateRate:1
+updateRate:5
 units:imperial
