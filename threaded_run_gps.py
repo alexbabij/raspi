@@ -7,6 +7,9 @@ from gps import *
 from time import *
 import time
 import threading
+
+#Change the refresh rate here to match one from the gps. compare gpsd time readings with if statement and if they are the same,
+#wait to run again by + 1/2 *Hz so that we can get closer to middle of readings
  
 gpsd = None #seting the global variable
  

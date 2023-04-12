@@ -101,4 +101,35 @@ else:
 ser.read_all() #should do basically the same as flushing the buffer
 time.sleep(1.0)
 #Enable communication betweenn GPS and GSM by turning on unsolicited aiding 
-sendCommand("AT+UGIND=1")
+
+sendCommand("AT+UGIND=1") #If this fails our gps will just not work through gpsd, so we will retry it once (might make it retry n times idk)
+time.sleep(3.0)
+ser.read_all()
+gpsPResp = sendCommand('AT+UGIND?') # I really should stop switching between ' and " randomly
+gpsPResp = gpsPResp.rstrip()
+#Check if the gps is set with our parameters
+if gpsPResp.decode()[8:] == '1': #there is no "7:end" in python, just leave this blank
+    print(gpsPResp.decode()[8])
+else:
+    print(gpsPResp.decode()[7:])
+    #print("\nGPS setup failed, returned configuration of:", gpsPResp.decode())
+
+# with open('configDevice.txt') as file:
+#     config = file.read()
+#     print(config)
+##Not really worth it right now, just do config as variables in here
+
+print("\n")
+updateRate = 1 #in Hz 
+#With our specific gps, with a baud rate of 38400, 10Hz may be unstable idk
+#contains binary strings that must be sent to set each of the different update rates
+#binary stuff is stored as a string since that is the format we will use when we send it
+updateRDict = {1: 'B5 62 06 08 06 00 E8 03 01 00 01 00 01 39', 2: 'B5 62 06 08 06 00 F4 01 01 00 01 00 0B 77', 4: 'B5 62 06 08 06 00 FA 00 01 00 01 00 10 96',
+5: 'B5 62 06 08 06 00 C8 00 01 00 01 00 DE 6A', 8: 'B5 62 06 08 06 00 7D 00 01 00 01 00 93 A8', 10: 'B5 62 06 08 06 00 64 00 01 00 01 00 7A 12'}
+
+#Default update rate is 1 on gps boot, so if we have it set to 1 in here, do nothing
+#We also don't want to send an incomplete binary string somehow i.e. AT+UGUBX="wrong"
+if (updateRate != 1) & (updateRate in updateRDict):
+    sendCommand("AT+UGUBX=\""+updateRDict[updateRate]+"\"")
+else:
+    print("Invalid or already set update rate")
