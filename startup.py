@@ -109,18 +109,21 @@ gpsPResp = sendCommand('AT+UGIND?') # I really should stop switching between ' a
 gpsPResp = gpsPResp.rstrip()
 #Check if the gps is set with our parameters
 if gpsPResp.decode()[8:] == '1': #there is no "7:end" in python, just leave this blank
-    print(gpsPResp.decode()[8])
+    print("\nSuccess")
 else:
-    print(gpsPResp.decode()[7:])
-    #print("\nGPS setup failed, returned configuration of:", gpsPResp.decode())
+    print("\nSetup failed, returned configuration of:", gpsPResp.decode()[8])
+    sendCommand("AT+UGIND=1")
 
-# with open('configDevice.txt') as file:
-#     config = file.read()
-#     print(config)
-##Not really worth it right now, just do config as variables in here
+
+
+#Configure gps settings including update rate
+with open('configDevice.txt') as mycfgfile:
+    config = mycfgfile.read().splitlines() #Read in each line as a list i.e. [a:1, b:2]
+    config = dict([eachLine.split(":") for eachLine in config]) #Split by ":" and turn into dict
 
 print("\n")
-updateRate = 1 #in Hz 
+updateRate = int(config["updateRate"]) #in Hz 
+#It doesn't matter that we can't configure an updateRate that is not an integer i.e. 1.1Hz because we can't just generate the corresponding binary command anyway
 #With our specific gps, with a baud rate of 38400, 10Hz may be unstable idk
 #contains binary strings that must be sent to set each of the different update rates
 #binary stuff is stored as a string since that is the format we will use when we send it

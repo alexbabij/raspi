@@ -9,6 +9,7 @@ try:
  
  
     while True:
+        start = time.time()
         report = gpsd.next() #
         if report['class'] == 'TPV':
              
@@ -20,7 +21,9 @@ try:
             print(getattr(report,'ept','nan'),"\t"),
             print(getattr(report,'speed','nan'),"\t"),
             print(getattr(report,'climb','nan'),"\t")
- 
+            end = time.time()
+            elapsed = (end-start)
+            print('\nTime/refresh',elapsed)
         time.sleep(0.1) 
  
 except (KeyboardInterrupt, SystemExit): #when you press ctrl+c
