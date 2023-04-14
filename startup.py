@@ -137,4 +137,8 @@ if (updateRate != 1) & (updateRate in updateRDict):
 else:
     print("Invalid or already set update rate")
 
+"""
+Need to add a selection for a vehicle solve instead of staionary
+"""
+
 print("\nEnd Setup")
