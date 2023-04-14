@@ -28,7 +28,7 @@ gpsData = []
 counter = 0
 try:
  
-     while True & (counter < 20):
+     while True & (counter <= 10):
         
         start = time.time()
         report = gpsd.next() #
