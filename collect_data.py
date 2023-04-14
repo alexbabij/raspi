@@ -17,7 +17,11 @@ sleepInterval = 1/(updateRate*10) #Maybe tweak this depending on performance
 #to be safe, we will just refresh much faster than we would be getting TPV reports
 
 
-gpsd = gps(mode=WATCH_ENABLE|WATCH_NEWSTYLE) 
+
+#from: https://stackoverflow.com/questions/17984809/how-do-i-create-an-incrementing-filename-in-python
+
+#We want to name the file based on the vehicle used so that later we can select all data for a given vehicle
+vehicleName = "" #make a way to configure this later
 
    
 #We want to not allow the user to start taking data until we have an adequate fix, but we don't really want to terminate it partway 
@@ -25,11 +29,18 @@ gpsd = gps(mode=WATCH_ENABLE|WATCH_NEWSTYLE)
 
 #This is our list that contains all time and velocity samples for the current run
 gpsData = []
+currentData = ['',float('nan')]
 counter = 0
-currentData = ["null",0]
+totCounter = counter
+#write our data to a file every 1 second 
+samplesC = 1 * updateRate
+totSamplesC = 120 * updateRate #Basically a timeout in case we don't stop taking data (120 seconds)
+#Should make a rolling estimation of acceleration to determine where data starts
+gpsd = gps(mode=WATCH_ENABLE|WATCH_NEWSTYLE) 
+
 try:
  
-     while True & (counter <= 10):
+     while True & (totCounter < totSamplesC):
         
         start = time.time()
         report = gpsd.next() #
@@ -50,11 +61,16 @@ try:
             end = time.time()
             elapsed = (end-start)
             print('\nTime/refresh',elapsed)
+
+            #if (counter > samplesC):
+                #with open(gpsDatFile)######################################################################
+
+
         time.sleep(sleepInterval) 
 except KeyError:
         pass #We would rather just skip if we cannot get good data rather than have our stuff error out
 except (KeyboardInterrupt, SystemExit): #when you press ctrl+c
-    print("Done.\nExiting.")
+    print("\nExiting.")
 else:
     print(gpsData)
 
