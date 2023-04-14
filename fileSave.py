@@ -1,17 +1,11 @@
 #The will take the lowest unique available number i.e., if a-2.txt, a-3.txt exists, it will make a-1.txt instead of a-4.txt
 import os
-
-L = [['t1',1],['t2',2],['t3',3]]
-fileCreated = False
-data = L
-vehicle = "car1"
-data2 = [['t4',4],['t5',5],['t6',6]]
-
+#import time
 
 def writeFile(vehicle,data,fileCreated=False,filePath=""):
 #If the file is created during this session we want to write to it, so the first time we run the functoin, we want to create the file,
 #we then want to continue to write to the same file until we re run the entire script that calls this function (we take another set of data)
-    print("CWD:",os.getcwd())
+    #print("CWD:",os.getcwd())
     
     #Check if directory for vehicle exists and if not, create it
     #Changing directory is not limited to the function scope, so we need to reset it when we are done, or else it won't
@@ -31,8 +25,16 @@ def writeFile(vehicle,data,fileCreated=False,filePath=""):
 
 
     os.chdir(os.getcwd()+"/"+vehicle) #Put each vehicle's data in its own folder
-    print("Saving to:",os.getcwd())
+    #print("Saving to:",os.getcwd())
+    
+    #curTime = time.strftime("%Y_%m_%d-%H_%M_%S")
+    #ideally, we could just name our files with the current system time, which also makes it easier to sort through them, but we won't reliably have internet 
+    #access, and our will most likely lose power a lot, so the system time will not be accurate.
 
+    #We will instead use the time that is input in our data list. This is not optimal, since if the location of that entry changes, this method breaks,
+    #but we already hardcoded the tuple size and data type in each position elsewhere in here, so its not that bad.
+
+    #from: https://stackoverflow.com/questions/17984809/how-do-i-create-an-incrementing-filename-in-python
     def next_path(path_pattern):
         """
         Finds the next free path in an sequentially named list of files
@@ -61,10 +63,17 @@ def writeFile(vehicle,data,fileCreated=False,filePath=""):
         return path_pattern % b
 
     if not fileCreated:
-           
-        new_path=next_path("a-%s.txt")
+        #dataTime = "2005-06-08T10:34:48.283Z" = typical format
+        dataTime = data[0][0].replace(":","_") #First position of first tuple is first recorded time
+        dataTime = dataTime.replace(".","_ms")
+        #This should always be unique, since we are including the milliseconds in this naming scheme, 
+        #and we physically can't poll our gps faster than the resolution of the milliseconds field.
+        #We still leave the unique naming function in here, just in case there is some weird case of a collision, and it makes
+        #testing this without actually getting unique data much easier
+
+        new_path=next_path(vehicle+"_"+dataTime+"-"+"%s"+".txt")
         filePath = new_path
-        print(new_path)
+        print("Creating new file at:",new_path)
     
         with open(new_path, "x") as file1: 
             #We include exclusive creation, even though this should never be the case with our checks
@@ -83,6 +92,14 @@ def writeFile(vehicle,data,fileCreated=False,filePath=""):
     #There is definitely a better way to do this, and idk how inefficient this is
     fileCreated = True
     return filePath, fileCreated
+
+
+
+L = [["2005-06-08T10:34:49.283Z",1],['t2',2],['t3',3]]
+fileCreated = False
+data = L
+vehicle = "car1"
+data2 = [['t4',4],['t5',5],['t6',6]]
 
 print("0cwd",os.getcwd())
 filePath, fileCreated = writeFile(vehicle,data,fileCreated,"") #the first time we run it, filePath should be ignored by function
