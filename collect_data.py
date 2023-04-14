@@ -26,6 +26,7 @@ gpsd = gps(mode=WATCH_ENABLE|WATCH_NEWSTYLE)
 #This is our list that contains all time and velocity samples for the current run
 gpsData = []
 counter = 0
+currentData = ["null",0]
 try:
  
      while True & (counter <= 10):
