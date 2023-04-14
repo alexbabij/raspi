@@ -33,8 +33,8 @@ currentData = ['',float('nan')]
 counter = 0
 totCounter = counter
 #write our data to a file every 1 second 
-samplesC = 1 * updateRate
-totSamplesC = 120 * updateRate #Basically a timeout in case we don't stop taking data (120 seconds)
+samplesC = int(config["storage interval"]) * updateRate #Only whole second intervals are allowed otherwise this counter could be a decimal
+totSamplesC = float(config["timeout"]) * updateRate #Basically a timeout in case we don't stop taking data (120 seconds)
 #Should make a rolling estimation of acceleration to determine where data starts
 gpsd = gps(mode=WATCH_ENABLE|WATCH_NEWSTYLE) 
 

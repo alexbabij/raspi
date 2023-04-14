@@ -1,36 +1,31 @@
-import serial, time
-port = "/dev/ttyGSM1"
-ser = serial.Serial(port, baudrate = 115200, timeout = 1) #make the timeout pretty big because it takes a second for it to open the serial channel I think
-PAUSE = 0.1
-print("Startup\n")
-time.sleep(1.0)
+with open('configDevice.txt') as mycfgfile:
+    config = mycfgfile.read().splitlines() #Read in each line as a list i.e. [a:1, b:2]
+    config = dict([eachLine.split(":") for eachLine in config]) 
+#We are parsing the first line description at the top of the file, but its a dictionary, so we really don't care
+    print(config)
 
-GPSParams = '1,4,71'
-print("\nTurning on GPS with AT+UGPS="+GPSParams)
+    print(float(config["storage interval"]))
+    print(type(float(config["storage interval"])))
 
-def sendCommand(command,timeout=1): #optional function input for timeout
-    command = command + "\r\n"
-    ser.write(command.encode())
-    output = ser.read_until(b'\n')   # default is \n
-    print("Command sent:", output.rstrip().decode())     #rstrip will remove any trailing new lines or carriage return, this makes the output more readable
-    response = ser.read_until(b'\n')
-    #response = ser.read(80)
-    print("response", response.decode())
-    time.sleep(PAUSE)
-    return response
 
-sendCommand('AT+UGPS='+GPSParams,timeout=10)
+from testnew import *
 
-ser.flush()
-time.sleep(7.0)
-gpsPResp = sendCommand('AT+UGPS?')
-gpsPResp = gpsPResp.rstrip()
-#Check if the gps is turned on with our parameters
-if gpsPResp.decode()[7:] == GPSParams: #there is no "7:end" in python, just leave this blank
-    print("Success")
-else:
-    print("\nGPS setup failed, returned configuration of:", gpsPResp.decode())
 
-time.sleep(3.0)
-#Enable communication betweenn GPS and GSM by turning on unsolicited aiding 
-sendCommand("AT+UGIND=1")
+L = [["2005-06-08T10:34:49.283Z",1],['t2',2],['t3',3]]
+data = L
+vehicle = config["current vehicle"]
+data2 = [['t4',4],['t5',5],['t6',6]]
+
+print("0cwd",os.getcwd())
+filePath, fileCreated = writeFile(vehicle,data,fileCreated=False) #the first time we run it, filePath should be ignored by function
+print("\n"+filePath,fileCreated)
+print("1cwd",os.getcwd())
+filePath, fileCreated = writeFile(vehicle,data2,fileCreated,filePath)
+print("\n"+filePath,fileCreated)
+print("2cwd",os.getcwd())
+filePath, fileCreated = writeFile("car2",data,fileCreated=False)
+print("3cwd",os.getcwd())
+filePath, fileCreated = writeFile("car2",data,fileCreated,filePath)
+print("4cwd",os.getcwd())
+filePath, fileCreated = writeFile("car2",data2,fileCreated,filePath)
+print("5cwd",os.getcwd())

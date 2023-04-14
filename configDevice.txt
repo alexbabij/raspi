@@ -1,2 +1,6 @@
+Units are Hz, seconds   :null
 updateRate:1
 units:imperial
+timeout:120
+storage interval:1.01
+current vehicle:car1

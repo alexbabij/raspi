@@ -12,19 +12,19 @@ def writeFile(vehicle,data,fileCreated=False,filePath=""):
     #find our data folder that already exists
     cwdOrigin = os.getcwd()
 
-    if not os.path.isdir(os.getcwd()+"/data"):
+    if not os.path.isdir(os.getcwd()+"\data"):
         os.makedirs("data")
         print("Created directory \"data\"")
 
-    os.chdir(os.getcwd()+"/data")
+    os.chdir(os.getcwd()+"\data")
 
     #at this stage, cwd should be in data folder
-    if not os.path.isdir(os.getcwd()+"/"+vehicle): #evaluates to false if dir doesn't exist
+    if not os.path.isdir(os.getcwd()+"\\"+vehicle): #evaluates to false if dir doesn't exist
         os.makedirs(vehicle)
         print("Created directory \""+vehicle+"\"")
 
 
-    os.chdir(os.getcwd()+"/"+vehicle) #Put each vehicle's data in its own folder
+    os.chdir(os.getcwd()+"\\"+vehicle) #Put each vehicle's data in its own folder
     #print("Saving to:",os.getcwd())
     
     #curTime = time.strftime("%Y_%m_%d-%H_%M_%S")
