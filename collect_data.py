@@ -10,11 +10,9 @@ with open('configDevice.txt') as mycfgfile:
     config = dict([eachLine.split(":") for eachLine in config]) #Split by ":" and turn into dict
 updateRate = int(config["updateRate"])
 sleepInterval = 1/(updateRate*10) #Maybe tweak this depending on performance
-#Basically, we want to refresh this faster than the update rate of our gps since the time to execute gpsd.next() will scale with 
-#our refresh rate. In other words, even if our sleepinterval is 0.1s, but our frequency is 1s, the time to execute 1 cycle will be 
-#close to 1 second because gpsd will wait to complete gpsd.next
-#At the same time, though, gpsd will send multiple different json objects, only one of which will be the TPV report we want, so
-#to be safe, we will just refresh much faster than we would be getting TPV reports
+#gpsd is weird, and while it should be waiting to return a NEW report every time we query it, it doesn't and will return around 4 TPV
+#reports, regardless of how long we wait to query it again in our loop, idk. The above works and doesn't cause it to lag or take longer
+#than the interval it is timing to run the entire function, unlike using something like:1/(updateRate*2)
 
 vehicle = config["current vehicle"]
 
@@ -30,17 +28,17 @@ gpsData = []
 rollingGpsData = []
 currentData = ['',float('nan')]
 counter = 0
-totCounter = counter
 #write our data to a file every 1 second 
 samplesC = int(config["storage interval"]) * updateRate #Only whole second intervals are allowed otherwise this counter could be a decimal
-totSamplesC = float(config["timeout"]) * updateRate  
-#totCounter interrupts from the top of the loop, so we want to log our last chunk of data
-#Basically a timeout in case we don't stop taking data (120 seconds)
+totSamplesC = float(config["timeout"]) + time.time() 
+#Basically a timeout in case we don't stop taking data within timeout period
 
 
 #Should make a rolling estimation of acceleration to determine where data starts ########################
 
 totstart = time.time()
+#we do our timeout using time.time() instead of counting the successful writes, because then it will truly be timing out based on time
+#instead of timing out based on writes, meaning if we have a period of unsuccessful writes/data it will still timeout normally
 
 gpsd = gps(mode=WATCH_ENABLE|WATCH_NEWSTYLE) 
 
@@ -51,7 +49,7 @@ filePath = ""
 fileCreated = False
 try:
  
-     while True & (totCounter < totSamplesC):
+     while True & (time.time() < totSamplesC):
         
         
         report = gpsd.next() #
@@ -70,13 +68,14 @@ try:
                     gpsData.append(currentData)
                     rollingGpsData.append(currentData)
                     counter += 1 #We save our file after 5 SUCCESSFUL readings
-                    totCounter += 1 
+                    print(time.time()-totstart)
 
                 elif gpsData[-1][0] != currentData[0]:
                     gpsData.append(currentData)
                     rollingGpsData.append(currentData)
                     counter += 1
-                    totCounter += 1 
+                    print(time.time()-totstart)
+                  
 
             print(currentData)
             
@@ -94,9 +93,7 @@ try:
                 rollingGpsData = []
                 
             
-            #totCounter += 1
-            print(totCounter)
-
+          
         time.sleep(sleepInterval) 
     
 except KeyError:
