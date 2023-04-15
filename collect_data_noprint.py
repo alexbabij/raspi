@@ -78,23 +78,23 @@ try:
                     counter += 1
                     totCounter += 1 
 
-            print(currentData)
+            
             
             
             
             end = time.time()
             elapsed = (end-start)
-            print('\nTime/refresh',elapsed)
+            
 
             if (counter >= samplesC):
                 filePath, fileCreated = writeFile(vehicle,rollingGpsData,fileCreated,filePath)
                 counter = 0
-                print("Saved data:",rollingGpsData)
+               
                 rollingGpsData = []
                 
             
             #totCounter += 1
-            print(totCounter)
+            
 
         time.sleep(sleepInterval) 
     
