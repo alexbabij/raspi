@@ -3,6 +3,7 @@
 from gps import *
 import time
 import math
+import subprocess
 
 #Configure gps settings including update rate
 with open('configDevice.txt') as mycfgfile:
@@ -15,10 +16,6 @@ sleepInterval = 1/(updateRate*10) #Maybe tweak this depending on performance
 #than the interval it is timing to run the entire function, unlike using something like:1/(updateRate*2)
 
 vehicle = config["current vehicle"]
-
-
-
-
 
 #We want to not allow the user to start taking data until we have an adequate fix, but we don't really want to terminate it partway 
 #through a run if we end up losing the fix
