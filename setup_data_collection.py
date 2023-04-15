@@ -3,7 +3,7 @@
 from gps import *
 import time
 import subprocess
-
+from gpiozero import Button
 
 #We want to not allow the user to start taking data until we have an adequate fix, but we don't really want to terminate it partway 
 #through a run if we end up losing the fix
@@ -16,8 +16,15 @@ buttonEnabled = False
 
 def whenPressed():
     global goodFix
-    goodFix = True
-    
+    if buttonEnabled:
+        goodFix = True
+
+button = Button(21) #This is gpio 21, not pin 21
+button.when_pressed = whenPressed
+#The way the pushbutton input works with gpiozero is it basically runs externally from this script in that it will run whenPressed
+#outside of the while loop, meaning that even if the while loop sleeps for 1 second, the function whenPressed will execute immediately
+
+
 try:
  
      while goodFix == False:
@@ -29,14 +36,14 @@ try:
 
             if int(mode) <= 1:
                 print("Waiting for fix, status:",modeDict[mode], "("+round((time.time()-startTime),1)+")s")
-                time.sleep(1)
+                buttonEnabled = False
+                
             elif (mode == '2') | (mode == '3'):
                 print(modeDict[mode],"ready to start")
-                goodFix == True   
+                buttonEnabled = True
                 startTime = time.time()
-                #time.sleep(1) We don't use sleep here, since we are waiting for a pushbutton input, and instead 
-                #wait for user input with a timeout of one second, i.e. it will wait to continue until the timeout
-          
+        
+        time.sleep(1)                
 
          
     

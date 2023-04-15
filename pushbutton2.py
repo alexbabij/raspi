@@ -26,7 +26,7 @@ while flag:
     print("Waiting for button press..."+str(butOn))
     time.sleep(1)
     
-
+print("running rest of code")
 # #button.wait_for_press()
 # def buttonPressTog():
 #     global state
