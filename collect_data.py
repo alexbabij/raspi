@@ -97,7 +97,7 @@ try:
             #totCounter += 1
             print(totCounter)
 
-        #time.sleep(sleepInterval) 
+        time.sleep(sleepInterval) 
     
 except KeyError:
         pass #We would rather just skip if we cannot get good data rather than have our stuff error out
