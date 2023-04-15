@@ -40,7 +40,7 @@ totSamplesC = float(config["timeout"]) * updateRate
 
 #Should make a rolling estimation of acceleration to determine where data starts ########################
 
-totend = time.time()
+totstart = time.time()
 
 gpsd = gps(mode=WATCH_ENABLE|WATCH_NEWSTYLE) 
 
