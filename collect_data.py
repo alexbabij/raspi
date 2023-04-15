@@ -60,6 +60,7 @@ try:
                 #We should never get nan or an empty string since we check for it, but just in case, we don't want this to stop collecting data
                 gpsData.append(currentData)
                 rollingGpsData.append(currentData)
+                counter += 1 #We save our file after 5 SUCCESSFUL readings
             print(currentData)
             
             
@@ -74,17 +75,21 @@ try:
                 print("Saved data:",rollingGpsData)
                 rollingGpsData = []
                 
-            counter += 1
+            
             totCounter += 1
             print(totCounter)
 
         time.sleep(sleepInterval) 
+    
 except KeyError:
         pass #We would rather just skip if we cannot get good data rather than have our stuff error out
 except (KeyboardInterrupt, SystemExit): #when you press ctrl+c
     print("\nExiting.")
     filePath, fileCreated = writeFile(vehicle,rollingGpsData,fileCreated,filePath)
 else:
+    if not counter == 0:
+        filePath, fileCreated = writeFile(vehicle,rollingGpsData,fileCreated,filePath)
+        #Write the rest of the data when we exit the while loop
     print(gpsData)
 
 
