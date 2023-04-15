@@ -100,6 +100,7 @@ else:
     if not counter == 0:
         filePath, fileCreated = writeFile(vehicle,rollingGpsData,fileCreated,filePath)
         print("Saved data:",rollingGpsData)
+        print("Finished collecting data")
         #Write the rest of the data when we exit the while loop
     print(gpsData)
 
