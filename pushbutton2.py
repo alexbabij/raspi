@@ -22,7 +22,7 @@ button.when_pressed = on_press
 
 while flag:
     # do something else while button is not pressed
-    print("Waiting for button press..."+butOn)
+    print("Waiting for button press..."+str(butOn))
     butOn = not butOn
     time.sleep(1)
     
