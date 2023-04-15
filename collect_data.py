@@ -56,11 +56,19 @@ try:
             #Not sure how much an effect on performance this has
 
                 currentData = [getattr(report,'time',''),getattr(report,'speed','nan')]
-                
                 #We should never get nan or an empty string since we check for it, but just in case, we don't want this to stop collecting data
-                gpsData.append(currentData)
-                rollingGpsData.append(currentData)
-                counter += 1 #We save our file after 5 SUCCESSFUL readings
+                #We are capable of getting duplicate results, so we filter them out
+
+                if len(gpsData) <= 1:
+                
+                    gpsData.append(currentData)
+                    rollingGpsData.append(currentData)
+                    counter += 1 #We save our file after 5 SUCCESSFUL readings
+                elif gpsData[-1] != gpsData[-2]:
+                    gpsData.append(currentData)
+                    rollingGpsData.append(currentData)
+                    counter += 1
+
             print(currentData)
             
             
