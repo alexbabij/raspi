@@ -8,7 +8,7 @@ with open('configDevice.txt') as mycfgfile:
     print(type(float(config["storage interval"])))
 
 
-from testnew import *
+from fileSave import *
 
 
 L = [["2005-06-08T10:34:49.283Z",1],['t2',2],['t3',3]]

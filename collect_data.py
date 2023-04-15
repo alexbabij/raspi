@@ -16,19 +16,18 @@ sleepInterval = 1/(updateRate*10) #Maybe tweak this depending on performance
 #At the same time, though, gpsd will send multiple different json objects, only one of which will be the TPV report we want, so
 #to be safe, we will just refresh much faster than we would be getting TPV reports
 
+vehicle = config["current vehicle"]
 
 
-#from: https://stackoverflow.com/questions/17984809/how-do-i-create-an-incrementing-filename-in-python
 
-#We want to name the file based on the vehicle used so that later we can select all data for a given vehicle
-vehicleName = "" #make a way to configure this later
 
-   
+
 #We want to not allow the user to start taking data until we have an adequate fix, but we don't really want to terminate it partway 
 #through a run if we end up losing the fix
 
 #This is our list that contains all time and velocity samples for the current run
 gpsData = []
+rollingGpsData = []
 currentData = ['',float('nan')]
 counter = 0
 totCounter = counter
@@ -37,6 +36,8 @@ samplesC = int(config["storage interval"]) * updateRate #Only whole second inter
 totSamplesC = float(config["timeout"]) * updateRate #Basically a timeout in case we don't stop taking data (120 seconds)
 #Should make a rolling estimation of acceleration to determine where data starts
 gpsd = gps(mode=WATCH_ENABLE|WATCH_NEWSTYLE) 
+
+from fileSave import *
 
 try:
  
@@ -54,16 +55,22 @@ try:
                 currentData = [getattr(report,'time',''),getattr(report,'speed','nan')]
                 #We should never get nan or an empty string since we check for it, but just in case, we don't want this to stop collecting data
                 gpsData.append(currentData)
-            
+                rollingGpsData.append(currentData)
             print(currentData)
             
             counter += 1
+            totCounter += 1
+            
             end = time.time()
             elapsed = (end-start)
             print('\nTime/refresh',elapsed)
 
-            #if (counter > samplesC):
-                #with open(gpsDatFile)######################################################################
+            if (counter > samplesC):
+                filePath, fileCreated = writeFile(vehicle,rollingGpsData,fileCreated,filePath)
+                counter = 0
+                print("Saved data:",rollingGpsData)
+                rollingGpsData = []
+                
 
 
         time.sleep(sleepInterval) 
@@ -71,6 +78,7 @@ except KeyError:
         pass #We would rather just skip if we cannot get good data rather than have our stuff error out
 except (KeyboardInterrupt, SystemExit): #when you press ctrl+c
     print("\nExiting.")
+    filePath, fileCreated = writeFile(vehicle,rollingGpsData,fileCreated,filePath)
 else:
     print(gpsData)
 
