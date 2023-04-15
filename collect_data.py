@@ -62,21 +62,21 @@ try:
                 rollingGpsData.append(currentData)
             print(currentData)
             
-            counter += 1
-            totCounter += 1
-            print(totCounter)
+            
             
             end = time.time()
             elapsed = (end-start)
             print('\nTime/refresh',elapsed)
 
-            if (counter > samplesC):
+            if (counter >= samplesC):
                 filePath, fileCreated = writeFile(vehicle,rollingGpsData,fileCreated,filePath)
                 counter = 0
                 print("Saved data:",rollingGpsData)
                 rollingGpsData = []
                 
-
+            counter += 1
+            totCounter += 1
+            print(totCounter)
 
         time.sleep(sleepInterval) 
 except KeyError:
