@@ -59,7 +59,7 @@ try:
                 #We should never get nan or an empty string since we check for it, but just in case, we don't want this to stop collecting data
                 #We are capable of getting duplicate results, so we filter them out
 
-                if len(gpsData) <= 1:
+                if len(gpsData) == 0:
                     gpsData.append(currentData)
                     rollingGpsData.append(currentData)
                     counter += 1 #We save our file after 5 SUCCESSFUL readings
