@@ -7,7 +7,7 @@ blink_on = False
 
 def go_blink():
     global blink_on
-
+    print("button pressed")
     if blink_on:
         led.off()
     else:
