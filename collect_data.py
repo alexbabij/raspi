@@ -39,6 +39,9 @@ gpsd = gps(mode=WATCH_ENABLE|WATCH_NEWSTYLE)
 
 from fileSave import *
 
+
+filePath = ""
+fileCreated = False
 try:
  
      while True & (totCounter < totSamplesC):
@@ -53,6 +56,7 @@ try:
             #Not sure how much an effect on performance this has
 
                 currentData = [getattr(report,'time',''),getattr(report,'speed','nan')]
+                
                 #We should never get nan or an empty string since we check for it, but just in case, we don't want this to stop collecting data
                 gpsData.append(currentData)
                 rollingGpsData.append(currentData)
@@ -60,6 +64,7 @@ try:
             
             counter += 1
             totCounter += 1
+            print(totCounter)
             
             end = time.time()
             elapsed = (end-start)
