@@ -97,7 +97,7 @@ try:
             #totCounter += 1
             print(totCounter)
 
-        time.sleep(sleepInterval) 
+        #time.sleep(sleepInterval) 
     
 except KeyError:
         pass #We would rather just skip if we cannot get good data rather than have our stuff error out
@@ -111,7 +111,7 @@ else:
         print("Finished collecting data")
         #Write the rest of the data when we exit the while loop
     print(gpsData)
-    totend = totstart - time.time()
+    totend = time.time() - totstart
     print("\nCompleted in:",totend)
 
 
