@@ -20,5 +20,7 @@ led = LED(26)
 try:
     button.when_pressed = go_blink
     pause()
+
 finally:
+    print("done")
     pass
