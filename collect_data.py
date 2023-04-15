@@ -64,7 +64,7 @@ try:
                     gpsData.append(currentData)
                     rollingGpsData.append(currentData)
                     counter += 1 #We save our file after 5 SUCCESSFUL readings
-                elif gpsData[-1] != gpsData[-2]:
+                elif gpsData[-1][0] != gpsData[-2][0]:
                     gpsData.append(currentData)
                     rollingGpsData.append(currentData)
                     counter += 1
