@@ -6,20 +6,22 @@ from gpiozero import LED, Button
 import time
 
 
-button = Button(21)
+flag = True
 
-state = False
-switch = True
-def go_blink():
-    print("button pressed")
+def on_press():
+    global flag
+    flag = False
+    # do something when button is pressed
+    print("Button pressed")
 
-try:
-    button.when_pressed = go_blink
-    pause(2)
+button = Button(2)
 
-finally:
-    print("finally done")
-    pass
+button.when_pressed = on_press
+
+while flag:
+    # do something else while button is not pressed
+    print("Waiting for button press...")
+
 
 # #button.wait_for_press()
 # def buttonPressTog():
