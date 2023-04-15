@@ -9,7 +9,7 @@ with open('configDevice.txt') as mycfgfile:
     config = mycfgfile.read().splitlines() #Read in each line as a list i.e. [a:1, b:2]
     config = dict([eachLine.split(":") for eachLine in config]) #Split by ":" and turn into dict
 updateRate = int(config["updateRate"])
-sleepInterval = 1/(updateRate*10) #Maybe tweak this depending on performance
+sleepInterval = 1/(updateRate*2) #Maybe tweak this depending on performance
 #Basically, we want to refresh this faster than the update rate of our gps since the time to execute gpsd.next() will scale with 
 #our refresh rate. In other words, even if our sleepinterval is 0.1s, but our frequency is 1s, the time to execute 1 cycle will be 
 #close to 1 second because gpsd will wait to complete gpsd.next
@@ -89,6 +89,7 @@ except (KeyboardInterrupt, SystemExit): #when you press ctrl+c
 else:
     if not counter == 0:
         filePath, fileCreated = writeFile(vehicle,rollingGpsData,fileCreated,filePath)
+        print("Saved data:",rollingGpsData)
         #Write the rest of the data when we exit the while loop
     print(gpsData)
 
