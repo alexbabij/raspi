@@ -68,18 +68,15 @@ try:
                     gpsData.append(currentData)
                     rollingGpsData.append(currentData)
                     counter += 1 #We save our file after 5 SUCCESSFUL readings
-                    print(time.time()-totstart)
+                    print("Time since start:",time.time()-totstart)
+                    print(currentData)
 
                 elif gpsData[-1][0] != currentData[0]:
                     gpsData.append(currentData)
                     rollingGpsData.append(currentData)
                     counter += 1
-                    print(time.time()-totstart)
-                  
-
-            print(currentData)
-            
-            
+                    print("Time since start:",time.time()-totstart)
+                    print(currentData)          
             
             end = time.time()
             elapsed = (end-start)
