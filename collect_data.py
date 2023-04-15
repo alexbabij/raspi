@@ -60,14 +60,16 @@ try:
                 #We are capable of getting duplicate results, so we filter them out
 
                 if len(gpsData) <= 1:
-                
                     gpsData.append(currentData)
                     rollingGpsData.append(currentData)
                     counter += 1 #We save our file after 5 SUCCESSFUL readings
-                elif gpsData[-1][0] != gpsData[-2][0]:
+                    totCounter += 1 
+
+                elif gpsData[-1][0] != currentData[0]:
                     gpsData.append(currentData)
                     rollingGpsData.append(currentData)
                     counter += 1
+                    totCounter += 1 
 
             print(currentData)
             
@@ -84,7 +86,7 @@ try:
                 rollingGpsData = []
                 
             
-            totCounter += 1
+            #totCounter += 1
             print(totCounter)
 
         time.sleep(sleepInterval) 
