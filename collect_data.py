@@ -30,7 +30,7 @@ gpsData = []
 rollingGpsData = []
 currentData = ['',float('nan')]
 counter = 0
-totCounter = counter
+totCounter = counter + 1 #totCounter interrupts from the top of the loop, so we want to log our last chunk of data
 #write our data to a file every 1 second 
 samplesC = int(config["storage interval"]) * updateRate #Only whole second intervals are allowed otherwise this counter could be a decimal
 totSamplesC = float(config["timeout"]) * updateRate #Basically a timeout in case we don't stop taking data (120 seconds)

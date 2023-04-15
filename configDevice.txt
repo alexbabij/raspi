@@ -1,5 +1,5 @@
 Units are Hz, seconds   :null
-updateRate:1
+updateRate:5
 units:imperial
 timeout:5
 storage interval:1
