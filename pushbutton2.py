@@ -7,21 +7,25 @@ import time
 
 
 flag = True
+butOn = False
 
 def on_press():
     global flag
-    flag = False
-    # do something when button is pressed
-    print("Button pressed")
+    if butOn:
+        flag = False
+        # do something when button is pressed
+        print("Button pressed")
 
-button = Button(2)
+button = Button(21)
 
 button.when_pressed = on_press
 
 while flag:
     # do something else while button is not pressed
-    print("Waiting for button press...")
-
+    print("Waiting for button press..."+butOn)
+    butOn = not butOn
+    time.sleep(1)
+    
 
 # #button.wait_for_press()
 # def buttonPressTog():
