@@ -81,7 +81,7 @@ try:
             end = time.time()
             elapsed = (end-start)
             start = time.time()
-            print('\nTime/refresh',elapsed)
+            #print('\nTime/refresh',elapsed)
 
             if (counter >= samplesC):
                 filePath, fileCreated = writeFile(vehicle,rollingGpsData,fileCreated,filePath)
