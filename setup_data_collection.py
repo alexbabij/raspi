@@ -12,7 +12,12 @@ modeDict = {'0':'unkown','1':'no fix','2':'2D fix','3':'3D fix'}
 gpsd = gps(mode=WATCH_ENABLE|WATCH_NEWSTYLE) 
 goodFix = False  
 startTime = time.time()
+buttonEnabled = False
 
+def whenPressed():
+    global goodFix
+    goodFix = True
+    
 try:
  
      while goodFix == False:
@@ -24,12 +29,16 @@ try:
 
             if int(mode) <= 1:
                 print("Waiting for fix, status:",modeDict[mode], "("+round((time.time()-startTime),1)+")s")
+                time.sleep(1)
             elif (mode == '2') | (mode == '3'):
                 print(modeDict[mode],"ready to start")
                 goodFix == True   
+                startTime = time.time()
+                #time.sleep(1) We don't use sleep here, since we are waiting for a pushbutton input, and instead 
+                #wait for user input with a timeout of one second, i.e. it will wait to continue until the timeout
           
 
-        time.sleep(1) 
+         
     
 except KeyError:
         pass #We would rather just skip if we cannot get good data rather than have our stuff error out
@@ -38,4 +47,4 @@ except (KeyboardInterrupt, SystemExit): #when you press ctrl+c
 else:
     print("Running data collection\n")
 
-subprocess.run(["python","collect_data.py"])
+#subprocess.run(["python","collect_data.py"])
