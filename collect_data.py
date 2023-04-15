@@ -40,7 +40,7 @@ totSamplesC = float(config["timeout"]) * updateRate
 
 #Should make a rolling estimation of acceleration to determine where data starts ########################
 
-
+totend = time.time()
 
 gpsd = gps(mode=WATCH_ENABLE|WATCH_NEWSTYLE) 
 
@@ -111,6 +111,9 @@ else:
         print("Finished collecting data")
         #Write the rest of the data when we exit the while loop
     print(gpsData)
+    totend = totstart - time.time()
+    print("\nCompleted in:",totend)
+
 
 
 #Parsing the GPSD json:
