@@ -46,14 +46,14 @@ gpsd = gps(mode=WATCH_ENABLE|WATCH_NEWSTYLE)
 
 from fileSave import *
 
-
+start = time.time()
 filePath = ""
 fileCreated = False
 try:
  
      while True & (totCounter < totSamplesC):
         
-        start = time.time()
+        
         report = gpsd.next() #
         if report['class'] == 'TPV': 
         #This a lame way to select the correct json object since gpsd will return multiple different objects in repeating order
@@ -84,6 +84,7 @@ try:
             
             end = time.time()
             elapsed = (end-start)
+            start = time.time()
             print('\nTime/refresh',elapsed)
 
             if (counter >= samplesC):
