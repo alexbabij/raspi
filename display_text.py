@@ -28,7 +28,9 @@ else:
     width = disp.width  # we swap height/width to rotate it to landscape!
     height = disp.height
 
-def dispText(textIn,textLoc,FONTSIZE=15,BORDER=5,width=width,height=height):
+
+
+def dispText(textIn,textLoc,fontColor=[0,0,0],FONTSIZE=15,BORDER=5,width=width,height=height):
     startTime = time.time()
     # First define some constants to allow easy resizing of shapes.
     #BORDER = 20
@@ -54,7 +56,7 @@ def dispText(textIn,textLoc,FONTSIZE=15,BORDER=5,width=width,height=height):
     # Draw Some Text
     #text = "Hello Worldaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!"
     # 0,0 = top left corner of display
-    fontColor = [0,0,0]
+    #fontColor = [0,0,0]
     if textLoc == "center":
         (font_width, font_height) = font.getsize_multiline(textIn)
         draw.text(
