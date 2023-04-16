@@ -24,7 +24,7 @@ from adafruit_rgb_display import st7735  # pylint: disable=unused-import
 
 # First define some constants to allow easy resizing of shapes.
 BORDER = 20
-FONTSIZE = 24
+FONTSIZE = 20
 
 # Configuration for CS and DC pins (these are PiTFT defaults):
 cs_pin = digitalio.DigitalInOut(board.CE0)
