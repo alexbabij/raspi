@@ -46,9 +46,9 @@ def dispText(textIn,textLoc,fontColor=[0,0,0,255],FONTSIZE=15,BORDER=5,width=wid
     #disp.image(image)
 
     # Draw a smaller inner purple rectangle
-    draw.rectangle(
-        (0, 0, width - BORDER - 1, height - BORDER - 1), fill=(170, 0, 136)
-    )
+    # draw.rectangle(
+    #     (0, 0, width - BORDER - 1, height - BORDER - 1), fill=(170, 0, 136)
+    # )
 
     # Load a TTF Font
     font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", FONTSIZE)
