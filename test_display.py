@@ -25,4 +25,4 @@ while True:
         rounding = 1
     if location >= 4:
         location = 0
- 
+  
