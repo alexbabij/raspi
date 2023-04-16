@@ -40,13 +40,13 @@ def dispText(textIn,textLoc,FONTSIZE=15,width=width,height=height):
     draw = ImageDraw.Draw(image)
 
     # Draw a green filled box as the background
-    draw.rectangle((0, 0, width, height), fill=(textLoc,255,255))
+    draw.rectangle((0, 0, width, height), fill=(255,255,255))
     #disp.image(image)
 
-    # # Draw a smaller inner purple rectangle
-    # draw.rectangle(
-    #     (BORDER, BORDER, width - BORDER - 1, height - BORDER - 1), fill=(170, 0, 136)
-    # )
+    # Draw a smaller inner purple rectangle
+    draw.rectangle(
+        (0, 0, width - BORDER - 1, height - BORDER - 1), fill=(170, 0, 136)
+    )
 
     # Load a TTF Font
     font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", FONTSIZE)
@@ -54,13 +54,23 @@ def dispText(textIn,textLoc,FONTSIZE=15,width=width,height=height):
     # Draw Some Text
     #text = "Hello Worldaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!"
     textLoc
-    (font_width, font_height) = font.getsize(textIn)
-    draw.text(
-        (width // 2 - font_width // 2, height // 2 - font_height // 2),
-        textIn,
-        font=font,
-        fill=(255, 255, 0),
-    )
+
+    if textLoc == "center":
+        (font_width, font_height) = font.getsize(textIn)
+        draw.text(
+            (width // 2 - font_width // 2, height // 2 - font_height // 2),
+            textIn,
+            font=font,
+            fill=(255, 255, 0),
+        )
+    elif textLoc == "northwest":
+        (font_width, font_height) = font.getsize(textIn)
+        draw.text(
+            (width // 2 - font_width // 2, height // 2 - font_height // 2),
+            textIn,
+            font=font,
+            fill=(255, 255, 0),
+        )
 
     # Display image.
     disp.image(image)
