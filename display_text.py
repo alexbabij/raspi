@@ -43,12 +43,12 @@ def dispText(textIn,textLoc,FONTSIZE=15):
 
     # Draw a green filled box as the background
     draw.rectangle((0, 0, width, height), fill=(255,255,255))
-    disp.image(image)
+    #disp.image(image)
 
-    # Draw a smaller inner purple rectangle
-    draw.rectangle(
-        (BORDER, BORDER, width - BORDER - 1, height - BORDER - 1), fill=(170, 0, 136)
-    )
+    # # Draw a smaller inner purple rectangle
+    # draw.rectangle(
+    #     (BORDER, BORDER, width - BORDER - 1, height - BORDER - 1), fill=(170, 0, 136)
+    # )
 
     # Load a TTF Font
     font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", FONTSIZE)

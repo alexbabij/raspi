@@ -7,6 +7,6 @@ counter = 0
 while True:
 
     counter += 1
-
-    dispText("test,",counter)
-    time.sleep(1)
+    string = "test,"+counter
+    dispText(string,1)
+    time.sleep(0.5)
