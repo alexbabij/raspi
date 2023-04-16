@@ -87,7 +87,7 @@ def dispText(textIn,textLoc,FONTSIZE=15,BORDER=5,width=width,height=height):
             font=font,
             fill=(fontColor[0], fontColor[1], fontColor[2]),
         )
-    elif textLoc == "soutwest":
+    elif textLoc == "southwest":
         (font_width, font_height) = font.getsize_multiline(textIn)
         draw.text(
             (width-(BORDER+font_width),BORDER),
@@ -95,6 +95,14 @@ def dispText(textIn,textLoc,FONTSIZE=15,BORDER=5,width=width,height=height):
             font=font,
             fill=(fontColor[0], fontColor[1], fontColor[2]),
         )    
+    else: #Put text in center as default
+        (font_width, font_height) = font.getsize_multiline(textIn)
+        draw.text(
+            (width // 2 - font_width // 2, height // 2 - font_height // 2),
+            textIn,
+            font=font,
+            fill=(fontColor[0], fontColor[1], fontColor[2]),
+        )
     # Display image.
     disp.image(image)
     print("Elapsed time:",str(time.time()-startTime))
