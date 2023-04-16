@@ -7,6 +7,9 @@ counter = 0
 while True:
 
     counter += 1
-    string = "test,"+counter
-    dispText(string,1)
+    string = "test,"+str(counter)
+    dispText(string,counter*10)
     time.sleep(0.5)
+    if counter >= 24:
+        counter = 0
+

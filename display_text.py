@@ -42,7 +42,7 @@ def dispText(textIn,textLoc,FONTSIZE=15):
     draw = ImageDraw.Draw(image)
 
     # Draw a green filled box as the background
-    draw.rectangle((0, 0, width, height), fill=(255,255,255))
+    draw.rectangle((0, 0, width, height), fill=(textLoc,255,255))
     #disp.image(image)
 
     # # Draw a smaller inner purple rectangle
