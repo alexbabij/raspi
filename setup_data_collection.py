@@ -20,10 +20,13 @@ def whenPressed():
         goodFix = True
 
 button = Button(21) #This is gpio 21, not pin 21
+#Normally, .when_pressed only stays "active" while the script is being executed, so signal.pause() would need to be used to keep
+#the button active. In our case, the while loop keeps the script running and the button active
 button.when_pressed = whenPressed
 #The way the pushbutton input works with gpiozero is it basically runs externally from this script in that it will run whenPressed
 #outside of the while loop, meaning that even if the while loop sleeps for 1 second, the function whenPressed will execute immediately
-
+#This implementation is still a little bit of a workaround, though, and we basically need to wait out an entire while loop cycle before
+#it actually stops from the button press.
 
 try:
  
@@ -39,7 +42,7 @@ try:
                 buttonEnabled = False
                 
             elif (mode == '2') | (mode == '3'):
-                print(modeDict[mode],"ready to start")
+                print("Status:",modeDict[mode],"ready to start - push button to begin data collection")
                 buttonEnabled = True
                 startTime = time.time()
         
@@ -54,4 +57,4 @@ except (KeyboardInterrupt, SystemExit): #when you press ctrl+c
 else:
     print("Running data collection\n")
 
-#subprocess.run(["python","collect_data.py"])
+subprocess.run(["python","collect_data.py"])

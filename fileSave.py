@@ -78,14 +78,14 @@ def writeFile(vehicle,data,fileCreated=False,filePath=""):
         with open(new_path, "x") as file1: 
             #We include exclusive creation, even though this should never be the case with our checks
             file1.write(vehicle+"\n") #Include name of vehicle as first line
-            file1.writelines([i[0]+','+str(i[1])+'\n' for i in data]) 
+            file1.writelines([i[0]+','+str(i[1])+','+str(i[2])+'\n' for i in data]) 
             #We know what our format will be so no need to make this procedural or complicated
     
     else:
 
         with open(filePath, "a") as file1:
             #If we have just created this, we want to continue writing to it
-            file1.writelines([i[0]+','+str(i[1])+'\n' for i in data]) 
+            file1.writelines([i[0]+','+str(i[1])+','+str(i[2])+'\n' for i in data]) 
             
 
     os.chdir(cwdOrigin) #Step back out to original directory so when we rerun the function we can find data and deeper folders

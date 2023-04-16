@@ -15,10 +15,12 @@ sleepInterval = 1/(updateRate*10) #Maybe tweak this depending on performance
 #reports, regardless of how long we wait to query it again in our loop, idk. The above works and doesn't cause it to lag or take longer
 #than the interval it is timing to run the entire function, unlike using something like:1/(updateRate*2)
 
+#The speed reading that comes out of gpsd is in m/s, this dictionary stores the conversion factor from m/s to [key]
+conversionDict = {"mph": 2.2369362912, "kph": 3.6}
 vehicle = config["current vehicle"]
+cutoffSpeed = float(config["max speed"])/conversionDict[config["units"]]
+maxSpeed = False #Set to true upon reaching our configured cutoff speed, ends the while loop and data collection
 
-#We want to not allow the user to start taking data until we have an adequate fix, but we don't really want to terminate it partway 
-#through a run if we end up losing the fix
 
 #This is our list that contains all time and velocity samples for the current run
 gpsData = []
@@ -46,7 +48,7 @@ filePath = ""
 fileCreated = False
 try:
  
-     while True & (time.time() < totSamplesC):
+     while (maxSpeed==False) & (time.time() < totSamplesC):
         
         
         report = gpsd.next() #
@@ -56,8 +58,9 @@ try:
             if (math.isfinite(getattr(report,'speed',float('nan')))) & (getattr(report,'time','') !=''):
             #If the data is bad we just ignore it, the format for this is to return NaN for numbers and empty for strings: ''
             #Not sure how much an effect on performance this has
-
-                currentData = [getattr(report,'time',''),getattr(report,'speed','nan')]
+                
+                #We record gps time, velocity, and time offset since starting script measured by the pi
+                currentData = [getattr(report,'time',''),getattr(report,'speed','nan'),(totstart-time.time())]
                 #We should never get nan or an empty string since we check for it, but just in case, we don't want this to stop collecting data
                 #We are capable of getting duplicate results, so we filter them out
 
@@ -86,7 +89,13 @@ try:
                 print("Saved data:",rollingGpsData)
                 rollingGpsData = []
                 
+            if gpsData[-1][1] >= (cutoffSpeed*1.1):
+                maxSpeed = True
             
+            if gpsData[-1][1] >= (cutoffSpeed):
+                totSamplesC = time.time() + 1 
+
+            #Record data up until reaching slightly past target speed, or 1 second after reaching target speed, whichever is first
           
         time.sleep(sleepInterval) 
     

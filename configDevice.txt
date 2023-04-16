@@ -1,6 +1,7 @@
-Units are Hz, seconds   :null
+Units are Hz, seconds,   :null
 updateRate:5
-units:imperial
 timeout:10
 storage interval:1
 current vehicle:car1
+max speed:60
+units:mph
