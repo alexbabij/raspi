@@ -56,7 +56,7 @@ def dispText(textIn,textLoc,FONTSIZE=15,BORDER=5,width=width,height=height):
     # 0,0 = top left corner of display
 
     if textLoc == "center":
-        (font_width, font_height) = font.getsize(textIn)
+        (font_width, font_height) = font.getsize_multiline(textIn)
         draw.text(
             (width // 2 - font_width // 2, height // 2 - font_height // 2),
             textIn,
@@ -64,7 +64,7 @@ def dispText(textIn,textLoc,FONTSIZE=15,BORDER=5,width=width,height=height):
             fill=(255, 255, 0),
         )
     elif textLoc == "northwest":
-        (font_width, font_height) = font.getsize(textIn)
+        (font_width, font_height) = font.getsize_multiline(textIn)
         draw.text(
             (BORDER,BORDER),
             textIn,
@@ -72,7 +72,7 @@ def dispText(textIn,textLoc,FONTSIZE=15,BORDER=5,width=width,height=height):
             fill=(255, 255, 0),
         )
     elif textLoc == "southeast":
-        (font_width, font_height) = font.getsize(textIn)
+        (font_width, font_height) = font.getsize_multiline(textIn)
         draw.text(
             (width-(BORDER+font_width),height-(BORDER+font_height)),
             textIn,
