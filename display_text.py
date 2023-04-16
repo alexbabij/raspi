@@ -54,14 +54,14 @@ def dispText(textIn,textLoc,FONTSIZE=15,BORDER=5,width=width,height=height):
     # Draw Some Text
     #text = "Hello Worldaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!"
     # 0,0 = top left corner of display
-
+    fontColor = [0,0,0]
     if textLoc == "center":
         (font_width, font_height) = font.getsize_multiline(textIn)
         draw.text(
             (width // 2 - font_width // 2, height // 2 - font_height // 2),
             textIn,
             font=font,
-            fill=(255, 255, 0),
+            fill=(fontColor[0], fontColor[1], fontColor[2]),
         )
     elif textLoc == "northwest":
         (font_width, font_height) = font.getsize_multiline(textIn)
@@ -69,7 +69,7 @@ def dispText(textIn,textLoc,FONTSIZE=15,BORDER=5,width=width,height=height):
             (BORDER,BORDER),
             textIn,
             font=font,
-            fill=(255, 255, 0),
+            fill=(fontColor[0], fontColor[1], fontColor[2]),
         )
     elif textLoc == "southeast":
         (font_width, font_height) = font.getsize_multiline(textIn)
@@ -77,9 +77,24 @@ def dispText(textIn,textLoc,FONTSIZE=15,BORDER=5,width=width,height=height):
             (width-(BORDER+font_width),height-(BORDER+font_height)),
             textIn,
             font=font,
-            fill=(255, 255, 0),
+            fill=(fontColor[0], fontColor[1], fontColor[2]),
         )
-
+    elif textLoc == "northeast":
+        (font_width, font_height) = font.getsize_multiline(textIn)
+        draw.text(
+            (BORDER,height-(BORDER+font_height)),
+            textIn,
+            font=font,
+            fill=(fontColor[0], fontColor[1], fontColor[2]),
+        )
+    elif textLoc == "soutwest":
+        (font_width, font_height) = font.getsize_multiline(textIn)
+        draw.text(
+            (width-(BORDER+font_width),BORDER),
+            textIn,
+            font=font,
+            fill=(fontColor[0], fontColor[1], fontColor[2]),
+        )    
     # Display image.
     disp.image(image)
     print("Elapsed time:",str(time.time()-startTime))
