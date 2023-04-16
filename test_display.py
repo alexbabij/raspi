@@ -11,8 +11,9 @@ while True:
 
     counter += 1
     timee += 0.1
+    rounding +=1
     truet = time.time()-startt
-    string = "test,"+str(round(timee,1))+" "+str(round(truet,rounding))
+    string = "test,"+str(round(timee,1))+"\n"+str(round(truet,rounding))
     dispText(string,"northwest")
     time.sleep(0.1)
     if counter >= 24:
