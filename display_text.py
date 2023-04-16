@@ -18,7 +18,7 @@ BAUDRATE = 24000000
 spi = board.SPI()
 
 
-disp = st7735.ST7735R(spi, rotation=90, invert=True, cs=cs_pin, dc=dc_pin, rst=reset_pin, baudrate=BAUDRATE)
+disp = st7735.ST7735R(spi, rotation=90, invert=False, cs=cs_pin, dc=dc_pin, rst=reset_pin, baudrate=BAUDRATE)
 # Create blank image for drawing.
 # Make sure to create image with mode 'RGB' for full color.
 if disp.rotation % 180 == 90:
@@ -57,13 +57,15 @@ def dispText(textIn,textLoc,fontColor=[0,0,0,255],FONTSIZE=15,BORDER=5,width=wid
     #text = "Hello Worldaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!"
     # 0,0 = top left corner of display
     #fontColor = [0,0,0]
+
+    #For some reason, the R and B in the RGBA values are swapped, but only for fill in draw.text, I have no idea why
     if textLoc == "center":
         (font_width, font_height) = font.getsize_multiline(textIn)
         draw.text(
             (width // 2 - font_width // 2, height // 2 - font_height // 2),
             textIn,
             font=font,
-            fill=(fontColor[0], fontColor[1], fontColor[2], fontColor[3]),
+            fill=(fontColor[2], fontColor[1], fontColor[0], fontColor[3]),
         )
     elif textLoc == "northwest":
         (font_width, font_height) = font.getsize_multiline(textIn)
@@ -71,7 +73,7 @@ def dispText(textIn,textLoc,fontColor=[0,0,0,255],FONTSIZE=15,BORDER=5,width=wid
             (BORDER,BORDER),
             textIn,
             font=font,
-            fill=(fontColor[0], fontColor[1], fontColor[2], fontColor[3]),
+            fill=(fontColor[2], fontColor[1], fontColor[0], fontColor[3]),
         )
     elif textLoc == "southeast":
         (font_width, font_height) = font.getsize_multiline(textIn)
@@ -79,7 +81,7 @@ def dispText(textIn,textLoc,fontColor=[0,0,0,255],FONTSIZE=15,BORDER=5,width=wid
             (width-(BORDER+font_width),height-(BORDER+font_height)),
             textIn,
             font=font,
-            fill=(fontColor[0], fontColor[1], fontColor[2], fontColor[3]),
+            fill=(fontColor[2], fontColor[1], fontColor[0], fontColor[3]),
         )
     elif textLoc == "northeast":
         (font_width, font_height) = font.getsize_multiline(textIn)
@@ -87,7 +89,7 @@ def dispText(textIn,textLoc,fontColor=[0,0,0,255],FONTSIZE=15,BORDER=5,width=wid
             (BORDER,height-(BORDER+font_height)),
             textIn,
             font=font,
-            fill=(fontColor[0], fontColor[1], fontColor[2], fontColor[3]),
+            fill=(fontColor[2], fontColor[1], fontColor[0], fontColor[3]),
         )
     elif textLoc == "southwest":
         (font_width, font_height) = font.getsize_multiline(textIn)
@@ -95,7 +97,7 @@ def dispText(textIn,textLoc,fontColor=[0,0,0,255],FONTSIZE=15,BORDER=5,width=wid
             (width-(BORDER+font_width),BORDER),
             textIn,
             font=font,
-            fill=(fontColor[0], fontColor[1], fontColor[2], fontColor[3]),
+            fill=(fontColor[2], fontColor[1], fontColor[0], fontColor[3]),
         )    
     else: #Put text in center as default
         (font_width, font_height) = font.getsize_multiline(textIn)
@@ -103,7 +105,7 @@ def dispText(textIn,textLoc,fontColor=[0,0,0,255],FONTSIZE=15,BORDER=5,width=wid
             (width // 2 - font_width // 2, height // 2 - font_height // 2),
             textIn,
             font=font,
-            fill=(fontColor[0], fontColor[1], fontColor[2], fontColor[3]),
+            fill=(fontColor[2], fontColor[1], fontColor[0], fontColor[3]),
         )
     # Display image.
     disp.image(image)
