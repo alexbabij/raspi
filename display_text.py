@@ -71,6 +71,14 @@ def dispText(textIn,textLoc,FONTSIZE=15,BORDER=5,width=width,height=height):
             font=font,
             fill=(255, 255, 0),
         )
+    elif textLoc == "southeast":
+        (font_width, font_height) = font.getsize(textIn)
+        draw.text(
+            (width-(BORDER+font_width),height-(BORDER+font_height)),
+            textIn,
+            font=font,
+            fill=(255, 255, 0),
+        )
 
     # Display image.
     disp.image(image)

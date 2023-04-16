@@ -14,7 +14,7 @@ while True:
     rounding +=1
     truet = time.time()-startt
     string = "test,"+str(round(timee,1))+"\n"+str(round(truet,rounding))
-    dispText(string,"northwest")
+    dispText(string,"southeast")
     time.sleep(0.1)
     if counter >= 24:
         counter = 0
