@@ -31,12 +31,12 @@ MMC5983MA_offset = 131072.0
 
 
 
-magXmin = 0
-magYmin = 0
-magZmin = 0
-magXmax = 0
-magYmax = 0
-magZmax = 0
+magXmin =  122893
+magYmin =  123672
+magZmin =  123152
+magXmax =  138807
+magYmax =  139808
+magZmax =  140640
 
 '''
 Here is an example:
