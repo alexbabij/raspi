@@ -388,7 +388,7 @@ while True:
         outputString +="\n# kalmanX %5.2f   kalmanY %5.2f #\n" % (kalmanX,kalmanY)
 
     if 1:                       #Change to '0' to stop  showing the angles from the Kalman filter
-        outputString +="\n# pitch %5.2f   roll %5.2f #\n" % (pitch,roll)
+        outputString +="\n# pitch %5.2f   roll %5.2f #\n" % (pitch*180/M_PI,roll*180/M_PI)
 
     if 1:                       #Change to '0' to stop  showing the heading
         outputString +="# HEADING %5.2f  tiltCompensatedHeading %5.2f #" % (heading,tiltCompensatedHeading)
