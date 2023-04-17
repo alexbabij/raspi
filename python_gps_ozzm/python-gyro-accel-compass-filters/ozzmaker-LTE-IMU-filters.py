@@ -20,7 +20,7 @@ import math
 import IMU
 import datetime
 import os
-
+import numpy as np
 
 RAD_TO_DEG = 57.29578
 M_PI = 3.14159265358979323846
@@ -386,12 +386,17 @@ while True:
 
     if 1:                       #Change to '0' to stop  showing the angles from the Kalman filter
         outputString +="\n# kalmanX %5.2f   kalmanY %5.2f #\n" % (kalmanX,kalmanY)
-    
+
+    if 1:                       #Change to '0' to stop  showing the angles from the Kalman filter
+        outputString +="\n# pitch %5.2f   roll %5.2f #\n" % (pitch,roll)
+
     if 1:                       #Change to '0' to stop  showing the heading
         outputString +="# HEADING %5.2f  tiltCompensatedHeading %5.2f #" % (heading,tiltCompensatedHeading)
+    
+
 
     print(outputString)
-
+    rotMatrix = np.array([[]])
     #slow program down a bit, makes the output more readable
     time.sleep(0.03)
 

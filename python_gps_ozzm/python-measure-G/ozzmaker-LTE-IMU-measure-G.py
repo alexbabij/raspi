@@ -31,7 +31,7 @@ while True:
     yG = (ACCx * 0.244)/1000 * fGrav
     xG = (ACCy * 0.244)/1000 * fGrav
     zG = (ACCz * 0.244)/1000 * fGrav
-    print("##### X = %fG  ##### Y =   %fG  ##### Z =  %fG  #####" % ( yG, xG, zG))
+    print("##### X = %fm/s^2  ##### Y =   %fm/s^2  ##### Z =  %fm/s^2  #####" % ( yG, xG, zG))
 
 
 
