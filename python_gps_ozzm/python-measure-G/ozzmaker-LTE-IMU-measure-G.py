@@ -19,17 +19,18 @@ IMU.detectIMU()     #Detect if BerryIMU is connected.
 IMU.initIMU()       #Initialise the accelerometer, gyroscope and compass
 
 
+fGrav = 9.80674 #m/s^2 Force of gravity in Spokane, WA
 
 while True:
 
 
-    #Read the accelerometer,gyroscope and magnetometer values
+    #Read the accelerometer,gyroscope and magnetometer values, once being turned into values, is measured in G's, convert to m/s: 
     ACCx = IMU.readACCx()
     ACCy = IMU.readACCy()
-    ACCz = IMU.readACCz()
-    yG = (ACCx * 0.244)/1000
-    xG = (ACCy * 0.244)/1000
-    zG = (ACCz * 0.244)/1000
+    ACCz = IMU.readACCz() 
+    yG = (ACCx * 0.244)/1000 * fGrav
+    xG = (ACCy * 0.244)/1000 * fGrav
+    zG = (ACCz * 0.244)/1000 * fGrav
     print("##### X = %fG  ##### Y =   %fG  ##### Z =  %fG  #####" % ( yG, xG, zG))
 
 
