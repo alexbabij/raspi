@@ -382,7 +382,7 @@ while True:
         outputString +="\t# GYRX Angle %5.2f  GYRY Angle %5.2f  GYRZ Angle %5.2f # " % (gyroXangle,gyroYangle,gyroZangle)
 
     if 1:                       #Change to '0' to stop  showing the angles from the complementary filter
-        outputString +="#  CFangleX Angle %5.2f   CFangleY Angle %5.2f  #" % (CFangleX,CFangleY)
+        outputString +="\n#  CFangleX Angle %5.2f   CFangleY Angle %5.2f  #" % (CFangleX,CFangleY)
 
     if 1:                       #Change to '0' to stop  showing the angles from the Kalman filter
         outputString +="\n# kalmanX %5.2f   kalmanY %5.2f #\n" % (kalmanX,kalmanY)
