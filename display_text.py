@@ -45,10 +45,10 @@ def dispText(textIn,textLoc,fontColor=[0,0,0,255],FONTSIZE=15,BORDER=5,width=wid
     draw.rectangle((0, 0, width, height), fill=(255,255,255))
     #disp.image(image)
 
-    # Draw a smaller inner purple rectangle
-    # draw.rectangle(
-    #     (0, 0, width - BORDER - 1, height - BORDER - 1), fill=(170, 0, 136)
-    # )
+    #Draw a smaller inner purple rectangle
+    draw.rectangle(
+        (0, 0, width - BORDER - 1, height - BORDER - 1), fill=(170, 0, 136)
+    )
 
     # Load a TTF Font
     font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", FONTSIZE)
@@ -110,3 +110,4 @@ def dispText(textIn,textLoc,fontColor=[0,0,0,255],FONTSIZE=15,BORDER=5,width=wid
     # Display image.
     disp.image(image)
     print("Elapsed time:",str(time.time()-startTime))
+ 
