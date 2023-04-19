@@ -219,7 +219,7 @@ while True:
     a = datetime.datetime.now()
     LP = b.microseconds/(1000000*1.0)
     outputString = "Loop Time %5.2f " % ( LP )
-
+    print(outputString)
 
 
     ###############################################
