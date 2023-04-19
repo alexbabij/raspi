@@ -403,10 +403,13 @@ while True:
     psi = kalmanX * M_PI/180
     theta = kalmanY * M_PI/180
     phi = tiltCompensatedHeading * M_PI/180
+
+        
+    r1 = [math.cos(theta)*math.cos(phi), math.sin(psi)*math.sin(theta)*math.cos(phi)-math.cos(psi)*math.sin(phi), math.cos(psi)*math.sin(theta)*math.cos(phi)+math.sin(psi)*math.sin(phi)],
+    r2 = [[math.cos(theta)*math.sin(phi), math.sin(psi)*math.sin(theta)*math.sin(phi)+math.cos(psi)*math.cos(phi), math.cos(psi)*math.sin(theta)*math.sin(phi)-math.sin(psi)*math.cos(phi)]],
+    r3 = [-math.sin(theta), math.sin(psi)*math.cos(theta), math.cos(psi)*math.cos(theta)]
     
-    rotMatrix = np.array([[math.cos(theta)*math.cos(phi), math.sin(psi)*math.sin(theta)*math.cos(phi)-math.cos(psi)*math.sin(phi), math.cos(psi)*math.sin(theta)*math.cos(phi)+math.sin(psi)*math.sin(phi)],
-    [[math.cos(theta)*math.sin(phi), math.sin(psi)*math.sin(theta)*math.sin(phi)+math.cos(psi)*math.cos(phi), math.cos(psi)*math.sin(theta)*math.sin(phi)-math.sin(psi)*math.cos(phi)]],
-    [-math.sin(theta), math.sin(psi)*math.cos(theta), math.cos(psi)*math.cos(theta)]])
+    rotMatrix = np.array([r1,r2,r3])
     ACCVec = np.array([[ACCxt],[ACCyt],[ACCzt]])
     EFrame = np.matmul(rotMatrix, ACCVec)
 
