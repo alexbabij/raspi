@@ -160,11 +160,12 @@ while True:
     ##################### END Data Collection ########################
     #The documentation is cheeks, this link has some of? the different python functions: https://github.com/xioTechnologies/Fusion/blob/main/Python/Python-C-API/Ahrs.h
     #and https://github.com/xioTechnologies/Fusion/tree/main/Python/Python-C-API should contain all the functions
+    #look for PyMethodDef and PyGetSetDef 
 
     ahrs.update(gyroscope, accelerometer, magnetometer, delta_time)
     euler = ahrs.quaternion.to_euler()
-    ACCearthFrame = ahrs.get_earth_acceleration()
-    ACCLinear = ahrs.get_linear_acceleration()
+    ACCearthFrame = ahrs.earth_acceleration()
+    ACCLinear = ahrs.linear_acceleration()
 
     if 0:                       #Change to '0' to stop  showing the angles from the gyro
         outputString +="\t# GYRX Angle %5.2f  GYRY Angle %5.2f  GYRZ Angle %5.2f # " % (gyroXangle,gyroYangle,gyroZangle)
