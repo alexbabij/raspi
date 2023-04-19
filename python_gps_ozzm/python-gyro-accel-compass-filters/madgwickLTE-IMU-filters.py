@@ -163,9 +163,9 @@ while True:
     #look for PyMethodDef and PyGetSetDef 
 
     ahrs.update(gyroscope, accelerometer, magnetometer, delta_time)
-    euler = ahrs.quaternion.to_euler()
-    ACCearthFrame = ahrs.earth_acceleration()
-    ACCLinear = ahrs.linear_acceleration()
+    euler = ahrs.quaternion.to_euler() #This one is technically a function call
+    ACCearthFrame = ahrs.earth_acceleration #These ones are numpy array objects
+    ACCLinear = ahrs.linear_acceleration
 
     if 0:                       #Change to '0' to stop  showing the angles from the gyro
         outputString +="\t# GYRX Angle %5.2f  GYRY Angle %5.2f  GYRZ Angle %5.2f # " % (gyroXangle,gyroYangle,gyroZangle)
