@@ -408,7 +408,7 @@ while True:
     [[math.cos(theta)*math.sin(phi), math.sin(psi)*math.sin(theta)*math.sin(phi)+math.cos(psi)*math.cos(phi), math.cos(psi)*math.sin(theta)*math.sin(phi)-math.sin(psi)*math.cos(phi)]],
     [-math.sin(theta), math.sin(psi)*math.cos(theta), math.cos(psi)*math.cos(theta)]])
     ACCVec = np.array([[ACCxt],[ACCyt],[ACCzt]])
-    EFrame = np.dot(rotMatrix, ACCVec)
+    EFrame = np.matmul(rotMatrix, ACCVec)
 
     if 1:                       #Change to '0' to stop showing the acceleration
         outputString +="\n# dims %5.2f  ACCy %5.2f #" % (rotMatrix.ndim,np.size(rotMatrix))
