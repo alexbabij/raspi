@@ -151,10 +151,10 @@ while True:
     MAGz  = MAGz * 100
 
     
-    gyroscope = [rate_gyr_x,rate_gyr_y,rate_gyr_z]
-    accelerometer = [ACCx, ACCy, ACCz]
-    magnetometer = [MAGx, MAGy, MAGz]
-    euler = [0.0,0.0,0.0]
+    gyroscope = numpy.array([rate_gyr_x,rate_gyr_y,rate_gyr_z])
+    accelerometer = numpy.array([ACCx, ACCy, ACCz])
+    magnetometer = numpy.array([MAGx, MAGy, MAGz])
+    euler = numpy.array([0.0,0.0,0.0])
     ##################### END Data Collection ########################
 
     ahrs.update(gyroscope, accelerometer, magnetometer, delta_time)
