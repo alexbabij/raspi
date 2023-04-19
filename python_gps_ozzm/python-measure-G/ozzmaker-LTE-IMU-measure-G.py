@@ -13,6 +13,7 @@ import time
 import IMU
 import sys
 import datetime
+import math
 gyroXangle = 0.0
 gyroYangle = 0.0
 gyroZangle = 0.0
@@ -79,15 +80,16 @@ while True:
     ACCy =  ACCy  * ACC_LPF_FACTOR + oldYAccRawValue*(1 - ACC_LPF_FACTOR);
     ACCz =  ACCz  * ACC_LPF_FACTOR + oldZAccRawValue*(1 - ACC_LPF_FACTOR);
 
-    MAGx  = MAGx * (1.0/16384.0)  #18 bits
-    MAGy  = MAGy * (1.0/16384.0)  #18 bits
-    MAGz  = MAGz * (1.0/16384.0)  #18 bits
+    MAGx  = MAGx * (1.0/16384.0) *100 #18 bits
+    MAGy  = MAGy * (1.0/16384.0) *100 #18 bits
+    MAGz  = MAGz * (1.0/16384.0) *100 #18 bits
+    rsm = math.sqrt(MAGx*MAGx + MAGy*MAGy + MAGz*MAGz)
 
     yG = (ACCx * 0.244)/1000 * fGrav
     xG = (ACCy * 0.244)/1000 * fGrav
     zG = (ACCz * 0.244)/1000 * fGrav
     print("##### X = %fm/s^2  ##### Y =   %fm/s^2  ##### Z =  %fm/s^2  #####" % ( yG, xG, zG))
-    print("##### MAGx = %fuT  ##### MAGy =   %fuT  ##### MAGz =  %fuT  #####" % ( MAGx, MAGy, MAGz))
+    print("##### MAGx = %fuT  ##### MAGy =   %fuT  ##### MAGz =  %fuT  ##### rsm = %fuT" % ( MAGx, MAGy, MAGz, rsm))
 
 
 
