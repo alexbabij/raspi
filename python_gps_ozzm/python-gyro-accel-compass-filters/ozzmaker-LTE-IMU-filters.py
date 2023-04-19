@@ -374,6 +374,9 @@ while True:
 
     ##################### END Tilt Compensation ########################
 
+    ACCxt = (ACCx * 0.244)/1000
+    ACCyt= (ACCy * 0.244)/1000
+    ACCzt= (ACCz * 0.244)/1000
 
     if 0:                       #Change to '0' to stop showing the angles from the accelerometer
         outputString += "#  ACCX Angle %5.2f ACCY Angle %5.2f  #  " % (AccXangle, AccYangle)
@@ -394,7 +397,7 @@ while True:
         outputString +="\n# HEADING %5.2f  tiltCompensatedHeading %5.2f #" % (heading,tiltCompensatedHeading)
 
     if 1:                       #Change to '0' to stop showing the acceleration
-        outputString +="\n# ACCx %5.2f  ACCy %5.2f  ACCz %5.2f #" % (ACCx,ACCy,ACCz)
+        outputString +="\n# ACCx %5.2f  ACCy %5.2f  ACCz %5.2f #" % (ACCxt,ACCyt,ACCzt)
     
 
     psi = kalmanX * M_PI/180
@@ -404,7 +407,7 @@ while True:
     rotMatrix = np.array([[math.cos(theta)*math.cos(phi), math.sin(psi)*math.sin(theta)*math.cos(phi)-math.cos(psi)*math.sin(phi), math.cos(psi)*math.sin(theta)*math.cos(phi)+math.sin(psi)*math.sin(phi)],
     [[math.cos(theta)*math.sin(phi), math.sin(psi)*math.sin(theta)*math.sin(phi)+math.cos(psi)*math.cos(phi), math.cos(psi)*math.sin(theta)*math.sin(phi)-math.sin(psi)*math.cos(phi)]],
     [-math.sin(theta), math.sin(psi)*math.cos(theta), math.cos(psi)*math.cos(theta)]])
-    ACCVec = np.array([[ACCx],[ACCy],[ACCz]])
+    ACCVec = np.array([[ACCxt],[ACCyt],[ACCzt]])
     EFrame = np.dot(rotMatrix, ACCVec)
 
     if 1:                       #Change to '0' to stop showing the acceleration
