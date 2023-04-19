@@ -218,7 +218,7 @@ while True:
     b = datetime.datetime.now() - a
     a = datetime.datetime.now()
     LP = b.microseconds/(1000000*1.0)
-    outputString = "Loop Time %5.2f " % ( LP )
+    outputString = "Loop Time %5.5f " % ( LP )
     print(outputString)
 
 
@@ -369,8 +369,8 @@ while True:
     #Calculate tilt compensated heading
     tiltCompensatedHeading = 180 * math.atan2(magYcomp,magXcomp)/M_PI
 
-    if tiltCompensatedHeading < 0:
-        tiltCompensatedHeading += 360
+    # if tiltCompensatedHeading < 0:
+    #     tiltCompensatedHeading += 360
 
     ##################### END Tilt Compensation ########################
 
