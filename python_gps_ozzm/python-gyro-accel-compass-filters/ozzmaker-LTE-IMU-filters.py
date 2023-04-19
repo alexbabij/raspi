@@ -414,7 +414,7 @@ while True:
     rotMatrix = np.array([r1,r2,r3]) #Rotation matrix from euler angles to transform accelerometer back to earth frame
     ACCVec = np.array([[ACCxt],[ACCyt],[ACCzt]])
     EFrame = np.matmul(rotMatrix, ACCVec) #Accelerometer readings in earth frame
-    EFrameAccel = [EFrame[0][0], EFrame[1][0], (EFrame[2][0]-fGrav)] #Acceleration in earth frame without force of gravity. 
+    EFrameAccel = [EFrame[0][0]*fGrav, EFrame[1][0]*fGrav, (EFrame[2][0]*fGrav-fGrav)] #Convert from G's to m/s^2 and remove force of gravity. 
 
     if 0:                       #Change to '0' to stop showing the acceleration
         outputString +="\n# dims %5.2f  ACCy %5.2f #" % (rotMatrix.ndim,np.size(rotMatrix))
