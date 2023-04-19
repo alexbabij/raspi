@@ -385,18 +385,31 @@ while True:
         outputString +="\n#  CFangleX Angle %5.2f   CFangleY Angle %5.2f  #" % (CFangleX,CFangleY)
 
     if 1:                       #Change to '0' to stop  showing the angles from the Kalman filter
-        outputString +="\n# kalmanX %5.2f   kalmanY %5.2f #\n" % (kalmanX,kalmanY)
+        outputString +="\n# kalmanX %5.2f   kalmanY %5.2f #" % (kalmanX,kalmanY)
 
-    if 1:                       #Change to '0' to stop  showing the angles from the Kalman filter
+    if 0:                       #Change to '0' to stop  showing the angles from the Kalman filter
         outputString +="\n# pitch %5.2f   roll %5.2f #\n" % (pitch*180/M_PI,roll*180/M_PI)
 
     if 1:                       #Change to '0' to stop  showing the heading
-        outputString +="# HEADING %5.2f  tiltCompensatedHeading %5.2f #" % (heading,tiltCompensatedHeading)
-    
+        outputString +="\n# HEADING %5.2f  tiltCompensatedHeading %5.2f #" % (heading,tiltCompensatedHeading)
 
+    if 1:                       #Change to '0' to stop showing the acceleration
+        outputString +="\n# ACCx %5.2f  ACCy %5.2f  ACCz %5.2f #" % (ACCx,ACCy,ACCz)
+
+    psi = kalmanX * M_PI/180
+    theta = kalmanY * M_PI/180
+    phi = tiltCompensatedHeading * M_PI/180
+    
+    rotMatrix = np.array([[math.cos(theta)*math.cos(phi), math.sin(psi)*math.sin(theta)*math.cos(phi)-math.cos(psi)*math.sin(phi), math.cos(psi)*math.sin(theta)*math.cos(phi)+math.sin(psi)*math.sin(phi)],
+    [[math.cos(theta)*math.sin(phi), math.sin(psi)*math.sin(theta)*math.sin(phi)+math.cos(psi)*math.cos(phi), math.cos(psi)*math.sin(theta)*math.sin(phi)-math.sin(psi)*math.cos(phi)]],
+    [-math.sin(theta), math.sin(psi)*math.cos(theta), math.cos(psi)*math.cos(theta)]])
+    ACCVec = np.array([[ACCx],[ACCy],[ACCz]])
+    EFrame = np.dot(rotMatrix, ACCVec)
+    
+    if 1:                       #Change to '0' to stop showing the acceleration
+        outputString +="\n# EarthACCx %5.2f  EarthACCy %5.2f  EarthACCz %5.2f #" % (EFrame[0][0],EFrame[1][0],EFrame[2][0])
 
     print(outputString)
-    rotMatrix = np.array([[]])
     #slow program down a bit, makes the output more readable
     time.sleep(0.03)
 
