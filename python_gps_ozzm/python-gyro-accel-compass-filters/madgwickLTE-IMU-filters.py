@@ -145,44 +145,35 @@ while True:
     ACCy= (ACCy * 0.244)/1000
     ACCz= (ACCz * 0.244)/1000
 
+    #Convert magnetometer to uT from G
+    MAGx  = MAGx * 100
+    MAGy  = MAGy * 100
+    MAGz  = MAGz * 100
+
     
     gyroscope = [rate_gyr_x,rate_gyr_y,rate_gyr_z]
     accelerometer = [ACCx, ACCy, ACCz]
-    magnetometer =
+    magnetometer = [MAGx, MAGy, MAGz]
+    euler = [0.0,0.0,0.0]
     ##################### END Data Collection ########################
 
     ahrs.update(gyroscope, accelerometer, magnetometer, delta_time)
+    euler = ahrs.quaternion.to_euler()
 
     
-    if 0:                       #Change to '0' to stop showing the angles from the accelerometer
-        outputString += "#  ACCX Angle %5.2f ACCY Angle %5.2f  #  " % (AccXangle, AccYangle)
 
     if 0:                       #Change to '0' to stop  showing the angles from the gyro
         outputString +="\t# GYRX Angle %5.2f  GYRY Angle %5.2f  GYRZ Angle %5.2f # " % (gyroXangle,gyroYangle,gyroZangle)
 
-    if 1:                       #Change to '0' to stop  showing the angles from the complementary filter
-        outputString +="\n#  CFangleX Angle %5.2f   CFangleY Angle %5.2f  #" % (CFangleX,CFangleY)
-
-    if 1:                       #Change to '0' to stop  showing the angles from the Kalman filter
-        outputString +="\n# kalmanX %5.2f   kalmanY %5.2f #" % (kalmanX,kalmanY)
-
-    if 0:                       #Change to '0' to stop  showing the angles from the Kalman filter
-        outputString +="\n# pitch %5.2f   roll %5.2f #\n" % (pitch*180/M_PI,roll*180/M_PI)
-
     if 1:                       #Change to '0' to stop  showing the heading
-        outputString +="\n# HEADING %5.2f  tiltCompensatedHeading %5.2f #" % (heading,tiltCompensatedHeading)
+        outputString +="\n# EulerX %5.2f  EulerY %5.2f Eulerz %5.2f#" % (euler[0],euler[1],euler[2])
 
     if 1:                       #Change to '0' to stop showing the acceleration
-        outputString +="\n# ACCx %5.2f  ACCy %5.2f  ACCz %5.2f #" % (ACCxt,ACCyt,ACCzt)
+        outputString +="\n# ACCx %5.2f  ACCy %5.2f  ACCz %5.2f #" % (ACCx,ACCy,ACCz)
     
 
-
-    
-
-    if 0:                       #Change to '0' to stop showing the acceleration
-        outputString +="\n# dims %5.2f  ACCy %5.2f #" % (rotMatrix.ndim,np.size(rotMatrix))
-    if 1:                       #Change to '0' to stop showing the acceleration
-        outputString +="\n# EarthACCx %5.2f  EarthACCy %5.2f  EarthACCz %5.2f #" % (EFrameAccel[0],EFrameAccel[1],EFrameAccel[2])
+    # if 1:                       #Change to '0' to stop showing the acceleration
+    #     outputString +="\n# EarthACCx %5.2f  EarthACCy %5.2f  EarthACCz %5.2f #" % (EFrameAccel[0],EFrameAccel[1],EFrameAccel[2])
 
     print(outputString)
     #slow program down a bit, makes the output more readable
