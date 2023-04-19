@@ -395,6 +395,7 @@ while True:
 
     if 1:                       #Change to '0' to stop showing the acceleration
         outputString +="\n# ACCx %5.2f  ACCy %5.2f  ACCz %5.2f #" % (ACCx,ACCy,ACCz)
+    
 
     psi = kalmanX * M_PI/180
     theta = kalmanY * M_PI/180
@@ -405,8 +406,10 @@ while True:
     [-math.sin(theta), math.sin(psi)*math.cos(theta), math.cos(psi)*math.cos(theta)]])
     ACCVec = np.array([[ACCx],[ACCy],[ACCz]])
     EFrame = np.dot(rotMatrix, ACCVec)
-    
+
     if 1:                       #Change to '0' to stop showing the acceleration
+        outputString +="\n# dims %5.2f  ACCy %5.2f #" % (rotMatrix.ndim,np.size(rotMatrix))
+    if 0:                       #Change to '0' to stop showing the acceleration
         outputString +="\n# EarthACCx %5.2f  EarthACCy %5.2f  EarthACCz %5.2f #" % (EFrame[0][0],EFrame[1][0],EFrame[2][0])
 
     print(outputString)
