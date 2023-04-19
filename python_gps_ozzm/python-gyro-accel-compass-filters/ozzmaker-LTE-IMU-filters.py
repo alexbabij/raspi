@@ -405,8 +405,8 @@ while True:
     phi = tiltCompensatedHeading * M_PI/180
 
         
-    r1 = [math.cos(theta)*math.cos(phi), math.sin(psi)*math.sin(theta)*math.cos(phi)-math.cos(psi)*math.sin(phi), math.cos(psi)*math.sin(theta)*math.cos(phi)+math.sin(psi)*math.sin(phi)],
-    r2 = [[math.cos(theta)*math.sin(phi), math.sin(psi)*math.sin(theta)*math.sin(phi)+math.cos(psi)*math.cos(phi), math.cos(psi)*math.sin(theta)*math.sin(phi)-math.sin(psi)*math.cos(phi)]],
+    r1 = [math.cos(theta)*math.cos(phi), math.sin(psi)*math.sin(theta)*math.cos(phi)-math.cos(psi)*math.sin(phi), math.cos(psi)*math.sin(theta)*math.cos(phi)+math.sin(psi)*math.sin(phi)]
+    r2 = [math.cos(theta)*math.sin(phi), math.sin(psi)*math.sin(theta)*math.sin(phi)+math.cos(psi)*math.cos(phi), math.cos(psi)*math.sin(theta)*math.sin(phi)-math.sin(psi)*math.cos(phi)]
     r3 = [-math.sin(theta), math.sin(psi)*math.cos(theta), math.cos(psi)*math.cos(theta)]
     
     rotMatrix = np.array([r1,r2,r3])
