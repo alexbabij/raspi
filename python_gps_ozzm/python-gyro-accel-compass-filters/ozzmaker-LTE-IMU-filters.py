@@ -413,9 +413,9 @@ while True:
     ACCVec = np.array([[ACCxt],[ACCyt],[ACCzt]])
     EFrame = np.matmul(rotMatrix, ACCVec)
 
-    if 1:                       #Change to '0' to stop showing the acceleration
-        outputString +="\n# dims %5.2f  ACCy %5.2f #" % (rotMatrix.ndim,np.size(rotMatrix))
     if 0:                       #Change to '0' to stop showing the acceleration
+        outputString +="\n# dims %5.2f  ACCy %5.2f #" % (rotMatrix.ndim,np.size(rotMatrix))
+    if 1:                       #Change to '0' to stop showing the acceleration
         outputString +="\n# EarthACCx %5.2f  EarthACCy %5.2f  EarthACCz %5.2f #" % (EFrame[0][0],EFrame[1][0],EFrame[2][0])
 
     print(outputString)
