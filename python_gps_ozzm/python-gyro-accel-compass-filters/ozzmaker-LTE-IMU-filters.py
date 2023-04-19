@@ -400,18 +400,21 @@ while True:
         outputString +="\n# ACCx %5.2f  ACCy %5.2f  ACCz %5.2f #" % (ACCxt,ACCyt,ACCzt)
     
 
+
+    #Everything above this is not my own work, I considered trying to implement a madgwick filter instead of kalman but so far no luck-Alex
     psi = kalmanX * M_PI/180
     theta = kalmanY * M_PI/180
     phi = tiltCompensatedHeading * M_PI/180
-
+    fGrav = 9.80674 #m/s^2 Force of gravity in Spokane, WA
         
     r1 = [math.cos(theta)*math.cos(phi), math.sin(psi)*math.sin(theta)*math.cos(phi)-math.cos(psi)*math.sin(phi), math.cos(psi)*math.sin(theta)*math.cos(phi)+math.sin(psi)*math.sin(phi)]
     r2 = [math.cos(theta)*math.sin(phi), math.sin(psi)*math.sin(theta)*math.sin(phi)+math.cos(psi)*math.cos(phi), math.cos(psi)*math.sin(theta)*math.sin(phi)-math.sin(psi)*math.cos(phi)]
     r3 = [-math.sin(theta), math.sin(psi)*math.cos(theta), math.cos(psi)*math.cos(theta)]
     
-    rotMatrix = np.array([r1,r2,r3])
+    rotMatrix = np.array([r1,r2,r3]) #Rotation matrix from euler angles to transform accelerometer back to earth frame
     ACCVec = np.array([[ACCxt],[ACCyt],[ACCzt]])
-    EFrame = np.matmul(rotMatrix, ACCVec)
+    EFrame = np.matmul(rotMatrix, ACCVec) #Accelerometer readings in earth frame
+    EFrameAccel = [EFrame[0][0], EFrame[1][0], (EFrame[2][0]-fGrav)] #Acceleration in earth frame without force of gravity. 
 
     if 0:                       #Change to '0' to stop showing the acceleration
         outputString +="\n# dims %5.2f  ACCy %5.2f #" % (rotMatrix.ndim,np.size(rotMatrix))
@@ -420,5 +423,5 @@ while True:
 
     print(outputString)
     #slow program down a bit, makes the output more readable
-    time.sleep(0.03)
-
+    #time.sleep(0.03)
+    #EFrameAccel
