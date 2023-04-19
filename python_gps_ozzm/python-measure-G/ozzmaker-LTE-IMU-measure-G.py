@@ -35,8 +35,8 @@ while True:
     ACCx = IMU.readACCx()
     ACCy = IMU.readACCy()
     ACCz = IMU.readACCz()
-    MAGx = IMU.readMAGz() 
-    MAGy = IMU.readMAGz() 
+    MAGx = IMU.readMAGx() 
+    MAGy = IMU.readMAGy() 
     MAGz = IMU.readMAGz() 
     MAGx  = MAGx * (1.0/16384.0)  #18 bits
     MAGy  = MAGy * (1.0/16384.0)  #18 bits
