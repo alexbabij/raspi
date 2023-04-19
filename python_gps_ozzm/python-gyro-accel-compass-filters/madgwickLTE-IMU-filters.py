@@ -6,7 +6,8 @@ import math
 import IMU
 import datetime
 import os
-import numpy as np
+import numpy
+import imufusion
 
 RAD_TO_DEG = 57.29578
 M_PI = 3.14159265358979323846
@@ -45,96 +46,6 @@ Dont use the above values, these are just an example.
 ############### END Calibration offsets #################
 
 
-#Kalman filter variables
-Q_angle = 0.02
-Q_gyro = 0.0015
-R_angle = 0.005
-y_bias = 0.0
-x_bias = 0.0
-XP_00 = 0.0
-XP_01 = 0.0
-XP_10 = 0.0
-XP_11 = 0.0
-YP_00 = 0.0
-YP_01 = 0.0
-YP_10 = 0.0
-YP_11 = 0.0
-KFangleX = 0.0
-KFangleY = 0.0
-
-
-
-def kalmanFilterY ( accAngle, gyroRate, DT):
-    y=0.0
-    S=0.0
-
-    global KFangleY
-    global Q_angle
-    global Q_gyro
-    global y_bias
-    global YP_00
-    global YP_01
-    global YP_10
-    global YP_11
-
-    KFangleY = KFangleY + DT * (gyroRate - y_bias)
-
-    YP_00 = YP_00 + ( - DT * (YP_10 + YP_01) + Q_angle * DT )
-    YP_01 = YP_01 + ( - DT * YP_11 )
-    YP_10 = YP_10 + ( - DT * YP_11 )
-    YP_11 = YP_11 + ( + Q_gyro * DT )
-
-    y = accAngle - KFangleY
-    S = YP_00 + R_angle
-    K_0 = YP_00 / S
-    K_1 = YP_10 / S
-
-    KFangleY = KFangleY + ( K_0 * y )
-    y_bias = y_bias + ( K_1 * y )
-
-    YP_00 = YP_00 - ( K_0 * YP_00 )
-    YP_01 = YP_01 - ( K_0 * YP_01 )
-    YP_10 = YP_10 - ( K_1 * YP_00 )
-    YP_11 = YP_11 - ( K_1 * YP_01 )
-
-    return KFangleY
-
-def kalmanFilterX ( accAngle, gyroRate, DT):
-    x=0.0
-    S=0.0
-
-    global KFangleX
-    global Q_angle
-    global Q_gyro
-    global x_bias
-    global XP_00
-    global XP_01
-    global XP_10
-    global XP_11
-
-
-    KFangleX = KFangleX + DT * (gyroRate - x_bias)
-
-    XP_00 = XP_00 + ( - DT * (XP_10 + XP_01) + Q_angle * DT )
-    XP_01 = XP_01 + ( - DT * XP_11 )
-    XP_10 = XP_10 + ( - DT * XP_11 )
-    XP_11 = XP_11 + ( + Q_gyro * DT )
-
-    x = accAngle - KFangleX
-    S = XP_00 + R_angle
-    K_0 = XP_00 / S
-    K_1 = XP_10 / S
-
-    KFangleX = KFangleX + ( K_0 * x )
-    x_bias = x_bias + ( K_1 * x )
-
-    XP_00 = XP_00 - ( K_0 * XP_00 )
-    XP_01 = XP_01 - ( K_0 * XP_01 )
-    XP_10 = XP_10 - ( K_1 * XP_00 )
-    XP_11 = XP_11 - ( K_1 * XP_01 )
-
-    return KFangleX
-
 
 gyroXangle = 0.0
 gyroYangle = 0.0
@@ -156,26 +67,25 @@ a = datetime.datetime.now()
 
 
 
-#Setup the tables for the mdeian filter. Fill them all with '1' so we dont get devide by zero error
-acc_medianTable1X = [1] * ACC_MEDIANTABLESIZE
-acc_medianTable1Y = [1] * ACC_MEDIANTABLESIZE
-acc_medianTable1Z = [1] * ACC_MEDIANTABLESIZE
-acc_medianTable2X = [1] * ACC_MEDIANTABLESIZE
-acc_medianTable2Y = [1] * ACC_MEDIANTABLESIZE
-acc_medianTable2Z = [1] * ACC_MEDIANTABLESIZE
-mag_medianTable1X = [1] * MAG_MEDIANTABLESIZE
-mag_medianTable1Y = [1] * MAG_MEDIANTABLESIZE
-mag_medianTable1Z = [1] * MAG_MEDIANTABLESIZE
-mag_medianTable2X = [1] * MAG_MEDIANTABLESIZE
-mag_medianTable2Y = [1] * MAG_MEDIANTABLESIZE
-mag_medianTable2Z = [1] * MAG_MEDIANTABLESIZE
-
+ 
 IMU.detectIMU()     #Detect if BerryIMU is connected.
 
 IMU.initIMU()       #Initialise the accelerometer, gyroscope and compass
 
+# Instantiate algorithms
+sample_rate = 20 #Hz
+offset = imufusion.Offset(sample_rate)
+ahrs = imufusion.Ahrs()
+
+ahrs.settings = imufusion.Settings(imufusion.CONVENTION_NWU,  # convention
+                                   0.5,  # gain
+                                   10,  # acceleration rejection
+                                   20,  # magnetic rejection
+                                   5 * sample_rate)  # rejection timeout = 5 seconds
+
 
 while True:
+    
 
     #Read the accelerometer,gyroscope and magnetometer values
     ACCx = IMU.readACCx()
@@ -203,10 +113,10 @@ while True:
     ##Calculate loop Period(LP). How long between Gyro Reads
     b = datetime.datetime.now() - a
     a = datetime.datetime.now()
-    LP = b.microseconds/(1000000*1.0)
+    LP = b.microseconds/(1000000*1.0) #loop time
     outputString = "Loop Time %5.5f " % ( LP )
     print(outputString)
-
+    delta_time = LP
 
     ###############################################
     #### Apply low pass filter ####
@@ -225,145 +135,25 @@ while True:
     oldYAccRawValue = ACCy
     oldZAccRawValue = ACCz
 
-    #########################################
-    #### Median filter for accelerometer ####
-    #########################################
-    # cycle the table
-    for x in range (ACC_MEDIANTABLESIZE-1,0,-1 ):
-        acc_medianTable1X[x] = acc_medianTable1X[x-1]
-        acc_medianTable1Y[x] = acc_medianTable1Y[x-1]
-        acc_medianTable1Z[x] = acc_medianTable1Z[x-1]
-
-    # Insert the lates values
-    acc_medianTable1X[0] = ACCx
-    acc_medianTable1Y[0] = ACCy
-    acc_medianTable1Z[0] = ACCz
-
-    # Copy the tables
-    acc_medianTable2X = acc_medianTable1X[:]
-    acc_medianTable2Y = acc_medianTable1Y[:]
-    acc_medianTable2Z = acc_medianTable1Z[:]
-
-    # Sort table 2
-    acc_medianTable2X.sort()
-    acc_medianTable2Y.sort()
-    acc_medianTable2Z.sort()
-
-    # The middle value is the value we are interested in
-    ACCx = acc_medianTable2X[int(ACC_MEDIANTABLESIZE/2)];
-    ACCy = acc_medianTable2Y[int(ACC_MEDIANTABLESIZE/2)];
-    ACCz = acc_medianTable2Z[int(ACC_MEDIANTABLESIZE/2)];
-
-
-
-    #########################################
-    #### Median filter for magnetometer ####
-    #########################################
-    # cycle the table
-    for x in range (MAG_MEDIANTABLESIZE-1,0,-1 ):
-        mag_medianTable1X[x] = mag_medianTable1X[x-1]
-        mag_medianTable1Y[x] = mag_medianTable1Y[x-1]
-        mag_medianTable1Z[x] = mag_medianTable1Z[x-1]
-
-    # Insert the latest values
-    mag_medianTable1X[0] = MAGx
-    mag_medianTable1Y[0] = MAGy
-    mag_medianTable1Z[0] = MAGz
-
-    # Copy the tables
-    mag_medianTable2X = mag_medianTable1X[:]
-    mag_medianTable2Y = mag_medianTable1Y[:]
-    mag_medianTable2Z = mag_medianTable1Z[:]
-
-    # Sort table 2
-    mag_medianTable2X.sort()
-    mag_medianTable2Y.sort()
-    mag_medianTable2Z.sort()
-
-    # The middle value is the value we are interested in
-    MAGx = mag_medianTable2X[int(MAG_MEDIANTABLESIZE/2)];
-    MAGy = mag_medianTable2Y[int(MAG_MEDIANTABLESIZE/2)];
-    MAGz = mag_medianTable2Z[int(MAG_MEDIANTABLESIZE/2)];
-
-
-
     #Convert Gyro raw to degrees per second
     rate_gyr_x =  GYRx * G_GAIN
     rate_gyr_y =  GYRy * G_GAIN
     rate_gyr_z =  GYRz * G_GAIN
 
+    #Convert accelerometer data to g's
+    ACCx = (ACCx * 0.244)/1000
+    ACCy= (ACCy * 0.244)/1000
+    ACCz= (ACCz * 0.244)/1000
 
-    #Calculate the angles from the gyro.
-    gyroXangle+=rate_gyr_x*LP
-    gyroYangle+=rate_gyr_y*LP
-    gyroZangle+=rate_gyr_z*LP
+    
+    gyroscope = [rate_gyr_x,rate_gyr_y,rate_gyr_z]
+    accelerometer = [ACCx, ACCy, ACCz]
+    magnetometer =
+    ##################### END Data Collection ########################
 
-    #Convert Accelerometer values to degrees
-    AccXangle =  (math.atan2(ACCy,ACCz)*RAD_TO_DEG)
-    AccYangle =  (math.atan2(ACCz,ACCx)+M_PI)*RAD_TO_DEG
+    ahrs.update(gyroscope, accelerometer, magnetometer, delta_time)
 
-
-    #Change the rotation value of the accelerometer to -/+ 180 and
-    #move the Y axis '0' point to up.  This makes it easier to read.
-    if AccYangle > 90:
-        AccYangle -= 270.0
-    else:
-        AccYangle += 90.0
-
-
-
-    #Complementary filter used to combine the accelerometer and gyro values.
-    CFangleX=AA*(CFangleX+rate_gyr_x*LP) +(1 - AA) * AccXangle
-    CFangleY=AA*(CFangleY+rate_gyr_y*LP) +(1 - AA) * AccYangle
-
-    #Kalman filter used to combine the accelerometer and gyro values.
-    kalmanY = kalmanFilterY(AccYangle, rate_gyr_y,LP)
-    kalmanX = kalmanFilterX(AccXangle, rate_gyr_x,LP)
-
-    #Calculate heading
-    heading = 180 * math.atan2(MAGy,MAGx)/M_PI
-
-    #Only have our heading between 0 and 360
-    if heading < 0:
-        heading += 360
-
-
-
-    ####################################################################
-    ###################Tilt compensated heading#########################
-    ####################################################################
-    #Flip Z for tilt compensation to work.
-    MAGz = -MAGz
-    #Normalize accelerometer raw values.
-    accXnorm = ACCx/math.sqrt(ACCx * ACCx + ACCy * ACCy + ACCz * ACCz)
-    accYnorm = ACCy/math.sqrt(ACCx * ACCx + ACCy * ACCy + ACCz * ACCz)
-
-
-    #Calculate pitch and roll
-    pitch = math.asin(accXnorm)
-    roll = -math.asin(accYnorm/math.cos(pitch))
-
-
-    #Calculate the new tilt compensated values
-    #X compensation
-    magXcomp = MAGx*math.cos(pitch)+MAGz*math.sin(pitch)
-
-    #Y compensation
-    magYcomp = MAGx*math.sin(roll)*math.sin(pitch)+MAGy*math.cos(roll)-MAGz*math.sin(roll)*math.cos(pitch)
-
-
-    #Calculate tilt compensated heading
-    tiltCompensatedHeading = 180 * math.atan2(magYcomp,magXcomp)/M_PI
-
-    # if tiltCompensatedHeading < 0:
-    #     tiltCompensatedHeading += 360
-
-    ##################### END Tilt Compensation ########################
-
-    ACCxt = (ACCx * 0.244)/1000
-    ACCyt= (ACCy * 0.244)/1000
-    ACCzt= (ACCz * 0.244)/1000
-
+    
     if 0:                       #Change to '0' to stop showing the angles from the accelerometer
         outputString += "#  ACCX Angle %5.2f ACCY Angle %5.2f  #  " % (AccXangle, AccYangle)
 
@@ -387,20 +177,7 @@ while True:
     
 
 
-    #Everything above this is not my own work, I considered trying to implement a madgwick filter instead of kalman but so far no luck-Alex
-    psi = kalmanX * M_PI/180
-    theta = kalmanY * M_PI/180
-    phi = tiltCompensatedHeading * M_PI/180
-    fGrav = 9.80674 #m/s^2 Force of gravity in Spokane, WA
-        
-    r1 = [math.cos(theta)*math.cos(phi), math.sin(psi)*math.sin(theta)*math.cos(phi)-math.cos(psi)*math.sin(phi), math.cos(psi)*math.sin(theta)*math.cos(phi)+math.sin(psi)*math.sin(phi)]
-    r2 = [math.cos(theta)*math.sin(phi), math.sin(psi)*math.sin(theta)*math.sin(phi)+math.cos(psi)*math.cos(phi), math.cos(psi)*math.sin(theta)*math.sin(phi)-math.sin(psi)*math.cos(phi)]
-    r3 = [-math.sin(theta), math.sin(psi)*math.cos(theta), math.cos(psi)*math.cos(theta)]
     
-    rotMatrix = np.array([r1,r2,r3]) #Rotation matrix from euler angles to transform accelerometer back to earth frame
-    ACCVec = np.array([[ACCxt],[ACCyt],[ACCzt]])
-    EFrame = np.matmul(rotMatrix, ACCVec) #Accelerometer readings in earth frame
-    EFrameAccel = [EFrame[0][0]*fGrav, EFrame[1][0]*fGrav, (EFrame[2][0]*fGrav)]#-fGrav)] #Convert from G's to m/s^2 and remove force of gravity. 
 
     if 0:                       #Change to '0' to stop showing the acceleration
         outputString +="\n# dims %5.2f  ACCy %5.2f #" % (rotMatrix.ndim,np.size(rotMatrix))
@@ -409,5 +186,5 @@ while True:
 
     print(outputString)
     #slow program down a bit, makes the output more readable
-    #time.sleep(0.03)
+    time.sleep(0.03)
     #EFrameAccel
