@@ -9,7 +9,7 @@ import os
 import numpy
 import imufusion
 
-targetHz = 100 #Target frequency to run at 
+targetHz = 50 #Target frequency to run at 
 targetS = 1/targetHz
 #Ideally, we want to align our refresh rate with a multiple of our gps refresh rate so we can grab relevant accelerometer data.
 #GPS data is precisely aligned to seconds i.e. at 5Hz signals are sent from gps at 03:21:15.00, 03:21:15.20, etc. (I think, this may not include time offset to our location)
@@ -68,7 +68,7 @@ IMU.detectIMU()     #Detect if BerryIMU is connected.
 IMU.initIMU()       #Initialise the accelerometer, gyroscope and compass
 
 # Instantiate algorithms
-sample_rate = 20 #Hz
+sample_rate = targetHz #Hz
 offset = imufusion.Offset(sample_rate)
 ahrs = imufusion.Ahrs()
 
