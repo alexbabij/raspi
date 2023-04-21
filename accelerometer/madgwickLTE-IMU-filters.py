@@ -183,6 +183,7 @@ while True:
     #slow program down a bit, makes the output more readable
     delTime = time.time()-lastTime
     if (delTime) < targetS:
+        print("\nSurplus time:",targetS-delTime)
         time.sleep(targetS-delTime)
 
     lastTime = time.time()
