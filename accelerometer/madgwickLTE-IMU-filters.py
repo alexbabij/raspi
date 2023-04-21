@@ -179,7 +179,7 @@ while True:
         if 1:                       #Change to '0' to stop showing the acceleration
             outputString +="\n# LinearACCx %5.4f  LinearACCy %5.4f  LinearACCz %5.4f #" % (ACCLinear[0],ACCLinear[1],ACCLinear[2])
         if 1:                       #Change to '0' to stop showing the acceleration
-            outputString +="\n# EarthMagnitude %5.4f  LinearMagnitude   #" % (ACCmagnitudeE,ACCmagnitudeL)
+            outputString +="\n# EarthMagnitude %5.4f  LinearMagnitude  %5.4f #" % (ACCmagnitudeE,ACCmagnitudeL)
         # if 1:                       #Change to '0' to stop showing the acceleration
         #     outputString +="\n# EarthACCx %5.4f  EarthACCy %5.4f  EarthACCz %5.4f #" % (EFrameAccel[0],EFrameAccel[1],EFrameAccel[2])
 
