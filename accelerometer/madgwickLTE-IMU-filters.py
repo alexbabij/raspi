@@ -9,7 +9,7 @@ import os
 import numpy
 import imufusion
 
-targetHz = 50 #Target frequency to run at 
+targetHz = 100 #Target frequency to run at 
 targetS = 1/targetHz
 #Ideally, we want to align our refresh rate with a multiple of our gps refresh rate so we can grab relevant accelerometer data.
 #GPS data is precisely aligned to seconds i.e. at 5Hz signals are sent from gps at 03:21:15.00, 03:21:15.20, etc. (I think, this may not include time offset to our location)
@@ -163,7 +163,7 @@ while True:
     ACCLinear = ahrs.linear_acceleration #acceleration in device frame with gravity removed
     ACCmagnitudeE = math.sqrt(ACCearthFrame[0]*ACCearthFrame[0] + ACCearthFrame[1]*ACCearthFrame[1] + ACCearthFrame[2]*ACCearthFrame[2])
     ACCmagnitudeL = math.sqrt(ACCLinear[0]*ACCLinear[0] + ACCLinear[1]*ACCLinear[1] + ACCLinear[2]*ACCLinear[2])
-
+    
     if 1: #easy disable all the print statements
         if 0:                       #Change to '0' to stop  showing the angles from the gyro
             outputString +="\t# GYRX Angle %5.4f  GYRY Angle %5.4f  GYRZ Angle %5.4f # " % (gyroXangle,gyroYangle,gyroZangle)

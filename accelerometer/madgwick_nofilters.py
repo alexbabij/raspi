@@ -140,6 +140,8 @@ while True:
     #The documentation is cheeks, this link has some of? the different python functions: https://github.com/xioTechnologies/Fusion/blob/main/Python/Python-C-API/Ahrs.h
     #and https://github.com/xioTechnologies/Fusion/tree/main/Python/Python-C-API should contain all the functions
     #look for PyMethodDef and PyGetSetDef 
+    
+    #accelerations are in g's
 
     ahrs.update(gyroscope, accelerometer, magnetometer, delta_time)
     euler = ahrs.quaternion.to_euler() #This one is technically a function call
