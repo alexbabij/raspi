@@ -4,6 +4,11 @@ from gps import *
 import time
 import math
 import subprocess
+import multiprocessing as mp #we don technically need this since multiprocessing gets imported in madgwick_filters
+
+from accelerometer.collect_accel_madgwick import *
+
+
 
 #Configure gps settings including update rate
 with open('configDevice.txt') as mycfgfile:

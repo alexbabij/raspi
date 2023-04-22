@@ -78,7 +78,8 @@ ahrs.settings = imufusion.Settings(imufusion.CONVENTION_NWU,  # convention
                                    20,  # magnetic rejection
                                    5 * sample_rate)  # rejection timeout = 5 seconds
 
-
+#The madgwick filter here is actually very fast, but we are limited by the refresh rate we have set for our accelerometer (100Hz), 
+#meaning as currently configured, we cannot loop this faster than every 0.01 seconds
 while True:
     
 
