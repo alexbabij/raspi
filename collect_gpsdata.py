@@ -105,7 +105,7 @@ class gpsThr(tr.Thread):
                             print("accDataMag",accDataMag[0])
                         
                         print("currentData",currentData)
-                        currentData[4] = accTime#-totstart
+                        currentData[4] = time.time()-accTime#-totstart
 
                         if len(gpsData) == 0:
                             gpsData.append(currentData)
