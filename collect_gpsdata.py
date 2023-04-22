@@ -4,9 +4,9 @@ from gps import *
 import time
 import math
 import subprocess
-import multiprocessing as mp #we don technically need this since multiprocessing gets imported in madgwick_filters
+import threading as tr #we don technically need this since threading gets imported in madgwick_filters
 
-from accelerometer.collect_accel_madgwick import *
+
 
 
 
@@ -30,7 +30,7 @@ maxSpeed = False #Set to true upon reaching our configured cutoff speed, ends th
 #This is our list that contains all time and velocity samples for the current run
 gpsData = []
 rollingGpsData = []
-currentData = ['',float('nan')]
+currentData = ['',float('nan'),0.0,0.0]
 counter = 0
 #write our data to a file every 1 second 
 samplesC = int(config["storage interval"]) * updateRate #Only whole second intervals are allowed otherwise this counter could be a decimal
@@ -38,87 +38,117 @@ totSamplesC = float(config["timeout"]) + time.time()
 #Basically a timeout in case we don't stop taking data within timeout period
 
 
-#Should make a rolling estimation of acceleration to determine where data starts ########################
-
-totstart = time.time()
 #we do our timeout using time.time() instead of counting the successful writes, because then it will truly be timing out based on time
 #instead of timing out based on writes, meaning if we have a period of unsuccessful writes/data it will still timeout normally
 
-gpsd = gps(mode=WATCH_ENABLE|WATCH_NEWSTYLE) 
+
+accDataMag = 0.0
+
+
+from accelerometer.collect_accel_madgwick import *
+
 
 from fileSave import *
 
-start = time.time()
-filePath = ""
-fileCreated = False
-try:
- 
-     while (maxSpeed==False) & (time.time() < totSamplesC):
-        
-        
-        report = gpsd.next() #
-        if report['class'] == 'TPV': 
-        #This a lame way to select the correct json object since gpsd will return multiple different objects in repeating order
-             
-            if (math.isfinite(getattr(report,'speed',float('nan')))) & (getattr(report,'time','') !=''):
-            #If the data is bad we just ignore it, the format for this is to return NaN for numbers and empty for strings: ''
-            #Not sure how much an effect on performance this has
-                
-                #We record gps time, velocity, and time offset since starting script measured by the pi
-                currentData = [getattr(report,'time',''),getattr(report,'speed','nan'),(totstart-time.time())]
-                #We should never get nan or an empty string since we check for it, but just in case, we don't want this to stop collecting data
-                #We are capable of getting duplicate results, so we filter them out
+class gpsThr(tr.Thread):
+    def __init__(self):
+        super().__init__()
+        self.running = True
 
-                if len(gpsData) == 0:
-                    gpsData.append(currentData)
-                    rollingGpsData.append(currentData)
-                    counter += 1 #We save our file after 5 SUCCESSFUL readings
-                    print("Time since start:",time.time()-totstart)
-                    print(currentData)
-
-                elif gpsData[-1][0] != currentData[0]:
-                    gpsData.append(currentData)
-                    rollingGpsData.append(currentData)
-                    counter += 1
-                    print("Time since start:",time.time()-totstart)
-                    print(currentData)          
-            
-            end = time.time()
-            elapsed = (end-start)
+    def recGPS(self):
+        try:
+            gpsd = gps(mode=WATCH_ENABLE|WATCH_NEWSTYLE)
             start = time.time()
-            #print('\nTime/refresh',elapsed)
+            filePath = ""
+            fileCreated = False
+            totstart = time.time()
 
-            if (counter >= samplesC):
-                filePath, fileCreated = writeFile(vehicle,rollingGpsData,fileCreated,filePath)
-                counter = 0
-                print("Saved data:",rollingGpsData)
-                rollingGpsData = []
+            while (self.running == True) & (time.time() < totSamplesC):
                 
-            if gpsData[-1][1] >= (cutoffSpeed*1.1):
-                maxSpeed = True
+                
+                report = gpsd.next()
+                if report['class'] == 'TPV': 
+                #This a lame way to select the correct json object since gpsd will return multiple different objects in repeating order
+                    
+                    if (math.isfinite(getattr(report,'speed',float('nan')))) & (getattr(report,'time','') !=''):
+                    #If the data is bad we just ignore it, the format for this is to return NaN for numbers and empty for strings: ''
+                    #Not sure how much an effect on performance this has
+                        
+                        #We record gps time, velocity, and time offset since starting script measured by the pi
+                        currentData = [getattr(report,'time',''),getattr(report,'speed','nan'),(totstart-time.time()),0.0]
+                        #We should never get nan or an empty string since we check for it, but just in case, we don't want this to stop collecting data
+                        #We are capable of getting duplicate results, so we filter them out
+
+                        #we want to have the acceleration value locked for as little time as possible
+                        with accLock:
+                            currentData[3] = accDataMag
+
+                        if len(gpsData) == 0:
+                            gpsData.append(currentData)
+                            rollingGpsData.append(currentData)
+                            counter += 1 #We save our file after 5 SUCCESSFUL readings
+                            print("Time since start:",time.time()-totstart)
+                            print(currentData)
+
+                        elif gpsData[-1][0] != currentData[0]:
+                            gpsData.append(currentData)
+                            rollingGpsData.append(currentData)
+                            counter += 1
+                            print("Time since start:",time.time()-totstart)
+                            print(currentData)          
+                    
+                    end = time.time()
+                    elapsed = (end-start)
+                    start = time.time()
+                    #print('\nTime/refresh',elapsed)
+
+                    if (counter >= samplesC):
+                        filePath, fileCreated = writeFile(vehicle,rollingGpsData,fileCreated,filePath)
+                        counter = 0
+                        print("Saved data:",rollingGpsData)
+                        rollingGpsData = []
+                        
+                    if gpsData[-1][1] >= (cutoffSpeed*1.1):
+                        self.running = False
+                    
+                    if gpsData[-1][1] >= (cutoffSpeed):
+                        self.running = False
+                        #totSamplesC = time.time() + 1 
+
+                    #Record data up until reaching slightly past (10%) target speed, or 1 second after reaching target speed, whichever is first
+                
+                time.sleep(sleepInterval) 
             
-            if gpsData[-1][1] >= (cutoffSpeed):
-                totSamplesC = time.time() + 1 
+        except KeyError:
+                pass #We would rather just skip if we cannot get good data rather than have our stuff error out
+        except (KeyboardInterrupt, SystemExit): #when you press ctrl+c
+            print("\nExiting.")
+            filePath, fileCreated = writeFile(vehicle,rollingGpsData,fileCreated,filePath)
+        else:
+            if not counter == 0: #dont write to the file on exit if we just wrote to it 
+                filePath, fileCreated = writeFile(vehicle,rollingGpsData,fileCreated,filePath)
+                print("Saved data:",rollingGpsData)
+                print("Finished collecting data")
+                #Write the rest of the data when we exit the while loop
+            print(gpsData)
+            totend = time.time() - totstart
+            print("\nCompleted in:",totend)
 
-            #Record data up until reaching slightly past target speed, or 1 second after reaching target speed, whichever is first
-          
-        time.sleep(sleepInterval) 
-    
-except KeyError:
-        pass #We would rather just skip if we cannot get good data rather than have our stuff error out
-except (KeyboardInterrupt, SystemExit): #when you press ctrl+c
-    print("\nExiting.")
-    filePath, fileCreated = writeFile(vehicle,rollingGpsData,fileCreated,filePath)
-else:
-    if not counter == 0:
-        filePath, fileCreated = writeFile(vehicle,rollingGpsData,fileCreated,filePath)
-        print("Saved data:",rollingGpsData)
-        print("Finished collecting data")
-        #Write the rest of the data when we exit the while loop
-    print(gpsData)
-    totend = time.time() - totstart
-    print("\nCompleted in:",totend)
+if __name__ == "__main__": # I think we don't technically need this since we won't be importing this file into anything probably
 
+    accThread = accThr
+    gpsThread = gpsThr
+    accThread.start()
+    gpsThread.start()
 
+    try: #since both our gps and accelerometer are running in separate threads, we use this to be able to catch keyboard exceptions whenever we want
+        while True:
+            time.sleep(1)
 
-#Parsing the GPSD json:
+    except KeyboardInterrupt:
+        print("Attempting to close threads...")
+        accThread.running = False
+        gpsThread.running = False
+        accThread.join()
+        gpsThread.join()
+        print("Threads successfully closed.")
