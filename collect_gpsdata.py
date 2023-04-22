@@ -94,23 +94,28 @@ class gpsThr(tr.Thread):
                     #Not sure how much an effect on performance this has
                         print("gpsData1.5",gpsData)
                         #We record gps time, velocity, and time offset since starting script measured by the pi
-                        currentData = [getattr(report,'time',''),getattr(report,'speed','nan'),(time.time()-totstart),0.0,0.0]
+                        with accLock:
+                            curAccDataMag = accDataMag[0]
+                            accTime = accDataMag[1]
+                            print("accDataMag",accDataMag[0])
+                        
+                        print("currentData",currentData)
+                      
+                        print("counter",counter)
+                        print("gpsData3",gpsData)
+
+                        currentData = [getattr(report,'time',''),getattr(report,'speed','nan'),(time.time()-totstart),curAccDataMag,(time.time()-accTime)]
                         #currentData[:3] = [getattr(report,'time',''),getattr(report,'speed','nan'),(time.time()-totstart)]
-                        #doing it this way somehow manages to also update the value in gpsData after this step
+                        #doing it this way somehow manages to also update the value in gpsData after this step, I think this may have to do with the
+                        #same weirdness that lets me update accDataMag without declaring it a global variable, because gpsData is assigned the same object
+                        #in memorry as currentData, meaning if I simply update currentData's elements, it also updates gpsData, whereas if I redeclare
+                        #currentData = [...], I think it makes a new thing. we can get around this by using .copy() instead of just gpsData = currentData
 
                         #We should never get nan or an empty string since we check for it, but just in case, we don't want this to stop collecting data
                         #We are capable of getting duplicate results, so we filter them out
                         print("gpsData2",gpsData)
                         #we want to have the acceleration value variable locked for as little time as possible
-                        with accLock:
-                            currentData[3] = accDataMag[0]
-                            accTime = accDataMag[1]
-                            print("accDataMag",accDataMag[0])
                         
-                        print("currentData",currentData)
-                        currentData[4] = time.time()-accTime#-totstart
-                        print("counter",counter)
-                        print("gpsData3",gpsData)
                         if len(gpsData) == 0:
                             gpsData.append(currentData)
                             rollingGpsData.append(currentData)
