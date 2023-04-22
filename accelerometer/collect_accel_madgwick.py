@@ -211,3 +211,5 @@ class accThr(tr.Thread):
 
             lastTime = time.time()
             #EFrameAccel
+
+print("acc class done")

@@ -137,6 +137,8 @@ class gpsThr(tr.Thread):
             totend = time.time() - totstart
             print("\nCompleted in:",totend)
 
+print("gps class done")
+
 if __name__ == "__main__": # I think we don't technically need this since we won't be importing this file into anything probably
 
     accThread = accThr()
