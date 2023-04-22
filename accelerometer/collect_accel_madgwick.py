@@ -182,6 +182,7 @@ class accThr(tr.Thread):
             ACCmagnitudeL = math.sqrt(ACCLinear[0]*ACCLinear[0] + ACCLinear[1]*ACCLinear[1] + ACCLinear[2]*ACCLinear[2])
             
             #accDataMag = ACCmagnitudeE
+            sampleTime = time.time()
             with accLock:
                 #Python is weird, if I were to do accDataMag = ACCmagnitudeE, this would not update the global variable, because python would create a new 
                 #local variable in the scope of this function also named accDataMag. To be able to do it this way, I would need to declare global accDataMag 
@@ -189,7 +190,7 @@ class accThr(tr.Thread):
                 #The below does work though, and updates the global variable, assumably because it tries to access the index of the global variable instead of 
                 #trying to create a new one 
                 accDataMag[0] = ACCmagnitudeE
-                accDataMag[1] = time.time()
+                accDataMag[1] = sampleTime
                 #accDataMag = ACCmagnitudeE
                 
 
