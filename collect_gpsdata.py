@@ -98,13 +98,13 @@ class gpsThr(tr.Thread):
                         #We should never get nan or an empty string since we check for it, but just in case, we don't want this to stop collecting data
                         #We are capable of getting duplicate results, so we filter them out
 
-                        #we want to have the acceleration value locked for as little time as possible
+                        #we want to have the acceleration value variable locked for as little time as possible
                         with accLock:
                             currentData[3] = accDataMag[0]
                             accTime = accDataMag[1]
                             print("accDataMag",accDataMag[0])
                         
-                        print("currentData[3]",currentData[3])
+                        print("currentData[4]",currentData[4])
                         currentData[4] = totstart-accTime
                         if len(gpsData) == 0:
                             gpsData.append(currentData)
