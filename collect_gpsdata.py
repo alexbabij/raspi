@@ -139,8 +139,8 @@ class gpsThr(tr.Thread):
 
 if __name__ == "__main__": # I think we don't technically need this since we won't be importing this file into anything probably
 
-    accThread = accThr
-    gpsThread = gpsThr
+    accThread = accThr()
+    gpsThread = gpsThr()
     accThread.start()
     gpsThread.start()
 
