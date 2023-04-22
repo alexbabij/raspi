@@ -65,7 +65,7 @@ class gpsThr(tr.Thread):
             filePath = ""
             fileCreated = False
             totstart = time.time()
-
+            print("gps rec started")
             while (self.running == True) & (time.time() < totSamplesC):
                 
                 
@@ -149,6 +149,7 @@ if __name__ == "__main__": # I think we don't technically need this since we won
     try: #since both our gps and accelerometer are running in separate threads, we use this to be able to catch keyboard exceptions whenever we want
         while True:
             time.sleep(1)
+            print("running")
 
     except KeyboardInterrupt:
         print("Attempting to close threads...")
