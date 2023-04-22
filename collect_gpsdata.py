@@ -44,9 +44,10 @@ maxSpeed = False #Set to true upon reaching our configured cutoff speed, ends th
 #instead of timing out based on writes, meaning if we have a period of unsuccessful writes/data it will still timeout normally
 
 
-#accDataMag = 0.0
+
 
 sys.path.append(os.path.join(os.path.dirname(__file__), 'accelerometer'))
+#This adds the folder "accelerometer to the path python searches in to import stuff"
 #from collect_accel_madgwick import *
 from accelerometer.collect_accel_madgwick import *
 
@@ -96,8 +97,8 @@ class gpsThr(tr.Thread):
 
                         #we want to have the acceleration value locked for as little time as possible
                         with accLock:
-                            currentData[3] = accDataMag[0]
-                            print("accDataMag",accDataMag[0])
+                            currentData[3] = accDataMag
+                            print("accDataMag",accDataMag)
 
                         if len(gpsData) == 0:
                             gpsData.append(currentData)

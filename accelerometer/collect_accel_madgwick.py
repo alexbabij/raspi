@@ -33,7 +33,7 @@ sample_rate = targetHz #Hz
 offset = imufusion.Offset(sample_rate)
 ahrs = imufusion.Ahrs()
 accLock = tr.Lock()
-accDataMag = [0.0]
+accDataMag = 0.0
 
 ahrs.settings = imufusion.Settings(imufusion.CONVENTION_NWU,  # convention
                                    0.5,  # gain
@@ -93,6 +93,8 @@ class accThr(tr.Thread):
         oldXAccRawValue = 0
         oldYAccRawValue = 0
         oldZAccRawValue = 0
+
+        global accDataMag
         print("acc rec started")
         while self.running == True:
             
@@ -181,13 +183,17 @@ class accThr(tr.Thread):
             
             #accDataMag = ACCmagnitudeE
             with accLock:
-                #for some reason this works and update accDataMag
-                accDataMag[0] = ACCmagnitudeE
-                #But this doesnt (assuming accDataMag initialized to accDataMag=0.0)
-                #accDataMag = 1.0#ACCmagnitudeE
+                #Python is weird, if I were to do accDataMag = ACCmagnitudeE, this would not update the global variable, because python would create a new 
+                #local variable in the scope of this function also named accDataMag. To be able to do it this way, I would need to declare global accDataMag 
+                #to make the variable global inside of the scope of the function?
+                #The below does work though, and updates the global variable, assumably because it tries to access the index of the global variable instead of 
+                #trying to create a new one 
+                #accDataMag[0] = ACCmagnitudeE
+                accDataMag = ACCmagnitudeE
+                
 
                 
-            print("accDataMag",accDataMag[0]) 
+            print("accDataMag",accDataMag) 
             if 1: #easy disable all the print statements
                 if 0:                       #Change to '0' to stop  showing the angles from the gyro
                     outputString +="\t# GYRX Angle %5.4f  GYRY Angle %5.4f  GYRZ Angle %5.4f # " % (gyroXangle,gyroYangle,gyroZangle)
@@ -220,4 +226,3 @@ class accThr(tr.Thread):
             #EFrameAccel
 
 print("acc class done")
-print("accDataMag final value inside collect_accel",accDataMag[0])
