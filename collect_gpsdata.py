@@ -79,7 +79,7 @@ class gpsThr(tr.Thread):
             rollingGpsData = []
             counter = 0
             print("gps rec started")
-            global accDataMag
+            #global accDataMag
             while (self.running == True) & (time.time() < totSamplesC):
                 
                 
@@ -98,9 +98,10 @@ class gpsThr(tr.Thread):
 
                         #we want to have the acceleration value locked for as little time as possible
                         with accLock:
-                            currentData[3] = accDataMag
-                            print("accDataMag",accDataMag)
-                            print("currentData[3]",currentData[3])
+                            currentData[3] = accDataMag[0]
+                            print("accDataMag",accDataMag[0])
+                        
+                        print("currentData[3]",currentData[3])
 
                         if len(gpsData) == 0:
                             gpsData.append(currentData)

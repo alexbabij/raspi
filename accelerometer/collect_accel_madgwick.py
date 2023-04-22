@@ -33,7 +33,7 @@ sample_rate = targetHz #Hz
 offset = imufusion.Offset(sample_rate)
 ahrs = imufusion.Ahrs()
 accLock = tr.Lock()
-accDataMag = 0.0
+accDataMag = [0.0]
 
 ahrs.settings = imufusion.Settings(imufusion.CONVENTION_NWU,  # convention
                                    0.5,  # gain
@@ -94,7 +94,7 @@ class accThr(tr.Thread):
         oldYAccRawValue = 0
         oldZAccRawValue = 0
 
-        global accDataMag
+        #global accDataMag
         print("acc rec started")
         while self.running == True:
             
@@ -188,8 +188,8 @@ class accThr(tr.Thread):
                 #to make the variable global inside of the scope of the function?
                 #The below does work though, and updates the global variable, assumably because it tries to access the index of the global variable instead of 
                 #trying to create a new one 
-                #accDataMag[0] = ACCmagnitudeE
-                accDataMag = ACCmagnitudeE
+                accDataMag[0] = ACCmagnitudeE
+                #accDataMag = ACCmagnitudeE
                 
 
                 
