@@ -106,6 +106,7 @@ class gpsThr(tr.Thread):
                         
                         print("currentData",currentData)
                         currentData[4] = time.time()-accTime#-totstart
+                        print("counter",counter)
 
                         if len(gpsData) == 0:
                             gpsData.append(currentData)
