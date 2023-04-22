@@ -92,7 +92,7 @@ class gpsThr(tr.Thread):
                     if (math.isfinite(getattr(report,'speed',float('nan')))) & (getattr(report,'time','') !=''):
                     #If the data is bad we just ignore it, the format for this is to return NaN for numbers and empty for strings: ''
                     #Not sure how much an effect on performance this has
-                        
+                        print("gpsData1.5",gpsData)
                         #We record gps time, velocity, and time offset since starting script measured by the pi
                         currentData[:3] = [getattr(report,'time',''),getattr(report,'speed','nan'),(time.time()-totstart)]
                         #We should never get nan or an empty string since we check for it, but just in case, we don't want this to stop collecting data
