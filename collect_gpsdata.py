@@ -79,6 +79,7 @@ class gpsThr(tr.Thread):
             rollingGpsData = []
             counter = 0
             print("gps rec started")
+            global accDataMag
             while (self.running == True) & (time.time() < totSamplesC):
                 
                 
