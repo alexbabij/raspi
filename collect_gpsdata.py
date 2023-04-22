@@ -99,6 +99,7 @@ class gpsThr(tr.Thread):
                         with accLock:
                             currentData[3] = accDataMag
                             print("accDataMag",accDataMag)
+                            print("currentData[3]",currentData[3])
 
                         if len(gpsData) == 0:
                             gpsData.append(currentData)
