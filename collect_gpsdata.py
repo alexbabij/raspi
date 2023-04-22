@@ -1,6 +1,8 @@
 #! /usr/bin/python
 #Running this file will collect gps data at the specified interval 
 from gps import *
+import os
+import sys
 import time
 import math
 import subprocess
@@ -44,7 +46,8 @@ totSamplesC = float(config["timeout"]) + time.time()
 
 accDataMag = 0.0
 
-
+sys.path.append(os.path.join(os.path.dirname(__file__), 'accelerometer'))
+#from collect_accel_madgwick import *
 from accelerometer.collect_accel_madgwick import *
 
 
