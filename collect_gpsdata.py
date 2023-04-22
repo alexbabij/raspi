@@ -33,7 +33,7 @@ maxSpeed = False #Set to true upon reaching our configured cutoff speed, ends th
 #gpsData = []
 #rollingGpsData = []
 #currentData = ['',float('nan'),0.0,0.0]
-counter = 0
+#counter = 0
 #write our data to a file every 1 second 
 samplesC = int(config["storage interval"]) * updateRate #Only whole second intervals are allowed otherwise this counter could be a decimal
 totSamplesC = float(config["timeout"]) + time.time() 
@@ -72,6 +72,7 @@ class gpsThr(tr.Thread):
             totstart = time.time()
             gpsData = []
             rollingGpsData = []
+            counter = 0
             print("gps rec started")
             while (self.running == True) & (time.time() < totSamplesC):
                 

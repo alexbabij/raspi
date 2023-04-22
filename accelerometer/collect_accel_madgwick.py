@@ -17,49 +17,7 @@ targetS = 1/targetHz
 #Ideally, we want to align our refresh rate with a multiple of our gps refresh rate so we can grab relevant accelerometer data.
 #GPS data is precisely aligned to seconds i.e. at 5Hz signals are sent from gps at 03:21:15.00, 03:21:15.20, etc. (I think, this may not include time offset to our location)
 
-RAD_TO_DEG = 57.29578
-M_PI = 3.14159265358979323846
-G_GAIN = 0.070          # [deg/s/LSB]  If you change the dps for gyro, you need to update this value accordingly
-AA =  0.40              # Complementary filter constant
-MAG_LPF_FACTOR = 0.4    # Low pass filter constant magnetometer
-ACC_LPF_FACTOR = 0.4    # Low pass filter constant for accelerometer
 
-
-
-
-################# Compass Calibration values ############
-# Use calibrateBerryIMU.py to get calibration values
-# Calibrating the compass isnt mandatory, however a calibrated
-# compass will result in a more accurate heading value.
-
-magXmin =  122893
-magYmin =  123672
-magZmin =  123152
-magXmax =  138807
-magYmax =  139808
-magZmax =  140640
-
-
-
-############### END Calibration offsets #################
-
-
-
-gyroXangle = 0.0
-gyroYangle = 0.0
-gyroZangle = 0.0
-CFangleX = 0.0
-CFangleY = 0.0
-CFangleXFiltered = 0.0
-CFangleYFiltered = 0.0
-kalmanX = 0.0
-kalmanY = 0.0
-oldXMagRawValue = 0
-oldYMagRawValue = 0
-oldZMagRawValue = 0
-oldXAccRawValue = 0
-oldYAccRawValue = 0
-oldZAccRawValue = 0
 
 #aStart = datetime.datetime.now()
 #lastTime = time.time()
@@ -97,6 +55,44 @@ class accThr(tr.Thread):
     def run(self):
         lastTime = time.time()
         aStart = datetime.datetime.now()
+
+        RAD_TO_DEG = 57.29578
+        M_PI = 3.14159265358979323846
+        G_GAIN = 0.070          # [deg/s/LSB]  If you change the dps for gyro, you need to update this value accordingly
+        AA =  0.40              # Complementary filter constant
+        MAG_LPF_FACTOR = 0.4    # Low pass filter constant magnetometer
+        ACC_LPF_FACTOR = 0.4    # Low pass filter constant for accelerometer
+
+
+
+
+        ################# Compass Calibration values ############
+        # Use calibrateBerryIMU.py to get calibration values
+        # Calibrating the compass isnt mandatory, however a calibrated
+        # compass will result in a more accurate heading value.
+
+        magXmin =  122893
+        magYmin =  123672
+        magZmin =  123152
+        magXmax =  138807
+        magYmax =  139808
+        magZmax =  140640
+
+
+
+        ############### END Calibration offsets #################
+
+
+
+        gyroXangle = 0.0
+        gyroYangle = 0.0
+        gyroZangle = 0.0
+        oldXMagRawValue = 0
+        oldYMagRawValue = 0
+        oldZMagRawValue = 0
+        oldXAccRawValue = 0
+        oldYAccRawValue = 0
+        oldZAccRawValue = 0
         while self.running == True:
             
 
