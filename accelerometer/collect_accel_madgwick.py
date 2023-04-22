@@ -44,6 +44,9 @@ ahrs.settings = imufusion.Settings(imufusion.CONVENTION_NWU,  # convention
 #The madgwick filter here is actually very fast, but we are limited by the refresh rate we have set for our accelerometer (100Hz), 
 #meaning as currently configured, we cannot loop this faster than every 0.01 seconds
 
+#Timestamps of lastest gps and accelerometer data readings
+gpsSampTS = [time.time()]
+accSampTS = [time.time()]
 
 class accThr(tr.Thread):
     def __init__(self):
@@ -109,7 +112,15 @@ class accThr(tr.Thread):
             MAGx = IMU.readMAGx()
             MAGy = IMU.readMAGy()
             MAGz = IMU.readMAGz()
-
+            with accLock:
+                accSampTS[0] = time.time()
+            lastTime = time.time()
+            bFin = datetime.datetime.now() - aStart
+            aStart = datetime.datetime.now()
+            LP = bFin.microseconds/(1000000*1.0) #loop time
+            outputString = "Loop Time %5.5f " % ( LP )
+            #print(outputString)
+            delta_time = LP
 
             #Apply compass calibration
             MAGx -= (magXmin + magXmax) /2
@@ -123,12 +134,7 @@ class accThr(tr.Thread):
 
 
             ##Calculate loop Period(LP). How long between Gyro Reads
-            bFin = datetime.datetime.now() - aStart
-            aStart = datetime.datetime.now()
-            LP = bFin.microseconds/(1000000*1.0) #loop time
-            outputString = "Loop Time %5.5f " % ( LP )
-            #print(outputString)
-            delta_time = LP
+            
 
             ###############################################
             #### Apply low pass filter ####
@@ -224,7 +230,7 @@ class accThr(tr.Thread):
                 #print("\nSurplus time:",targetS-delTime)
                 time.sleep(targetS-delTime)
 
-            lastTime = time.time()
+            
             #EFrameAccel
 
 print("acc class done")

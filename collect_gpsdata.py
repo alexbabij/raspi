@@ -29,6 +29,7 @@ cutoffSpeed = float(config["max speed"])/conversionDict[config["units"]]
 maxSpeed = False #Set to true upon reaching our configured cutoff speed, ends the while loop and data collection
 
 
+
 #This is our list that contains all time and velocity samples for the current run
 #gpsData = []
 #rollingGpsData = []
@@ -83,7 +84,6 @@ class gpsThr(tr.Thread):
             currentData.extend(accDataMag)
             #global accDataMag
             while (self.running == True) & (time.time() < totSamplesC):
-                print("gpsData1",gpsData)
                 
                 report = gpsd.next()
                 if report['class'] == 'TPV': 
@@ -92,7 +92,10 @@ class gpsThr(tr.Thread):
                     if (math.isfinite(getattr(report,'speed',float('nan')))) & (getattr(report,'time','') !=''):
                     #If the data is bad we just ignore it, the format for this is to return NaN for numbers and empty for strings: ''
                     #Not sure how much an effect on performance this has
-                        print("gpsData1.5",gpsData)
+
+                        with accLock:
+                            gpsSampTS[0] = time.time()
+                        
                         #We record gps time, velocity, and time offset since starting script measured by the pi
                         with accLock:
                             curAccDataMag = accDataMag[0]
@@ -102,7 +105,7 @@ class gpsThr(tr.Thread):
                         print("currentData",currentData)
                       
                         print("counter",counter)
-                        print("gpsData3",gpsData)
+                       
 
                         currentData = [getattr(report,'time',''),getattr(report,'speed','nan'),(time.time()-totstart),curAccDataMag,(time.time()-accTime)]
                         #currentData[:3] = [getattr(report,'time',''),getattr(report,'speed','nan'),(time.time()-totstart)]
@@ -113,7 +116,7 @@ class gpsThr(tr.Thread):
 
                         #We should never get nan or an empty string since we check for it, but just in case, we don't want this to stop collecting data
                         #We are capable of getting duplicate results, so we filter them out
-                        print("gpsData2",gpsData)
+                        
                         #we want to have the acceleration value variable locked for as little time as possible
                         
                         if len(gpsData) == 0:
@@ -129,8 +132,7 @@ class gpsThr(tr.Thread):
                             counter += 1
                             print("Time since start:",time.time()-totstart)
                             print(currentData)
-                            print("gpsData4",gpsData)          
-                    print("gpsData5",gpsData)
+                            
                     end = time.time()
                     elapsed = (end-start)
                     start = time.time()
