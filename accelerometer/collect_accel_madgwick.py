@@ -91,10 +91,12 @@ class accThr(tr.Thread):
     def __init__(self):
         super().__init__()
         self.running = True
-        self.aStart = datetime.datetime.now()
-        self.lastTime = time.time()
+        #self.aStart = datetime.datetime.now()
+        #self.lastTime = time.time()
     
     def run(self):
+        lastTime = time.time()
+        aStart = datetime.datetime.now()
         while self.running == True:
             
 

@@ -57,7 +57,7 @@ class gpsThr(tr.Thread):
     def __init__(self):
         super().__init__()
         self.running = True
-        self.rollingGpsData = []
+        #self.rollingGpsData = []
         
         
 
@@ -71,6 +71,7 @@ class gpsThr(tr.Thread):
             fileCreated = False
             totstart = time.time()
             gpsData = []
+            rollingGpsData = []
             print("gps rec started")
             while (self.running == True) & (time.time() < totSamplesC):
                 
