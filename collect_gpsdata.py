@@ -83,7 +83,7 @@ class gpsThr(tr.Thread):
             currentData.extend(accDataMag)
             #global accDataMag
             while (self.running == True) & (time.time() < totSamplesC):
-                print("gpsData",gpsData)
+                print("gpsData1",gpsData)
                 
                 report = gpsd.next()
                 if report['class'] == 'TPV': 
@@ -97,7 +97,7 @@ class gpsThr(tr.Thread):
                         currentData[:3] = [getattr(report,'time',''),getattr(report,'speed','nan'),(time.time()-totstart)]
                         #We should never get nan or an empty string since we check for it, but just in case, we don't want this to stop collecting data
                         #We are capable of getting duplicate results, so we filter them out
-                        print("gpsData",gpsData)
+                        print("gpsData2",gpsData)
                         #we want to have the acceleration value variable locked for as little time as possible
                         with accLock:
                             currentData[3] = accDataMag[0]
@@ -107,7 +107,7 @@ class gpsThr(tr.Thread):
                         print("currentData",currentData)
                         currentData[4] = time.time()-accTime#-totstart
                         print("counter",counter)
-                        print("gpsData",gpsData)
+                        print("gpsData3",gpsData)
                         if len(gpsData) == 0:
                             gpsData.append(currentData)
                             rollingGpsData.append(currentData)
@@ -120,8 +120,9 @@ class gpsThr(tr.Thread):
                             rollingGpsData.append(currentData)
                             counter += 1
                             print("Time since start:",time.time()-totstart)
-                            print(currentData)          
-                    
+                            print(currentData)
+                            print("gpsData4",gpsData)          
+                    print("gpsData5",gpsData)
                     end = time.time()
                     elapsed = (end-start)
                     start = time.time()
