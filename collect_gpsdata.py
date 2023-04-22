@@ -94,7 +94,10 @@ class gpsThr(tr.Thread):
                     #Not sure how much an effect on performance this has
                         print("gpsData1.5",gpsData)
                         #We record gps time, velocity, and time offset since starting script measured by the pi
-                        currentData[:3] = [getattr(report,'time',''),getattr(report,'speed','nan'),(time.time()-totstart)]
+                        currentData = [getattr(report,'time',''),getattr(report,'speed','nan'),(time.time()-totstart),0.0,0.0]
+                        #currentData[:3] = [getattr(report,'time',''),getattr(report,'speed','nan'),(time.time()-totstart)]
+                        #doing it this way somehow manages to also update the value in gpsData after this step
+
                         #We should never get nan or an empty string since we check for it, but just in case, we don't want this to stop collecting data
                         #We are capable of getting duplicate results, so we filter them out
                         print("gpsData2",gpsData)
