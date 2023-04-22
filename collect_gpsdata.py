@@ -94,7 +94,7 @@ class gpsThr(tr.Thread):
                     #Not sure how much an effect on performance this has
                         
                         #We record gps time, velocity, and time offset since starting script measured by the pi
-                        currentData[:3] = [getattr(report,'time',''),getattr(report,'speed','nan'),(totstart-time.time())]
+                        currentData[:3] = [getattr(report,'time',''),getattr(report,'speed','nan'),(time.time()-totstart)]
                         #We should never get nan or an empty string since we check for it, but just in case, we don't want this to stop collecting data
                         #We are capable of getting duplicate results, so we filter them out
 
@@ -104,7 +104,7 @@ class gpsThr(tr.Thread):
                             accTime = accDataMag[1]
                             print("accDataMag",accDataMag[0])
                         
-                        print("currentData[4]",currentData[4])
+                        print("currentData",currentData)
                         currentData[4] = totstart-accTime
                         if len(gpsData) == 0:
                             gpsData.append(currentData)
