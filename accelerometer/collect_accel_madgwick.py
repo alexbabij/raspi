@@ -92,7 +92,7 @@ class accThr(tr.Thread):
         super().__init__()
         self.running = True
     
-    def recAcc(self):
+    def run(self):
         while self.running == True:
             
 

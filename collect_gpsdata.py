@@ -58,7 +58,8 @@ class gpsThr(tr.Thread):
         super().__init__()
         self.running = True
 
-    def recGPS(self):
+    def run(self):
+        #this function definition of run(self) is a special method from threading. this function will automatically run when .start() is used 
         try:
             gpsd = gps(mode=WATCH_ENABLE|WATCH_NEWSTYLE)
             start = time.time()
