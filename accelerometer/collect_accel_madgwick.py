@@ -179,9 +179,9 @@ class accThr(tr.Thread):
             ACCmagnitudeE = math.sqrt(ACCearthFrame[0]*ACCearthFrame[0] + ACCearthFrame[1]*ACCearthFrame[1] + ACCearthFrame[2]*ACCearthFrame[2])
             ACCmagnitudeL = math.sqrt(ACCLinear[0]*ACCLinear[0] + ACCLinear[1]*ACCLinear[1] + ACCLinear[2]*ACCLinear[2])
             
-            accDataMag = ACCmagnitudeE
+            #accDataMag = ACCmagnitudeE
             with accLock:
-                accDataMag = ACCmagnitudeE
+                accDataMag[0] = ACCmagnitudeE
                 #It saying it doesn't get accessed is in the context of the function I think it should still update the variable
             print("ACCmagnitudeE",ACCmagnitudeE)
             print("accDataMag",accDataMag) 
