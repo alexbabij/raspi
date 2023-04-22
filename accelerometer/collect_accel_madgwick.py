@@ -217,3 +217,4 @@ class accThr(tr.Thread):
             #EFrameAccel
 
 print("acc class done")
+print("accDataMag final value inside collect_accel",accDataMag)
