@@ -127,7 +127,7 @@ class accThr(tr.Thread):
             aStart = datetime.datetime.now()
             LP = bFin.microseconds/(1000000*1.0) #loop time
             outputString = "Loop Time %5.5f " % ( LP )
-            print(outputString)
+            #print(outputString)
             delta_time = LP
 
             ###############################################
@@ -219,7 +219,7 @@ class accThr(tr.Thread):
             #Make our script refresh at a consistent rate
             delTime = time.time()-lastTime
             if (delTime) < targetS:
-                print("\nSurplus time:",targetS-delTime)
+                #print("\nSurplus time:",targetS-delTime)
                 time.sleep(targetS-delTime)
 
             lastTime = time.time()
