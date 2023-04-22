@@ -181,7 +181,7 @@ class accThr(tr.Thread):
             
             #accDataMag = ACCmagnitudeE
             with accLock:
-                accDataMag[0] = ACCmagnitudeE
+                accDataMag[0] = 1.0#ACCmagnitudeE
                 #It saying it doesn't get accessed is in the context of the function I think it should still update the variable
             print("ACCmagnitudeE",ACCmagnitudeE)
             print("accDataMag",accDataMag) 
