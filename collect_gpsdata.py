@@ -96,8 +96,8 @@ class gpsThr(tr.Thread):
 
                         #we want to have the acceleration value locked for as little time as possible
                         with accLock:
-                            currentData[3] = accDataMag
-                            print("accDataMag",accDataMag)
+                            currentData[3] = accDataMag[0]
+                            print("accDataMag",accDataMag[0])
 
                         if len(gpsData) == 0:
                             gpsData.append(currentData)

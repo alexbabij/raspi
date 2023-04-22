@@ -181,10 +181,13 @@ class accThr(tr.Thread):
             
             #accDataMag = ACCmagnitudeE
             with accLock:
-                accDataMag[0] = 1.0#ACCmagnitudeE
-                #It saying it doesn't get accessed is in the context of the function I think it should still update the variable
-            print("ACCmagnitudeE",ACCmagnitudeE)
-            print("accDataMag",accDataMag) 
+                #for some reason this works and update accDataMag
+                accDataMag[0] = ACCmagnitudeE
+                #But this doesnt (assuming accDataMag initialized to accDataMag=0.0)
+                #accDataMag = 1.0#ACCmagnitudeE
+
+                
+            print("accDataMag",accDataMag[0]) 
             if 1: #easy disable all the print statements
                 if 0:                       #Change to '0' to stop  showing the angles from the gyro
                     outputString +="\t# GYRX Angle %5.4f  GYRY Angle %5.4f  GYRZ Angle %5.4f # " % (gyroXangle,gyroYangle,gyroZangle)
@@ -217,4 +220,4 @@ class accThr(tr.Thread):
             #EFrameAccel
 
 print("acc class done")
-print("accDataMag final value inside collect_accel",accDataMag)
+print("accDataMag final value inside collect_accel",accDataMag[0])
