@@ -33,7 +33,7 @@ sample_rate = targetHz #Hz
 offset = imufusion.Offset(sample_rate)
 ahrs = imufusion.Ahrs()
 accLock = tr.Lock()
-accDataMag = [0.0]
+accDataMag = 0.0
 
 ahrs.settings = imufusion.Settings(imufusion.CONVENTION_NWU,  # convention
                                    0.5,  # gain
@@ -177,6 +177,9 @@ class accThr(tr.Thread):
             ACCLinear = ahrs.linear_acceleration #acceleration in device frame with gravity removed
             ACCmagnitudeE = math.sqrt(ACCearthFrame[0]*ACCearthFrame[0] + ACCearthFrame[1]*ACCearthFrame[1] + ACCearthFrame[2]*ACCearthFrame[2])
             ACCmagnitudeL = math.sqrt(ACCLinear[0]*ACCLinear[0] + ACCLinear[1]*ACCLinear[1] + ACCLinear[2]*ACCLinear[2])
+            print("ACCmagnitudeE",ACCmagnitudeE)
+            print("accDataMag",accDataMag)
+            accDataMag = ACCmagnitudeE
             with accLock:
                 accDataMag = ACCmagnitudeE
                 #It saying it doesn't get accessed is in the context of the function I think it should still update the variable

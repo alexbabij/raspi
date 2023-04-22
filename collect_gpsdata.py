@@ -44,7 +44,7 @@ totSamplesC = float(config["timeout"]) + time.time()
 #instead of timing out based on writes, meaning if we have a period of unsuccessful writes/data it will still timeout normally
 
 
-accDataMag = 0.0
+#accDataMag = 0.0
 
 sys.path.append(os.path.join(os.path.dirname(__file__), 'accelerometer'))
 #from collect_accel_madgwick import *
@@ -93,7 +93,7 @@ class gpsThr(tr.Thread):
                         #we want to have the acceleration value locked for as little time as possible
                         with accLock:
                             currentData[3] = accDataMag
-                            print(accDataMag)
+                            print("accDataMag",accDataMag)
 
                         if len(gpsData) == 0:
                             gpsData.append(currentData)
