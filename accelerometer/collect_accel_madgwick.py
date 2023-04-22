@@ -193,8 +193,8 @@ class accThr(tr.Thread):
                 
 
                 
-            print("accDataMag",accDataMag) 
-            if 1: #easy disable all the print statements
+            
+            if 0: #easy disable all the print statements
                 if 0:                       #Change to '0' to stop  showing the angles from the gyro
                     outputString +="\t# GYRX Angle %5.4f  GYRY Angle %5.4f  GYRZ Angle %5.4f # " % (gyroXangle,gyroYangle,gyroZangle)
 
