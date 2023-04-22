@@ -61,8 +61,8 @@ oldXAccRawValue = 0
 oldYAccRawValue = 0
 oldZAccRawValue = 0
 
-aStart = datetime.datetime.now()
-lastTime = time.time()
+#aStart = datetime.datetime.now()
+#lastTime = time.time()
 
 
  
@@ -91,6 +91,8 @@ class accThr(tr.Thread):
     def __init__(self):
         super().__init__()
         self.running = True
+        self.aStart = datetime.datetime.now()
+        self.lastTime = time.time()
     
     def run(self):
         while self.running == True:

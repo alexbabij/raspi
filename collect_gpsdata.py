@@ -30,9 +30,9 @@ maxSpeed = False #Set to true upon reaching our configured cutoff speed, ends th
 
 
 #This is our list that contains all time and velocity samples for the current run
-gpsData = []
-rollingGpsData = []
-currentData = ['',float('nan'),0.0,0.0]
+#gpsData = []
+#rollingGpsData = []
+#currentData = ['',float('nan'),0.0,0.0]
 counter = 0
 #write our data to a file every 1 second 
 samplesC = int(config["storage interval"]) * updateRate #Only whole second intervals are allowed otherwise this counter could be a decimal
@@ -57,6 +57,10 @@ class gpsThr(tr.Thread):
     def __init__(self):
         super().__init__()
         self.running = True
+        self.rollingGpsData = []
+        
+        
+
 
     def run(self):
         #this function definition of run(self) is a special method from threading. this function will automatically run when .start() is used 
@@ -66,6 +70,7 @@ class gpsThr(tr.Thread):
             filePath = ""
             fileCreated = False
             totstart = time.time()
+            gpsData = []
             print("gps rec started")
             while (self.running == True) & (time.time() < totSamplesC):
                 
