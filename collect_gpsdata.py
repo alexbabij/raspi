@@ -34,10 +34,10 @@ maxSpeed = False #Set to true upon reaching our configured cutoff speed, ends th
 #rollingGpsData = []
 #currentData = ['',float('nan'),0.0,0.0]
 #counter = 0
-#write our data to a file every 1 second 
-samplesC = int(config["storage interval"]) * updateRate #Only whole second intervals are allowed otherwise this counter could be a decimal
-totSamplesC = float(config["timeout"]) + time.time() 
-#Basically a timeout in case we don't stop taking data within timeout period
+# #write our data to a file every 1 second 
+# samplesC = int(config["storage interval"]) * updateRate #Only whole second intervals are allowed otherwise this counter could be a decimal
+# totSamplesC = float(config["timeout"]) + time.time() 
+# #Basically a timeout in case we don't stop taking data within timeout period
 
 
 #we do our timeout using time.time() instead of counting the successful writes, because then it will truly be timing out based on time
@@ -67,6 +67,10 @@ class gpsThr(tr.Thread):
         try:
             gpsd = gps(mode=WATCH_ENABLE|WATCH_NEWSTYLE)
             start = time.time()
+            #write our data to a file every 1 second 
+            samplesC = int(config["storage interval"]) * updateRate #Only whole second intervals are allowed otherwise this counter could be a decimal
+            totSamplesC = float(config["timeout"]) + time.time() 
+            #Basically a timeout in case we don't stop taking data within timeout period
             filePath = ""
             fileCreated = False
             totstart = time.time()

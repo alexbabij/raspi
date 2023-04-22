@@ -93,6 +93,7 @@ class accThr(tr.Thread):
         oldXAccRawValue = 0
         oldYAccRawValue = 0
         oldZAccRawValue = 0
+        print("acc rec started")
         while self.running == True:
             
 
