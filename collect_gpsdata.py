@@ -94,7 +94,7 @@ class gpsThr(tr.Thread):
             #while using + creates a new variable with the same name
             prevData = False
             #global accDataMag
-            while (self.running == True) & (time.time() < totSamplesC):
+            while (self.running == True):
                 
                 report = gpsd.next()
                 if report['class'] == 'TPV': 
@@ -188,7 +188,9 @@ class gpsThr(tr.Thread):
                         if gpsData[-1][1] >= (cutoffSpeed):
                             collectingData = False
                             #self.running = False
-                            #totSamplesC = time.time() + 1 
+                             
+                        if (time.time() > totSamplesC):
+                            collectingData = False
 
                         #Record data up until reaching slightly past (10%) target speed, or 1 second after reaching target speed, whichever is first
                 
@@ -236,7 +238,7 @@ class piScreen(tr.Thread):
             #This is the quick and dirty way. If we instead implement a function to just draw individual text blocks at given xy locations, we can vary
             #things like font size, color, etc. on a per character basis if we really wanted to, since we can draw successive things into an image,
             #then we write that image to the screen
-            string = "Elapsed Time: "+str(round(elapsedTime,2))+"s"+"\nVelocity:"+str(round(velocity,1))+displayUnits
+            string = "Time: "+str(round(elapsedTime,2))+"s"+"\nVelocity:"+str(round(velocity,1))+displayUnits
             string += "\nRefresh: "+str(round(1/totrefreshTime,1))+"fps" #dont forget you can't use commas to combine strings like you could in print()
             dispText(string,"nw",[255,255,255,255],15)
             elapsedR = time.time()-startTime
