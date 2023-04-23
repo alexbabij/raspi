@@ -198,6 +198,7 @@ if __name__ == "__main__": # I think we don't technically need this since we won
     accThread = accThr()
     gpsThread = gpsThr()
     accThread.start()
+    time.sleep(1) #have the accelerometer script start first so the values in it can start to even out since it is running a madgwick filter
     gpsThread.start()
 
     try: #since both our gps and accelerometer are running in separate threads, we use this to be able to catch keyboard exceptions whenever we want
