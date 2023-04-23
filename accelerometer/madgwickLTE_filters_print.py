@@ -113,6 +113,7 @@ while True:
     outputString = "Loop Time %5.5f " % ( LP )
     print(outputString)
     delta_time = LP
+    print("\ndelta_time",delta_time,"\n")
 
     ###############################################
     #### Apply low pass filter ####
