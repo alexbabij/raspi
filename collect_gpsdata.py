@@ -148,7 +148,7 @@ class gpsThr(tr.Thread):
                             collectingData = True
                             if (self.runStart == False):
                                 self.runStart = time.time()
-                                totSamplesC = float(config["global timeout"]) + time.time()
+                                totSamplesC = float(config["timeout"]) + time.time()
                                 if totSamplesC > globalTimeout:
                                     globalTimeout = totSamplesC + 1
                                     #if we would timeout before our local timeout, dont
