@@ -135,7 +135,7 @@ class gpsThr(tr.Thread):
                         #we want to have the acceleration value variable locked for as little time as possible
                         
                         if curAccDataMag >= accMin:
-                            if self.runComplete == False:
+                            if (self.runComplete == False) and collectingData:
                                 self.runStart = time.time()
                                 #This should run only once, when we first hit our target acceleration
                             collectingData = True
