@@ -116,8 +116,8 @@ class gpsThr(tr.Thread):
                       
                         print("counter",counter)
                        
-                        #Our format is: [gps time(yyyy-mm-ddThr:min:ms), gps speed(m/s), pi time offset(s), accelerometer acceleration in earth frame(G), 
-                                                            # difference between time of this measurement and accel measurement(s)]
+                        #Our format is: [gps time(yyyy-mm-ddThr:min:ms), gps speed(m/s), pi time offset(s), accelerometer acceleration magnitude in earth frame(G), 
+                                                            # difference between time of this measurement and accel measurement(s)] (5 elements long)
                         currentData = [getattr(report,'time',''),getattr(report,'speed','nan'),(time.time()-totstart),curAccDataMag,(time.time()-accTime)]
                         #currentData[:3] = [getattr(report,'time',''),getattr(report,'speed','nan'),(time.time()-totstart)]
                         #doing it this way somehow manages to also update the value in gpsData after this step, I think this may have to do with the
@@ -221,6 +221,7 @@ class piScreen(tr.Thread):
     
     def run(self):
         totrefreshTime = 0.0
+        data = [0.0]*5 # initialize this in case gpsThread.dataout isnt ready yet
         while self.running:
             startTime = time.time()
             data = gpsThread.dataOut.copy()
