@@ -138,7 +138,7 @@ class gpsThr(tr.Thread):
                             rollingGpsData.append(currentData)
                             prevData = currentData
                             self.dataOut = currentData
-                            print(self.dataOut)
+                            print("\nself.dataOut",self.dataOut,"\n")
 
                             print("Time since start:",time.time()-totstart)
                             print(currentData)
