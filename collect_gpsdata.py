@@ -138,7 +138,7 @@ class gpsThr(tr.Thread):
                             rollingGpsData.append(currentData)
                             prevData = currentData
                             self.dataOut = currentData
-                            print("\nself.dataOut",self.dataOut,"\n")
+                            print("\n\nself.dataOut",self.dataOut,"\n")
 
                             print("Time since start:",time.time()-totstart)
                             print(currentData)
@@ -147,6 +147,8 @@ class gpsThr(tr.Thread):
 
                         elif (prevData[0] != currentData[0]):
                             prevData = currentData
+                            self.dataOut = currentData
+                            print("\n\nself.dataOut",self.dataOut,"\n")
                             rollingGpsData.append(currentData)
                             if (not collectingData) & (len(rollingGpsData) > samplesC):
                                 #rollingGpsData normally gets saved every 1 second (actually comes from "storage inteval" setting) so its length should correspond to that 
