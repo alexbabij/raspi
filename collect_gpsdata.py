@@ -146,6 +146,7 @@ class gpsThr(tr.Thread):
                                 #i.e. if at sampling at 5Hz and saving every 1 second, this should always be of length 5. It is nice to have some data before we
                                 #reach our "starting" acceleration though, so we keep a rolling list of the last 1 seconds of measurements until collectingData = True
                                 rollingGpsData = rollingGpsData[len(rollingGpsData)-samplesC:] #this covers the case where its randomly longer than 11 which it should never be
+                                print("len(rollingGpsData)",len(rollingGpsData))
                             if collectingData: 
                                 gpsData.append(currentData)
                                 counter += 1
