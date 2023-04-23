@@ -78,6 +78,15 @@ class gpsThr(tr.Thread):
     def run(self):
         #this function definition of run(self) is a special method from threading. this function will automatically run when .start() is used 
         try:
+            self.running = True
+            self.dataOut = [0.0]*5 #initialize with values so other things can still use it as normal
+            self.runStart = False
+            self.accMag = 0.0
+            self.runComplete = False
+            self.timedOut = False
+           
+            #This is just in here too because in theory we could do gpsThread.start() again to restart data collection
+            
             gpsd = gps(mode=WATCH_ENABLE|WATCH_NEWSTYLE)
             start = time.time()
             #write our data to a file every 1 second 
@@ -134,11 +143,12 @@ class gpsThr(tr.Thread):
                         
                         #we want to have the acceleration value variable locked for as little time as possible
                         
-                        if curAccDataMag >= accMin:
-                            if (self.runComplete == False) and collectingData:
+                        if (curAccDataMag >= accMin) and (self.runComplete == False):
+                            collectingData = True
+                            if (self.runStart == False):
                                 self.runStart = time.time()
                                 #This should run only once, when we first hit our target acceleration
-                            collectingData = True
+                            
                             
 
                         if prevData == False:
