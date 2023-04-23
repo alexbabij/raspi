@@ -22,15 +22,23 @@ disp = st7735.ST7735R(spi, rotation=90, invert=False, cs=cs_pin, dc=dc_pin, rst=
 # Create blank image for drawing.
 # Make sure to create image with mode 'RGB' for full color.
 if disp.rotation % 180 == 90:
-    height = disp.width  # we swap height/width to rotate it to landscape!
-    width = disp.height
+    diheight = disp.width  # we swap height/width to rotate it to landscape!
+    diwidth = disp.height
 else:
-    width = disp.width  # we swap height/width to rotate it to landscape!
-    height = disp.height
+    diwidth = disp.width  # we swap height/width to rotate it to landscape!
+    diheight = disp.height
 
 #The screen will continue to display the last image sent to it, until it recieves something new
 
-def dispText(textIn,textLoc,fontColor=[0,0,0,255],FONTSIZE=15,BORDER=5,width=width,height=height):
+class piDisplay:
+    def __init__(self):
+        self.input = ""
+
+
+
+
+
+def dispText(textIn,textLoc,fontColor=[0,0,0,255],FONTSIZE=15,BORDER=5,width=diwidth,height=diheight):
     startTime = time.time()
     # First define some constants to allow easy resizing of shapes.
     #BORDER = 20
@@ -51,8 +59,9 @@ def dispText(textIn,textLoc,fontColor=[0,0,0,255],FONTSIZE=15,BORDER=5,width=wid
     )
 
     # Load a TTF Font
+    fstrt = time.time()
     font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", FONTSIZE)
-
+    print("time to load font:",time.time()-fstrt)
     # Draw Some Text
     #text = "Hello Worldaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!"
     # 0,0 = top left corner of display

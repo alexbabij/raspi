@@ -199,7 +199,10 @@ class gpsThr(tr.Thread):
 
 print("gps class done")
 
-if __name__ == "__main__": # I think we don't technically need this since we won't be importing this file into anything probably
+from display_text import *
+
+if __name__ == "__main__": # I think we don't technically need this since we won't be importing this file into anything probably. 
+                            #stuff in here wont run if we import this into something
 
     accThread = accThr()
     gpsThread = gpsThr()
