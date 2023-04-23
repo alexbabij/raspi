@@ -24,7 +24,7 @@ while True:
     location = 1
     string = "test,"+str(round(timee,1))+"\n"+str(round(truet,rounding))+"\nFrame: "+str(frameC)
     dispText(string,loDict[location],fontColor=[205,153,51,255])
-    time.sleep(0.3)
+    #time.sleep(0.3)
     if counter >= 24:
         counter = 0
     if rounding >= 4:
