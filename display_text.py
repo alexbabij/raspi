@@ -57,7 +57,7 @@ def dispText(textIn,textLoc,fontColor=[0,0,0,255],FONTSIZE=15,BORDER=5,width=diw
     draw.rectangle(
         (0, 0, width - BORDER - 1, height - BORDER - 1), fill=(170, 0, 136)
     )
-
+    print("time to process output:",time.time()-startTime)
     # Load a TTF Font
     fstrt = time.time()
     font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", FONTSIZE)
