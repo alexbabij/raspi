@@ -149,7 +149,7 @@ class gpsThr(tr.Thread):
                                 gpsData.append(currentData)
                                 counter += 1
 
-                        if collectingData & (len(gpsData==0)):
+                        if collectingData & (len(gpsData)==0):
                             gpsData.append(currentData)
                             counter += 1 #We save our file after 1 second of data collection while collectingData = true
 
