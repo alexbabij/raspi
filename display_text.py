@@ -59,11 +59,11 @@ def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,wid
     # draw.rectangle(
     #     (0, 0, width - BORDER - 1, height - BORDER - 1), fill=(170, 0, 136)
     # )
-    print("time to process output:",time.time()-startTime)
+    debugString = print("time to process output:",time.time()-startTime)+"\n"
     # Load a TTF Font
     fstrt = time.time()
     font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", FONTSIZE)
-    print("time to load font:",time.time()-fstrt)
+    debugString+= print("time to load font:",time.time()-fstrt)+"\n"
     # Draw Some Text
     #text = "Hello Worldaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!"
     # 0,0 = top left corner of display
@@ -120,7 +120,9 @@ def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,wid
         )
     # Display image.
     disp.image(image)
-    print("Elapsed time:",str(time.time()-startTime))
+    debugString += print("Elapsed time:",str(time.time()-startTime))+"\n"
+    if 0:
+        print(debugString)
  
 
 def dispBackground(backColor=[0,0,255],width=diwidth,height=diheight):
