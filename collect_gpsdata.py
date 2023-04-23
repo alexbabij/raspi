@@ -68,6 +68,7 @@ class gpsThr(tr.Thread):
         self.running = True
         self.dataOut = [0.0]*5 #initialize with values so other things can still use it as normal
         self.runStart = False
+        self.accMag = 0.0
         
         
 
