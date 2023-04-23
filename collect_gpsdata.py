@@ -109,6 +109,7 @@ class gpsThr(tr.Thread):
                         #We record gps time, velocity, and time offset since starting script as measured by the pi
                         with accLock:
                             curAccDataMag = accDataMag[0]
+                            self.accMag = curAccDataMag
                             accTime = accDataMag[1]
                             print("accDataMag",accDataMag[0])
                         
@@ -131,8 +132,11 @@ class gpsThr(tr.Thread):
                         #we want to have the acceleration value variable locked for as little time as possible
                         
                         if curAccDataMag >= accMin:
+                            if collectingData == False:
+                                self.runStart = time.time()
+                                #This should run only once, when we first hit our target acceleration
                             collectingData = True
-                            self.runStart = time.time()
+                            
 
                         if prevData == False:
                             rollingGpsData.append(currentData)
@@ -232,13 +236,15 @@ class piScreen(tr.Thread):
             startTime = time.time()
             data = gpsThread.dataOut.copy()
             velocity = data[1] * conversionDict[displayUnits]#convert from m/s to selected units
+            acceleration = gpsThread.accMag #g's
             if gpsThread.runStart != False:
                 elapsedTime = time.time()-gpsThread.runStart #s
             #construct our string to write to the screen
             #This is the quick and dirty way. If we instead implement a function to just draw individual text blocks at given xy locations, we can vary
             #things like font size, color, etc. on a per character basis if we really wanted to, since we can draw successive things into an image,
             #then we write that image to the screen
-            string = "Time: "+str(round(elapsedTime,2))+"s"+"\nVelocity:"+str(round(velocity,1))+displayUnits
+            string = "Time: "+str(round(elapsedTime,2))+"s"+"\nVelocity: "+str(round(velocity,1))+displayUnits
+            string += "\nAcceleration: "+str(acceleration)+"g"
             string += "\nRefresh: "+str(round(1/totrefreshTime,1))+"fps" #dont forget you can't use commas to combine strings like you could in print()
             dispText(string,"nw",[255,255,255,255],15)
             elapsedR = time.time()-startTime
