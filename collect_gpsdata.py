@@ -271,9 +271,9 @@ class piScreen(tr.Thread):
                 string = "Time: Run timed out"
             else:
                 string = "Time: "+str(round(elapsedTime,2))+"s"
-            string+="\nVelocity: "+str(round(velocity,1))+displayUnits
+            string+="\nVelocity: "+str(round(velocity,1))+" "+displayUnits
             string += "\nAcceleration: "+str(round(acceleration,2))+"g"
-            string += "\nRefresh: "+str(round(1/totrefreshTime,1))+"fps" #dont forget you can't use commas to combine strings like you could in print()
+            string += "\nRefresh: "+str(round(1/totrefreshTime,1))+" fps" #dont forget you can't use commas to combine strings like you could in print()
             dispText(string,"nw",[255,255,255,255],14)
             elapsedR = time.time()-startTime
             #attempt to refresh at the selected rate, if not possible, refresh as fast as possible

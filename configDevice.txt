@@ -5,6 +5,6 @@ storage interval:1
 acceleration threshold:0.1
 current vehicle:car1
 max speed:60
-units:kph
+units:mph
 screen refresh rate:15
 global timeout:300
