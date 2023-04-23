@@ -205,16 +205,18 @@ class gpsThr(tr.Thread):
                 pass #We would rather just skip if we cannot get good data rather than have our stuff error out
         except (KeyboardInterrupt, SystemExit): #when you press ctrl+c
             print("\nExiting.")
-            filePath, fileCreated = writeFile(vehicle,rollingGpsData,fileCreated,filePath)
-        else:
-            if not counter == 0: #dont write to the file on exit if we just wrote to it 
+            if collectingData:
                 filePath, fileCreated = writeFile(vehicle,rollingGpsData,fileCreated,filePath)
-                print("Saved data:",rollingGpsData)
-                print("Finished collecting data")
-                #Write the rest of the data when we exit the while loop
-            print(gpsData)
-            totend = time.time() - totstart
-            print("\nCompleted in:",totend)
+        else:
+            if collectingData:
+                if not counter == 0: #dont write to the file on exit if we just wrote to it 
+                    filePath, fileCreated = writeFile(vehicle,rollingGpsData,fileCreated,filePath)
+                    print("Saved data:",rollingGpsData)
+                    print("Finished collecting data")
+                    #Write the rest of the data when we exit the while loop
+                print(gpsData)
+                totend = time.time() - totstart
+                print("\nCompleted in:",totend)
 
 print("gps class done")
 
@@ -247,7 +249,7 @@ class piScreen(tr.Thread):
             string = "Time: "+str(round(elapsedTime,2))+"s"+"\nVelocity: "+str(round(velocity,1))+displayUnits
             string += "\nAcceleration: "+str(round(acceleration,2))+"g"
             string += "\nRefresh: "+str(round(1/totrefreshTime,1))+"fps" #dont forget you can't use commas to combine strings like you could in print()
-            dispText(string,"nw",[255,255,255,255],15)
+            dispText(string,"northwest",[255,255,255,255],10)
             elapsedR = time.time()-startTime
             #attempt to refresh at the selected rate, if not possible, refresh as fast as possible
             if (self.refreshRate) > elapsedR:
