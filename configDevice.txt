@@ -6,3 +6,4 @@ acceleration threshold:0.1
 current vehicle:car1
 max speed:60
 units:mph
+screen refresh rate:15

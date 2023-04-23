@@ -33,7 +33,8 @@ sample_rate = targetHz #Hz
 offset = imufusion.Offset(sample_rate)
 ahrs = imufusion.Ahrs()
 accLock = tr.Lock()
-accDataMag = [0.0,0.0]
+accDataMag = [0.0,0.0,0.0,0.0,0.0]
+#Format is: [magnitude of acceleration in earth frame, pi timestamp, pi frame linear acceleration x, y, z]
 
 ahrs.settings = imufusion.Settings(imufusion.CONVENTION_NWU,  # convention
                                    0.5,  # gain
@@ -200,6 +201,7 @@ class accThr(tr.Thread):
                 #trying to create a new one 
                 accDataMag[0] = ACCmagnitudeE
                 accDataMag[1] = sampleTime
+                accDataMag[2:5] = ACCLinear
                 #accDataMag = ACCmagnitudeE
                 
 

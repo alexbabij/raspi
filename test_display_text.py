@@ -55,10 +55,12 @@ def dispText(textIn,textLoc,fontColor=[0,0,0,255],FONTSIZE=15,BORDER=5,width=diw
     # draw.rectangle((0, 0, width, height), fill=(255,255,255))
     # #disp.image(image)
 
-    # #Draw a smaller inner purple rectangle
-    # draw.rectangle(
-    #     (0, 0, width - BORDER - 1, height - BORDER - 1), fill=(170, 0, 136)
-    # )
+    #Draw a smaller inner purple rectangle
+    draw.rectangle(
+        (0, 0, width - BORDER - 1, height - BORDER - 1), fill=(170, 0, 136)
+    )
+    #also draw an ellipse
+    draw.ellipse((20,25,100,100),outline="black",width="5",fill="red")
     print("time to process output:",time.time()-startTime)
     # Load a TTF Font
     fstrt = time.time()

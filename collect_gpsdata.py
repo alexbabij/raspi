@@ -29,6 +29,7 @@ cutoffSpeed = float(config["max speed"])/conversionDict[config["units"]]
 accMin = float(config["acceleration threshold"]) #minimum acceleration to start actually recording the data we read.
 #This includes a buffer of data taken before reaching this acceleration value. Intended use is to set minimum 
 #acceleration threshold to be considered as having actually started your 0-60 run
+screenRefreshRate = float(config["screen refresh rate"])
 
 maxSpeed = False #Set to true upon reaching our configured cutoff speed, ends the while loop and data collection
 
@@ -65,6 +66,7 @@ class gpsThr(tr.Thread):
         super().__init__()
         self.running = True
         self.dataOut = []
+        self.runStart = 0.0
         
         
 
@@ -86,8 +88,8 @@ class gpsThr(tr.Thread):
             rollingGpsData = []
             counter = 0
             print("gps rec started")
-            currentData = ['',float('nan'),0.0]
-            currentData.extend(accDataMag) #could use + instead to concatenate this to the list, doing it with .extend() modifies the same variable in memory
+            currentData = ['',float('nan'),0.0,0.0,0.0]
+            #currentData.extend(accDataMag) #could use + instead to concatenate this to the list, doing it with .extend() modifies the same variable in memory
             #while using + creates a new variable with the same name
             prevData = False
             #global accDataMag
@@ -113,7 +115,8 @@ class gpsThr(tr.Thread):
                       
                         print("counter",counter)
                        
-
+                        #Our format is: [gps time(yyyy-mm-ddThr:min:ms), gps speed(m/s), pi time offset(s), accelerometer acceleration in earth frame(G), 
+                                                            # difference between time of this measurement and accel measurement(s)]
                         currentData = [getattr(report,'time',''),getattr(report,'speed','nan'),(time.time()-totstart),curAccDataMag,(time.time()-accTime)]
                         #currentData[:3] = [getattr(report,'time',''),getattr(report,'speed','nan'),(time.time()-totstart)]
                         #doing it this way somehow manages to also update the value in gpsData after this step, I think this may have to do with the
@@ -128,6 +131,7 @@ class gpsThr(tr.Thread):
                         
                         if curAccDataMag >= accMin:
                             collectingData = True
+                            self.runStart = time.time()
 
                         if prevData == False:
                             rollingGpsData.append(currentData)
@@ -146,7 +150,8 @@ class gpsThr(tr.Thread):
                                 #rollingGpsData normally gets saved every 1 second (actually comes from "storage inteval" setting) so its length should correspond to that 
                                 #i.e. if at sampling at 5Hz and saving every 1 second, this should always be of length 5. It is nice to have some data before we
                                 #reach our "starting" acceleration though, so we keep a rolling list of the last 1 seconds of measurements until collectingData = True
-                                rollingGpsData = rollingGpsData[len(rollingGpsData)-samplesC:] #this covers the case where its randomly longer than 11 which it should never be
+                                rollingGpsData = rollingGpsData[len(rollingGpsData)-samplesC:] 
+                                #this covers the case where its randomly longer than 11 which it should never be
                                 #This in effect inserts the 1 second of data before we reach our target acceleration into our log txt file
                                 print("len(rollingGpsData)",len(rollingGpsData))
                             if collectingData: 
@@ -203,11 +208,28 @@ class gpsThr(tr.Thread):
 print("gps class done")
 
 from display_text import *
+#This is our display class, we can call the function dispText to write text to the screen with a few input parameters
+#Our display connection was setup when we imported the display_text file. Probably not the bet way to do this.
+class piScreen(tr.Thread):
+    def __init__(self):
+        super().__init__()
+        self.running = True
+        self.refreshRate = screenRefreshRate
+        
+    
+    def run(self):
+        data = gpsThread.dataOut.copy()
+        velocity = data[1] #m/s
+        elapsedTime = time.time()-gpsThread.runStart #s
+        #construct our string to write to the screen
+        string = ""
+
+
 
 if __name__ == "__main__": # I think we don't technically need this since we won't be importing this file into anything probably. 
                             #stuff in here wont run if we import this into something
     dispBackground([0,0,0]) #Set display screen to black background
-    dispText("Startup","center",[255,255,255,255],25)
+    dispText("Starting","center",[255,255,255,255],25)
     accThread = accThr()
     gpsThread = gpsThr()
     accThread.start()

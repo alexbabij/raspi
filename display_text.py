@@ -33,9 +33,9 @@ else:
 #The max frame rate is theoretically around 24 fps
 #from my testing we can get like 29 fps at max speed
 
-class piDisplay:
-    def __init__(self):
-        self.input = ""
+# class piDisplay:
+#     def __init__(self):
+#         self.input = ""
 
 
 
