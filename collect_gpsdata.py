@@ -220,7 +220,7 @@ class piScreen(tr.Thread):
         
     
     def run(self):
-        totrefreshTime = 0.0
+        totrefreshTime = 1.0 #have to be careful not to initialize to zero since we divide by it
         data = [0.0]*5 # initialize this in case gpsThread.dataout isnt ready yet
         while self.running:
             startTime = time.time()
