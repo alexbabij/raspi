@@ -245,7 +245,7 @@ class piScreen(tr.Thread):
             #things like font size, color, etc. on a per character basis if we really wanted to, since we can draw successive things into an image,
             #then we write that image to the screen
             string = "Time: "+str(round(elapsedTime,2))+"s"+"\nVelocity: "+str(round(velocity,1))+displayUnits
-            string += "\nAcceleration: "+str(acceleration)+"g"
+            string += "\nAcceleration: "+str(round(acceleration,2))+"g"
             string += "\nRefresh: "+str(round(1/totrefreshTime,1))+"fps" #dont forget you can't use commas to combine strings like you could in print()
             dispText(string,"nw",[255,255,255,255],15)
             elapsedR = time.time()-startTime
