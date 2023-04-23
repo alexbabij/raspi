@@ -7,3 +7,4 @@ current vehicle:car1
 max speed:60
 units:mph
 screen refresh rate:15
+global timeout:300

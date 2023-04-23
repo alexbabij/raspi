@@ -91,8 +91,9 @@ class gpsThr(tr.Thread):
             start = time.time()
             #write our data to a file every 1 second 
             samplesC = int(config["storage interval"]) * updateRate #Only whole second intervals are allowed otherwise this counter could be a decimal
-            totSamplesC = float(config["timeout"]) + time.time() 
-            #Basically a timeout in case we don't stop taking data within timeout period
+             
+            #Basically a timeout in case we don't stop taking data within timeout period, this starts when we hit our minimum acceleration
+            globalTimeout = float(config["global timeout"]) + time.time() #This one starts when we run this, not when we hit minimum acceleration
             filePath = ""
             fileCreated = False
             collectingData = False
@@ -147,7 +148,11 @@ class gpsThr(tr.Thread):
                             collectingData = True
                             if (self.runStart == False):
                                 self.runStart = time.time()
-                                #This should run only once, when we first hit our target acceleration
+                                totSamplesC = float(config["global timeout"]) + time.time()
+                                if totSamplesC > globalTimeout:
+                                    globalTimeout = totSamplesC + 1
+                                    #if we would timeout before our local timeout, dont
+                            #This should run only once, when we first hit our target acceleration
                             
                             
 
@@ -208,7 +213,7 @@ class gpsThr(tr.Thread):
                             self.runComplete = True
                             #self.running = False
                              
-                        if (time.time() > totSamplesC):
+                        if (time.time() > totSamplesC) or (time.time() > globalTimeout):
                             collectingData = False
                             self.runComplete = True
                             self.timedOut = True
