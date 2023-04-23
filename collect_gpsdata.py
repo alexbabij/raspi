@@ -231,8 +231,8 @@ class piScreen(tr.Thread):
             #This is the quick and dirty way. If we instead implement a function to just draw individual text blocks at given xy locations, we can vary
             #things like font size, color, etc. on a per character basis if we really wanted to, since we can draw successive things into an image,
             #then we write that image to the screen
-            string = "Elapsed Time:",str(round(elapsedTime,2))+"s","\nVelocity:",str(round(velocity,1)),displayUnits
-            string += "\nRefresh:",str(round(1/totrefreshTime,1))+"fps"
+            string = "Elapsed Time: "+str(round(elapsedTime,2))+"s"+"\nVelocity:"+str(round(velocity,1))+displayUnits
+            string += "\nRefresh: "+str(round(1/totrefreshTime,1))+"fps" #dont forget you can't use commas to combine strings like you could in print()
             dispText(string,"nw",[255,255,255,255],15)
             elapsedR = time.time()-startTime
             #attempt to refresh at the selected rate, if not possible, refresh as fast as possible
