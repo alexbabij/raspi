@@ -36,9 +36,8 @@ class piDisplay:
 
 
 
-
-
 def dispText(textIn,textLoc,fontColor=[0,0,0,255],FONTSIZE=15,BORDER=5,width=diwidth,height=diheight):
+    #fontColor = [R,G,B,opacity (0-255)]
     startTime = time.time()
     # First define some constants to allow easy resizing of shapes.
     #BORDER = 20
@@ -49,14 +48,14 @@ def dispText(textIn,textLoc,fontColor=[0,0,0,255],FONTSIZE=15,BORDER=5,width=diw
     # Get drawing object to draw on image.
     draw = ImageDraw.Draw(image)
 
-    # Draw a green filled box as the background
-    draw.rectangle((0, 0, width, height), fill=(255,255,255))
-    #disp.image(image)
+    # # Draw a green filled box as the background
+    # draw.rectangle((0, 0, width, height), fill=(255,255,255))
+    # #disp.image(image)
 
-    #Draw a smaller inner purple rectangle
-    draw.rectangle(
-        (0, 0, width - BORDER - 1, height - BORDER - 1), fill=(170, 0, 136)
-    )
+    # #Draw a smaller inner purple rectangle
+    # draw.rectangle(
+    #     (0, 0, width - BORDER - 1, height - BORDER - 1), fill=(170, 0, 136)
+    # )
     print("time to process output:",time.time()-startTime)
     # Load a TTF Font
     fstrt = time.time()
@@ -116,6 +115,27 @@ def dispText(textIn,textLoc,fontColor=[0,0,0,255],FONTSIZE=15,BORDER=5,width=diw
             font=font,
             fill=(fontColor[2], fontColor[1], fontColor[0], fontColor[3]),
         )
+    # Display image.
+    disp.image(image)
+    print("Elapsed time:",str(time.time()-startTime))
+ 
+
+def dispBackground(backColor=[0,0,255],width=diwidth,height=diheight):
+    startTime = time.time()
+    # First define some constants to allow easy resizing of shapes.
+    #BORDER = 20
+    #FONTSIZE = 20
+
+    image = Image.new("RGB", (width, height))
+
+    # Get drawing object to draw on image.
+    draw = ImageDraw.Draw(image)
+
+    # Draw a green filled box as the background
+    draw.rectangle((0, 0, width, height), fill=tuple(backColor))
+    #disp.image(image)
+  
+    
     # Display image.
     disp.image(image)
     print("Elapsed time:",str(time.time()-startTime))

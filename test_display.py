@@ -9,6 +9,7 @@ startt = time.time()
 rounding = 0
 location = 0
 loDict = {1: "northwest", 2: "southwest", 3: "southeast", 4: "northeast"}
+dispBackground([0,0,0])
 while True:
 
     counter += 1
