@@ -86,7 +86,9 @@ class gpsThr(tr.Thread):
             counter = 0
             print("gps rec started")
             currentData = ['',float('nan'),0.0]
-            currentData.extend(accDataMag)
+            currentData.extend(accDataMag) #could use + instead to concatenate this to the list, doing it with .extend() modifies the same variable in memory
+            #while using + creates a new variable with the same name
+            prevData = False
             #global accDataMag
             while (self.running == True) & (time.time() < totSamplesC):
                 
@@ -127,16 +129,17 @@ class gpsThr(tr.Thread):
                         if curAccDataMag >= accMin:
                             collectingData = True
 
-                        if (len(gpsData) == 0):
+                        if prevData == False:
                             rollingGpsData.append(currentData)
-                            gpsData.append(currentData)
+                            prevData = currentData
                             if collectingData:
+                                gpsData.append(currentData)
                                 counter += 1 #We save our file after 1 second of data collection while collectingData = true
                             print("Time since start:",time.time()-totstart)
                             print(currentData)
 
-                        elif (gpsData[-1][0] != currentData[0]):
-                            
+                        elif (prevData[0] != currentData[0]):
+                            prevData = currentData
                             rollingGpsData.append(currentData)
                             if (not collectingData) & (len(rollingGpsData) > samplesC):
                                 #rollingGpsData normally gets saved every 1 second (actually comes from "storage inteval" setting) so its length should correspond to that 
