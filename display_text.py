@@ -31,7 +31,7 @@ else:
 #The screen will continue to display the last image sent to it, until it recieves something new
 #according to this: https://arduino.stackexchange.com/questions/74624/slow-refresh-rate-of-1-8-tft-display
 #The max frame rate is theoretically around 24 fps
-#from my testing we can get like 6.5 fps
+#from my testing we can get like 29 fps at max speed
 
 class piDisplay:
     def __init__(self):
