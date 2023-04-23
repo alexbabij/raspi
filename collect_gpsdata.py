@@ -132,9 +132,7 @@ class gpsThr(tr.Thread):
                         if prevData == False:
                             rollingGpsData.append(currentData)
                             prevData = currentData
-                            if collectingData:
-                                gpsData.append(currentData)
-                                counter += 1 #We save our file after 1 second of data collection while collectingData = true
+                            
                             print("Time since start:",time.time()-totstart)
                             print(currentData)
 
@@ -151,7 +149,10 @@ class gpsThr(tr.Thread):
                                 gpsData.append(currentData)
                                 counter += 1
 
-                            
+                        if collectingData & (len(gpsData==0)):
+                            gpsData.append(currentData)
+                            counter += 1 #We save our file after 1 second of data collection while collectingData = true
+
                             print("Time since start:",time.time()-totstart)
                             print(currentData)
                         
