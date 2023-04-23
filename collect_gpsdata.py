@@ -309,3 +309,17 @@ if __name__ == "__main__": # I think we don't technically need this since we won
         gpsThread.join()
         dispThread.join()
         print("Threads successfully closed.")
+
+
+
+
+
+
+# """
+# Todo:
+# display 0-60 time
+# integrate with setup_data_collection
+# align refresh times of threads
+# set gps dynamic mode to vehicle instead of default
+# add  pushbutton to stop data collection
+# """
