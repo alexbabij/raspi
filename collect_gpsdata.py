@@ -66,7 +66,7 @@ class gpsThr(tr.Thread):
     def __init__(self):
         super().__init__()
         self.running = True
-        self.dataOut = []
+        self.dataOut = [0.0]*5 #initialize with values so other things can still use it as normal
         self.runStart = 0.0
         
         
