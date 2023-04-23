@@ -19,7 +19,7 @@ while True:
     rounding += 1
     location += 1
     truet = time.time()-startt
-    string = "test,"+str(round(timee,1))+"\n"+str(round(truet,rounding)+"\nFrame:",str(frameC))
+    string = "test,"+str(round(timee,1))+"\n"+str(round(truet,rounding)+"\nFrame: "+str(frameC))
     dispText(string,loDict[location],fontColor=[205,153,51,255])
     time.sleep(0.1)
     if counter >= 24:
