@@ -152,27 +152,27 @@ class gpsThr(tr.Thread):
                             print(currentData)
                         
                             
-                    end = time.time()
-                    elapsed = (end-start)
-                    start = time.time()
+                    # end = time.time()
+                    # elapsed = (end-start)
+                    # start = time.time()
                     #print('\nTime/refresh',elapsed)
-
-                    if (counter >= samplesC):
-                        filePath, fileCreated = writeFile(vehicle,rollingGpsData,fileCreated,filePath)
-                        counter = 0
-                        print("Saved data:",rollingGpsData)
-                        rollingGpsData = []
+                    if collectingData:
+                        if (counter >= samplesC):
+                            filePath, fileCreated = writeFile(vehicle,rollingGpsData,fileCreated,filePath)
+                            counter = 0
+                            print("Saved data:",rollingGpsData)
+                            rollingGpsData = []
+                            
+                        if gpsData[-1][1] >= (cutoffSpeed*1.1):
+                            collectingData = False
+                            #self.running = False
                         
-                    if gpsData[-1][1] >= (cutoffSpeed*1.1):
-                        collectingData = False
-                        #self.running = False
-                    
-                    if gpsData[-1][1] >= (cutoffSpeed):
-                        collectingData = False
-                        #self.running = False
-                        #totSamplesC = time.time() + 1 
+                        if gpsData[-1][1] >= (cutoffSpeed):
+                            collectingData = False
+                            #self.running = False
+                            #totSamplesC = time.time() + 1 
 
-                    #Record data up until reaching slightly past (10%) target speed, or 1 second after reaching target speed, whichever is first
+                        #Record data up until reaching slightly past (10%) target speed, or 1 second after reaching target speed, whichever is first
                 
                 time.sleep(sleepInterval) 
             
