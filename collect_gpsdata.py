@@ -26,6 +26,10 @@ sleepInterval = 1/(updateRate*10) #Maybe tweak this depending on performance
 conversionDict = {"mph": 2.2369362912, "kph": 3.6}
 vehicle = config["current vehicle"]
 cutoffSpeed = float(config["max speed"])/conversionDict[config["units"]]
+accMin = float(config["acceleration threshold"]) #minimum acceleration to start actually recording the data we read.
+#This includes a buffer of data taken before reaching this acceleration value. Intended use is to set minimum 
+#acceleration threshold to be considered as having actually started your 0-60 run
+
 maxSpeed = False #Set to true upon reaching our configured cutoff speed, ends the while loop and data collection
 
 
@@ -75,6 +79,7 @@ class gpsThr(tr.Thread):
             #Basically a timeout in case we don't stop taking data within timeout period
             filePath = ""
             fileCreated = False
+            collectingData = False
             totstart = time.time()
             gpsData = []
             rollingGpsData = []
@@ -119,19 +124,33 @@ class gpsThr(tr.Thread):
                         
                         #we want to have the acceleration value variable locked for as little time as possible
                         
-                        if len(gpsData) == 0:
-                            gpsData.append(currentData)
+                        if curAccDataMag >= accMin:
+                            collectingData = True
+
+                        if (len(gpsData) == 0):
                             rollingGpsData.append(currentData)
-                            counter += 1 #We save our file after 5 SUCCESSFUL readings
+                            if collectingData:
+                                gpsData.append(currentData)
+                                counter += 1 #We save our file after 1 second of data collection while collectingData = true
                             print("Time since start:",time.time()-totstart)
                             print(currentData)
 
-                        elif gpsData[-1][0] != currentData[0]:
-                            gpsData.append(currentData)
+                        elif (gpsData[-1][0] != currentData[0]):
+                            
                             rollingGpsData.append(currentData)
-                            counter += 1
+                            if (not collectingData) & (len(rollingGpsData) > samplesC):
+                                #rollingGpsData normally gets saved every 1 second (actually comes from "storage inteval" setting) so its length should correspond to that 
+                                #i.e. if at sampling at 5Hz and saving every 1 second, this should always be of length 5. It is nice to have some data before we
+                                #reach our "starting" acceleration though, so we keep a rolling list of the last 1 seconds of measurements until collectingData = True
+                                rollingGpsData = rollingGpsData[len(rollingGpsData)-samplesC:] #this covers the case where its randomly longer than 11 which it should never be
+                            if collectingData: 
+                                gpsData.append(currentData)
+                                counter += 1
+
+                            
                             print("Time since start:",time.time()-totstart)
                             print(currentData)
+                        
                             
                     end = time.time()
                     elapsed = (end-start)
@@ -145,10 +164,12 @@ class gpsThr(tr.Thread):
                         rollingGpsData = []
                         
                     if gpsData[-1][1] >= (cutoffSpeed*1.1):
-                        self.running = False
+                        collectingData = False
+                        #self.running = False
                     
                     if gpsData[-1][1] >= (cutoffSpeed):
-                        self.running = False
+                        collectingData = False
+                        #self.running = False
                         #totSamplesC = time.time() + 1 
 
                     #Record data up until reaching slightly past (10%) target speed, or 1 second after reaching target speed, whichever is first

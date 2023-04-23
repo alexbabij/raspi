@@ -47,6 +47,9 @@ ahrs.settings = imufusion.Settings(imufusion.CONVENTION_NWU,  # convention
 #Timestamps of lastest gps and accelerometer data readings
 gpsSampTS = [time.time()]
 accSampTS = [time.time()]
+#currently kinda unused, this would be for synchronizing the gps and accelerometer so you have a better chance of getting up to date data
+#as it stands, not really worth it to implement since we are at most off by around 1 cycle + read time = 0.02+0.01 = 0.03 seconds
+#which is kind of negligible compared to our gps sampling rate of 0.2 seconds
 
 class accThr(tr.Thread):
     def __init__(self):
