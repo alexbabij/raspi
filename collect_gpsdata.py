@@ -58,12 +58,13 @@ from accelerometer.collect_accel_madgwick import *
 
 
 from fileSave import *
+gpsSampTS = [time.time()]
 
 class gpsThr(tr.Thread):
     def __init__(self):
         super().__init__()
         self.running = True
-        #self.rollingGpsData = []
+        self.dataOut = []
         
         
 
@@ -100,10 +101,9 @@ class gpsThr(tr.Thread):
                     #If the data is bad we just ignore it, the format for this is to return NaN for numbers and empty for strings: ''
                     #Not sure how much an effect on performance this has
 
-                        with accLock:
-                            gpsSampTS[0] = time.time()
                         
-                        #We record gps time, velocity, and time offset since starting script measured by the pi
+                        
+                        #We record gps time, velocity, and time offset since starting script as measured by the pi
                         with accLock:
                             curAccDataMag = accDataMag[0]
                             accTime = accDataMag[1]
@@ -132,9 +132,12 @@ class gpsThr(tr.Thread):
                         if prevData == False:
                             rollingGpsData.append(currentData)
                             prevData = currentData
+                            self.dataOut = currentData
                             
                             print("Time since start:",time.time()-totstart)
                             print(currentData)
+                            with accLock:
+                                gpsSampTS[0] = time.time() #timestamp of when latest gps sample became available
 
                         elif (prevData[0] != currentData[0]):
                             prevData = currentData
@@ -203,12 +206,14 @@ from display_text import *
 
 if __name__ == "__main__": # I think we don't technically need this since we won't be importing this file into anything probably. 
                             #stuff in here wont run if we import this into something
-
+    dispBackground([0,0,0]) #Set display screen to black background
+    dispText("Startup","center",[255,255,255,255],25)
     accThread = accThr()
     gpsThread = gpsThr()
     accThread.start()
     time.sleep(1) #have the accelerometer script start first so the values in it can start to even out since it is running a madgwick filter
     gpsThread.start()
+
 
     try: #since both our gps and accelerometer are running in separate threads, we use this to be able to catch keyboard exceptions whenever we want
         while True:

@@ -1,7 +1,7 @@
 #! /usr/bin/python
 #Test the display text function
 import time
-from display_text import *
+from test_display_text import *
 
 timee = 0
 counter = 0
@@ -11,6 +11,8 @@ location = 0
 frameC = 0
 loDict = {1: "northwest", 2: "southwest", 3: "southeast", 4: "northeast"}
 dispBackground([0,0,0])
+dispText("Startup","center",[255,255,255,255],25)
+time.sleep(2)
 while True:
 
     frameC += 1

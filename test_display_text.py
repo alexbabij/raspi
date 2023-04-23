@@ -39,7 +39,7 @@ class piDisplay:
 
 
 
-def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,width=diwidth,height=diheight):
+def dispText(textIn,textLoc,fontColor=[0,0,0,255],FONTSIZE=15,BORDER=5,width=diwidth,height=diheight):
     #fontColor = [R,G,B,opacity (0-255)]
     startTime = time.time()
     # First define some constants to allow easy resizing of shapes.
