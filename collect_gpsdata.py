@@ -221,23 +221,23 @@ class piScreen(tr.Thread):
     
     def run(self):
         totrefreshTime = 0.0
-
-        startTime = time.time()
-        data = gpsThread.dataOut.copy()
-        velocity = data[1] * conversionDict[displayUnits]#convert from m/s to selected units
-        elapsedTime = time.time()-gpsThread.runStart #s
-        #construct our string to write to the screen
-        #This is the quick and dirty way. If we instead implement a function to just draw individual text blocks at given xy locations, we can vary
-        #things like font size, color, etc. on a per character basis if we really wanted to, since we can draw successive things into an image,
-        #then we write that image to the screen
-        string = "Elapsed Time:",str(round(elapsedTime,2))+"s","\nVelocity:",str(round(velocity,1)),displayUnits
-        string += "\nRefresh:",str(round(1/totrefreshTime,1))+"fps"
-        dispText(string,"nw",[255,255,255,255],15)
-        elapsedR = time.time()-startTime
-        #attempt to refresh at the selected rate, if not possible, refresh as fast as possible
-        if (self.refreshRate) > elapsedR:
-            time.sleep(self.refreshRate-elapsedR)
-        totrefreshTime = time.time()-startTime
+        while self.running:
+            startTime = time.time()
+            data = gpsThread.dataOut.copy()
+            velocity = data[1] * conversionDict[displayUnits]#convert from m/s to selected units
+            elapsedTime = time.time()-gpsThread.runStart #s
+            #construct our string to write to the screen
+            #This is the quick and dirty way. If we instead implement a function to just draw individual text blocks at given xy locations, we can vary
+            #things like font size, color, etc. on a per character basis if we really wanted to, since we can draw successive things into an image,
+            #then we write that image to the screen
+            string = "Elapsed Time:",str(round(elapsedTime,2))+"s","\nVelocity:",str(round(velocity,1)),displayUnits
+            string += "\nRefresh:",str(round(1/totrefreshTime,1))+"fps"
+            dispText(string,"nw",[255,255,255,255],15)
+            elapsedR = time.time()-startTime
+            #attempt to refresh at the selected rate, if not possible, refresh as fast as possible
+            if (self.refreshRate) > elapsedR:
+                time.sleep(self.refreshRate-elapsedR)
+            totrefreshTime = time.time()-startTime
 
 
 if __name__ == "__main__": # I think we don't technically need this since we won't be importing this file into anything probably. 
@@ -246,9 +246,11 @@ if __name__ == "__main__": # I think we don't technically need this since we won
     dispText("Starting","center",[255,255,255,255],25)
     accThread = accThr()
     gpsThread = gpsThr()
+    dispThread = piScreen()
     accThread.start()
     time.sleep(1) #have the accelerometer script start first so the values in it can start to even out since it is running a madgwick filter
     gpsThread.start()
+    dispThread.start()
 
 
     try: #since both our gps and accelerometer are running in separate threads, we use this to be able to catch keyboard exceptions whenever we want
@@ -260,6 +262,8 @@ if __name__ == "__main__": # I think we don't technically need this since we won
         print("Attempting to close threads...")
         accThread.running = False
         gpsThread.running = False
+        dispThread.running = False
         accThread.join()
         gpsThread.join()
+        dispThread.join()
         print("Threads successfully closed.")
