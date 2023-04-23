@@ -67,7 +67,7 @@ class gpsThr(tr.Thread):
         super().__init__()
         self.running = True
         self.dataOut = [0.0]*5 #initialize with values so other things can still use it as normal
-        self.runStart = 0.0
+        self.runStart = False
         
         
 
@@ -222,11 +222,13 @@ class piScreen(tr.Thread):
     def run(self):
         totrefreshTime = 1.0 #have to be careful not to initialize to zero since we divide by it
         data = [0.0]*5 # initialize this in case gpsThread.dataout isnt ready yet
+        elapsedTime = 0.000
         while self.running:
             startTime = time.time()
             data = gpsThread.dataOut.copy()
             velocity = data[1] * conversionDict[displayUnits]#convert from m/s to selected units
-            elapsedTime = time.time()-gpsThread.runStart #s
+            if gpsThread.runStart != False:
+                elapsedTime = time.time()-gpsThread.runStart #s
             #construct our string to write to the screen
             #This is the quick and dirty way. If we instead implement a function to just draw individual text blocks at given xy locations, we can vary
             #things like font size, color, etc. on a per character basis if we really wanted to, since we can draw successive things into an image,
