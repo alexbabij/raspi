@@ -23,6 +23,7 @@ while True:
     truet = time.time()-startt
     #location = 1
     string = "test,"+str(round(timee,1))+"\n"+str(round(truet,rounding))+"\nFrame: "+str(frameC)
+    string += "\ntest"
     dispText(string,loDict[location],[205,153,51,255])
     time.sleep(0.05)
     if counter >= 24:
