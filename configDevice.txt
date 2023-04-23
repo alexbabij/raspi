@@ -4,7 +4,7 @@ timeout:40
 storage interval:1
 acceleration threshold:0.15
 current vehicle:car1
-max speed:30
+max speed:20
 units:mph
 screen refresh rate:15
 global timeout:300
