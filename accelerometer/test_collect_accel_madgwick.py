@@ -226,7 +226,7 @@ try:
                         rate_gyr_x,rate_gyr_y,rate_gyr_z,
                         ACCx, ACCy, ACCz,
                         MAGx, MAGy, MAGz])
-        processedDataLog.append()
+        #processedDataLog.append()
         
         if 1: #easy disable all the print statements
             if 0:                       #Change to '0' to stop  showing the angles from the gyro
