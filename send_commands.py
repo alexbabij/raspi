@@ -21,8 +21,8 @@ def sendCommand(command,readall=False): #optional function input for timeout
 
 
 
-sendCommand("AT+UGUBX=\"B5 62 06 24 24 00 FF FF 00 02 00 00 00 00 10 27 00 00 05 00 FA 00 FA 00 64 00 2C 01 00 00 00 00 10 27 00 00 00 00 00 00 00 00 46 EE\"") #If this fails our gps will just not work through gpsd, so we will retry it once (might make it retry n times idk)
-
+#sendCommand("AT+UGUBX=\"B5 62 06 24 24 00 FF FF 00 02 00 00 00 00 10 27 00 00 05 00 FA 00 FA 00 64 00 2C 01 00 00 00 00 10 27 00 00 00 00 00 00 00 00 46 EE\"")
+sendCommand("AT+UGUBX=\"B5 62 06 08 06 00 F4 01 01 00 01 00 0B 77\"")
 
 
 
