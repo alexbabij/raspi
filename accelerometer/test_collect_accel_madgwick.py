@@ -53,7 +53,7 @@ accSampTS = [time.time()]
 #which is kind of negligible compared to our gps sampling rate of 0.2 seconds
 
 
-lastTime = time.time()
+
 aStart = datetime.datetime.now()
 
 RAD_TO_DEG = 57.29578
@@ -97,7 +97,7 @@ oldZAccRawValue = 0
 #global accDataMag
 print("acc rec started")
 while True:
-    
+    lastTime = time.time() 
 
     #Read the accelerometer,gyroscope and magnetometer values
     ACCx = IMU.readACCx()
