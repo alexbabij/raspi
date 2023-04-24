@@ -129,6 +129,9 @@ updateRate = int(config["updateRate"]) #in Hz
 #binary stuff is stored as a string since that is the format we will use when we send it
 updateRDict = {1: 'B5 62 06 08 06 00 E8 03 01 00 01 00 01 39', 2: 'B5 62 06 08 06 00 F4 01 01 00 01 00 0B 77', 4: 'B5 62 06 08 06 00 FA 00 01 00 01 00 10 96',
 5: 'B5 62 06 08 06 00 C8 00 01 00 01 00 DE 6A', 8: 'B5 62 06 08 06 00 7D 00 01 00 01 00 93 A8', 10: 'B5 62 06 08 06 00 64 00 01 00 01 00 7A 12'}
+#These came from the u-center software on windows that can generate the binary with the checksum for changing different settings on M8 gps'
+#Normally, gpsd can do this for us and send binary directly to the gps, but since we have to communicate over AT commands because
+#our gps goes through the cellular module on the ublox SARA-R5-M8, we have to do it ourselves.
 
 #Default update rate is 1 on gps boot, so if we have it set to 1 in here, do nothing
 #We also don't want to send an incomplete binary string somehow i.e. AT+UGUBX="wrong"

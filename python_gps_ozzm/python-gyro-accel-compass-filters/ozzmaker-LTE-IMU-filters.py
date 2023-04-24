@@ -401,7 +401,7 @@ while True:
     
 
 
-    #Everything above this is not my own work, I considered trying to implement a madgwick filter instead of kalman but so far no luck-Alex
+    #Everything above this is not my own work, I considered trying to implement a madgwick filter instead of kalman but so far no luck
     psi = kalmanX * M_PI/180
     theta = kalmanY * M_PI/180
     phi = tiltCompensatedHeading * M_PI/180

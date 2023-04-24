@@ -10,6 +10,7 @@ import numpy
 import imufusion
 import threading as tr
 
+from fileSave import *
 
 
 targetHz = 50 #Target frequency to run at 
@@ -110,150 +111,161 @@ counter = 0
 counter1 = 0
 #global accDataMag
 print("acc rec started")
-while True:
-    lastTime = time.time() 
 
-    #Read the accelerometer,gyroscope and magnetometer values
-    ACCx = IMU.readACCx()
-    ACCy = IMU.readACCy()
-    ACCz = IMU.readACCz()
-    GYRx = IMU.readGYRx()
-    GYRy = IMU.readGYRy()
-    GYRz = IMU.readGYRz()
-    MAGx = IMU.readMAGx()
-    MAGy = IMU.readMAGy()
-    MAGz = IMU.readMAGz()
+try:
+    dataLog = []
+    while True:
+        lastTime = time.time() 
 
-    
-    bFin = datetime.datetime.now() - aStart
-    aStart = datetime.datetime.now()
-    LP = bFin.microseconds/(1000000*1.0) #loop time
-    outputString = "Loop Time %5.5f " % ( LP )
-    #print(outputString)
-    delta_time = LP
-
-    #Apply compass calibration
-    MAGx -= (magXmin + magXmax) /2
-    MAGy -= (magYmin + magYmax) /2
-    MAGz -= (magZmin + magZmax) /2
-
-    #Times raw mag by sensitivity  
-    MAGx  = MAGx * (1.0/16384.0)  #18 bits
-    MAGy  = MAGy * (1.0/16384.0)  #18 bits
-    MAGz  = MAGz * (1.0/16384.0)  #18 bits
-
-
-    ##Calculate loop Period(LP). How long between Gyro Reads
-    
-
-    ###############################################
-    #### Apply low pass filter ####
-    ###############################################
-    MAGx =  MAGx  * MAG_LPF_FACTOR + oldXMagRawValue*(1 - MAG_LPF_FACTOR);
-    MAGy =  MAGy  * MAG_LPF_FACTOR + oldYMagRawValue*(1 - MAG_LPF_FACTOR);
-    MAGz =  MAGz  * MAG_LPF_FACTOR + oldZMagRawValue*(1 - MAG_LPF_FACTOR);
-    ACCx =  ACCx  * ACC_LPF_FACTOR + oldXAccRawValue*(1 - ACC_LPF_FACTOR);
-    ACCy =  ACCy  * ACC_LPF_FACTOR + oldYAccRawValue*(1 - ACC_LPF_FACTOR);
-    ACCz =  ACCz  * ACC_LPF_FACTOR + oldZAccRawValue*(1 - ACC_LPF_FACTOR);
-
-    oldXMagRawValue = MAGx
-    oldYMagRawValue = MAGy
-    oldZMagRawValue = MAGz
-    oldXAccRawValue = ACCx
-    oldYAccRawValue = ACCy
-    oldZAccRawValue = ACCz
-
-    #Convert Gyro raw to degrees per second
-    rate_gyr_x =  GYRx * G_GAIN
-    rate_gyr_y =  GYRy * G_GAIN
-    rate_gyr_z =  GYRz * G_GAIN
-
-    #Convert accelerometer data to g's
-    ACCx = (ACCx * 0.244)/1000
-    ACCy= (ACCy * 0.244)/1000
-    ACCz= (ACCz * 0.244)/1000
-    ACCx = ACCx*accScale
-    ACCy= ACCy*accScale
-    ACCz= ACCz*accScale
-
-
-    #Convert magnetometer to uT from G
-    MAGx  = MAGx * 100
-    MAGy  = MAGy * 100
-    MAGz  = MAGz * 100
-
-    
-    gyroscope = numpy.array([rate_gyr_x,rate_gyr_y,rate_gyr_z])
-    accelerometer = numpy.array([ACCx, ACCy, ACCz])
-    ACCVec = numpy.array([[ACCx], [ACCy], [ACCz]])
-    magnetometer = numpy.array([MAGx, MAGy, MAGz])
-    euler = numpy.array([0.0,0.0,0.0])
-    rotationMat = numpy.array([[0.0,0.0,0.0],[0.0,0.0,0.0],[0.0,0.0,0.0]])
-    ACCearthFrame = numpy.array([0.0,0.0,0.0])
-    ACCLinear = numpy.array([0.0,0.0,0.0])
-    ##################### END Data Collection ########################
-    #The documentation is cheeks, this link has some of? the different python functions: https://github.com/xioTechnologies/Fusion/blob/main/Python/Python-C-API/Ahrs.h
-    #and https://github.com/xioTechnologies/Fusion/tree/main/Python/Python-C-API should contain all the functions
-    #look for PyMethodDef and PyGetSetDef 
-
-    ahrs.update(gyroscope, accelerometer, magnetometer, delta_time)
-    #ahrs.update_no_magnetometer(gyroscope, accelerometer, delta_time)
-    euler = ahrs.quaternion.to_euler() #This one is technically a function call
-    rotationMat = ahrs.quaternion.to_matrix()
-    ACCearthFrame = ahrs.earth_acceleration #These ones are numpy array objects, this one is acceleration in earth frame with gravity removed
-    ACCLinear = ahrs.linear_acceleration #acceleration in device frame with gravity removed
-    EFrameRaw = numpy.matmul(rotationMat, ACCVec)
-    ACCmagnitudeE = math.sqrt(ACCearthFrame[0]*ACCearthFrame[0] + ACCearthFrame[1]*ACCearthFrame[1] + ACCearthFrame[2]*ACCearthFrame[2])
-    ACCmagnitudeL = math.sqrt(ACCLinear[0]*ACCLinear[0] + ACCLinear[1]*ACCLinear[1] + ACCLinear[2]*ACCLinear[2])
-    EarthRawMagnitude = math.sqrt(EFrameRaw[0][0]*EFrameRaw[0][0] + EFrameRaw[1][0]*EFrameRaw[1][0] + EFrameRaw[2][0]*EFrameRaw[2][0])
-    RawMagnitude = math.sqrt(ACCx*ACCx + ACCy*ACCy + ACCz*ACCz)
-    
-    #accDataMag = ACCmagnitudeE
-    sampleTime = time.time()
-    
-    counter1 +=1
-    if counter1 > 500: #wait 10 seconds before averaging to let readings stabilize
-        counter += 1
-        avgMag = (RawMagnitude + avgMag*(counter-1))/counter
-        
-        
+        #Read the accelerometer,gyroscope and magnetometer values
+        ACCx = IMU.readACCx()
+        ACCy = IMU.readACCy()
+        ACCz = IMU.readACCz()
+        GYRx = IMU.readGYRx()
+        GYRy = IMU.readGYRy()
+        GYRz = IMU.readGYRz()
+        MAGx = IMU.readMAGx()
+        MAGy = IMU.readMAGy()
+        MAGz = IMU.readMAGz()
 
         
-    
-    if 1: #easy disable all the print statements
-        if 0:                       #Change to '0' to stop  showing the angles from the gyro
-            outputString +="\t# GYRX Angle %5.4f  GYRY Angle %5.4f  GYRZ Angle %5.4f # " % (gyroXangle,gyroYangle,gyroZangle)
+        bFin = datetime.datetime.now() - aStart
+        aStart = datetime.datetime.now()
+        LP = bFin.microseconds/(1000000*1.0) #loop time
+        outputString = "Loop Time %5.5f " % ( LP )
+        #print(outputString)
+        delta_time = LP
 
-        if 0:                       #Change to '0' to stop  showing the heading
-            outputString +="\n# EulerX %5.4f  EulerY %5.4f Eulerz %5.4f#" % (euler[0],euler[1],euler[2])
+        #Apply compass calibration
+        MAGx -= (magXmin + magXmax) /2
+        MAGy -= (magYmin + magYmax) /2
+        MAGz -= (magZmin + magZmax) /2
 
-        if 1:                       #Change to '0' to stop showing the acceleration
-            outputString +="\n#Raw ACCx %5.4f  ACCy %5.4f  ACCz %5.4f #" % (ACCx,ACCy,ACCz)
-        if 1:                       #Change to '0' to stop showing the acceleration
-            outputString +="\n#Raw EarthACCx %5.4f  EarthACCy %5.4f  EarthACCz %5.4f #" % (EFrameRaw[0][0],EFrameRaw[1][0],EFrameRaw[2][0])
-        if 1:                       #Change to '0' to stop showing the acceleration
-            outputString +="\n# EarthACCx %5.4f  EarthACCy %5.4f  EarthACCz %5.4f #" % (ACCearthFrame[0],ACCearthFrame[1],ACCearthFrame[2])
-        if 1:                       #Change to '0' to stop showing the acceleration
-            outputString +="\n# LinearACCx %5.4f  LinearACCy %5.4f  LinearACCz %5.4f #" % (ACCLinear[0],ACCLinear[1],ACCLinear[2])
-        if 1:                       #Change to '0' to stop showing the acceleration
-            outputString +="\n# Ratio LinearACCx/ACCx %5.4f  LinearACCy/ACCy %5.4f  LinearACCz/ACCz %5.4f #" % (ACCLinear[0]/ACCx,ACCLinear[1]/ACCy,ACCLinear[2]/ACCz)
-        if 1:                       #Change to '0' to stop showing the acceleration
-            outputString +="\n# EarthMagnitude %5.4f  LinearMagnitude  %5.4f Earth Raw magnitude %5.4f Raw Magnitude %5.4f#" % (ACCmagnitudeE,ACCmagnitudeL,EarthRawMagnitude,RawMagnitude)
-        if 1:                       #Change to '0' to stop showing the acceleration
-            outputString +="\n# AvgRaw %5.5f #" % (avgMag)
-        # if 1:                       #Change to '0' to stop showing the acceleration
-        #     outputString +="\n# EarthACCx %5.4f  EarthACCy %5.4f  EarthACCz %5.4f #" % (EFrameAccel[0],EFrameAccel[1],EFrameAccel[2])
-
-        print(outputString)
-
-        print("Total Time",time.time()-tStart)
-    #Make our script refresh at a consistent rate
-    delTime = time.time()-lastTime
-    if (delTime) < targetS:
-        #print("\nSurplus time:",targetS-delTime)
-        time.sleep(targetS-delTime)
-
-    
-    #EFrameAccel
+        #Times raw mag by sensitivity  
+        MAGx  = MAGx * (1.0/16384.0)  #18 bits
+        MAGy  = MAGy * (1.0/16384.0)  #18 bits
+        MAGz  = MAGz * (1.0/16384.0)  #18 bits
 
 
+        ##Calculate loop Period(LP). How long between Gyro Reads
+        
+
+        ###############################################
+        #### Apply low pass filter ####
+        ###############################################
+        MAGx =  MAGx  * MAG_LPF_FACTOR + oldXMagRawValue*(1 - MAG_LPF_FACTOR);
+        MAGy =  MAGy  * MAG_LPF_FACTOR + oldYMagRawValue*(1 - MAG_LPF_FACTOR);
+        MAGz =  MAGz  * MAG_LPF_FACTOR + oldZMagRawValue*(1 - MAG_LPF_FACTOR);
+        ACCx =  ACCx  * ACC_LPF_FACTOR + oldXAccRawValue*(1 - ACC_LPF_FACTOR);
+        ACCy =  ACCy  * ACC_LPF_FACTOR + oldYAccRawValue*(1 - ACC_LPF_FACTOR);
+        ACCz =  ACCz  * ACC_LPF_FACTOR + oldZAccRawValue*(1 - ACC_LPF_FACTOR);
+
+        oldXMagRawValue = MAGx
+        oldYMagRawValue = MAGy
+        oldZMagRawValue = MAGz
+        oldXAccRawValue = ACCx
+        oldYAccRawValue = ACCy
+        oldZAccRawValue = ACCz
+
+        #Convert Gyro raw to degrees per second
+        rate_gyr_x =  GYRx * G_GAIN
+        rate_gyr_y =  GYRy * G_GAIN
+        rate_gyr_z =  GYRz * G_GAIN
+
+        #Convert accelerometer data to g's
+        ACCx = (ACCx * 0.244)/1000
+        ACCy= (ACCy * 0.244)/1000
+        ACCz= (ACCz * 0.244)/1000
+        ACCx = ACCx*accScale
+        ACCy= ACCy*accScale
+        ACCz= ACCz*accScale
+
+
+        #Convert magnetometer to uT from G
+        MAGx  = MAGx * 100
+        MAGy  = MAGy * 100
+        MAGz  = MAGz * 100
+
+        
+        gyroscope = numpy.array([rate_gyr_x,rate_gyr_y,rate_gyr_z])
+        accelerometer = numpy.array([ACCx, ACCy, ACCz])
+        ACCVec = numpy.array([[ACCx], [ACCy], [ACCz]])
+        magnetometer = numpy.array([MAGx, MAGy, MAGz])
+        euler = numpy.array([0.0,0.0,0.0])
+        rotationMat = numpy.array([[0.0,0.0,0.0],[0.0,0.0,0.0],[0.0,0.0,0.0]])
+        ACCearthFrame = numpy.array([0.0,0.0,0.0])
+        ACCLinear = numpy.array([0.0,0.0,0.0])
+        ##################### END Data Collection ########################
+        #The documentation is cheeks, this link has some of? the different python functions: https://github.com/xioTechnologies/Fusion/blob/main/Python/Python-C-API/Ahrs.h
+        #and https://github.com/xioTechnologies/Fusion/tree/main/Python/Python-C-API should contain all the functions
+        #look for PyMethodDef and PyGetSetDef 
+
+        ahrs.update(gyroscope, accelerometer, magnetometer, delta_time)
+        #ahrs.update_no_magnetometer(gyroscope, accelerometer, delta_time)
+        euler = ahrs.quaternion.to_euler() #This one is technically a function call
+        rotationMat = ahrs.quaternion.to_matrix()
+        ACCearthFrame = ahrs.earth_acceleration #These ones are numpy array objects, this one is acceleration in earth frame with gravity removed
+        ACCLinear = ahrs.linear_acceleration #acceleration in device frame with gravity removed
+        EFrameRaw = numpy.matmul(rotationMat, ACCVec)
+        ACCmagnitudeE = math.sqrt(ACCearthFrame[0]*ACCearthFrame[0] + ACCearthFrame[1]*ACCearthFrame[1] + ACCearthFrame[2]*ACCearthFrame[2])
+        ACCmagnitudeL = math.sqrt(ACCLinear[0]*ACCLinear[0] + ACCLinear[1]*ACCLinear[1] + ACCLinear[2]*ACCLinear[2])
+        EarthRawMagnitude = math.sqrt(EFrameRaw[0][0]*EFrameRaw[0][0] + EFrameRaw[1][0]*EFrameRaw[1][0] + EFrameRaw[2][0]*EFrameRaw[2][0])
+        RawMagnitude = math.sqrt(ACCx*ACCx + ACCy*ACCy + ACCz*ACCz)
+        
+        #accDataMag = ACCmagnitudeE
+        sampleTime = time.time()
+        
+        counter1 +=1
+        if counter1 > 500: #wait 10 seconds before averaging to let readings stabilize
+            counter += 1
+            avgMag = (RawMagnitude + avgMag*(counter-1))/counter
+            
+            
+        dataLog.append([(time.time()-tStart),
+                        rate_gyr_x,rate_gyr_y,rate_gyr_z,
+                        ACCx, ACCy, ACCz,
+                        MAGx, MAGy, MAGz])
+            
+        
+        if 1: #easy disable all the print statements
+            if 0:                       #Change to '0' to stop  showing the angles from the gyro
+                outputString +="\t# GYRX Angle %5.4f  GYRY Angle %5.4f  GYRZ Angle %5.4f # " % (gyroXangle,gyroYangle,gyroZangle)
+
+            if 0:                       #Change to '0' to stop  showing the heading
+                outputString +="\n# EulerX %5.4f  EulerY %5.4f Eulerz %5.4f#" % (euler[0],euler[1],euler[2])
+
+            if 1:                       #Change to '0' to stop showing the acceleration
+                outputString +="\n#Raw ACCx %5.4f  ACCy %5.4f  ACCz %5.4f #" % (ACCx,ACCy,ACCz)
+            if 1:                       #Change to '0' to stop showing the acceleration
+                outputString +="\n#Raw EarthACCx %5.4f  EarthACCy %5.4f  EarthACCz %5.4f #" % (EFrameRaw[0][0],EFrameRaw[1][0],EFrameRaw[2][0])
+            if 1:                       #Change to '0' to stop showing the acceleration
+                outputString +="\n# EarthACCx %5.4f  EarthACCy %5.4f  EarthACCz %5.4f #" % (ACCearthFrame[0],ACCearthFrame[1],ACCearthFrame[2])
+            if 1:                       #Change to '0' to stop showing the acceleration
+                outputString +="\n# LinearACCx %5.4f  LinearACCy %5.4f  LinearACCz %5.4f #" % (ACCLinear[0],ACCLinear[1],ACCLinear[2])
+            if 1:                       #Change to '0' to stop showing the acceleration
+                outputString +="\n# Ratio LinearACCx/ACCx %5.4f  LinearACCy/ACCy %5.4f  LinearACCz/ACCz %5.4f #" % (ACCLinear[0]/ACCx,ACCLinear[1]/ACCy,ACCLinear[2]/ACCz)
+            if 1:                       #Change to '0' to stop showing the acceleration
+                outputString +="\n# EarthMagnitude %5.4f  LinearMagnitude  %5.4f Earth Raw magnitude %5.4f Raw Magnitude %5.4f#" % (ACCmagnitudeE,ACCmagnitudeL,EarthRawMagnitude,RawMagnitude)
+            if 1:                       #Change to '0' to stop showing the acceleration
+                outputString +="\n# AvgRaw %5.5f #" % (avgMag)
+            # if 1:                       #Change to '0' to stop showing the acceleration
+            #     outputString +="\n# EarthACCx %5.4f  EarthACCy %5.4f  EarthACCz %5.4f #" % (EFrameAccel[0],EFrameAccel[1],EFrameAccel[2])
+
+            print(outputString)
+
+            print("Total Time",time.time()-tStart)
+        #Make our script refresh at a consistent rate
+        delTime = time.time()-lastTime
+        if (delTime) < targetS:
+            #print("\nSurplus time:",targetS-delTime)
+            time.sleep(targetS-delTime)
+
+        
+        #EFrameAccel
+
+except (KeyboardInterrupt, SystemExit): #when you press ctrl+c
+            print("\nExiting.")
+            filePath = ""
+            fileCreated = False
+            vehicle = "test1"
+            filePath, fileCreated = writeFile(vehicle,dataLog,fileCreated,filePath)
