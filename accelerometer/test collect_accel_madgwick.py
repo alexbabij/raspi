@@ -175,8 +175,10 @@ class accThr(tr.Thread):
             
             gyroscope = numpy.array([rate_gyr_x,rate_gyr_y,rate_gyr_z])
             accelerometer = numpy.array([ACCx, ACCy, ACCz])
+            ACCVec = numpy.array([[ACCx], [ACCy], [ACCz]])
             magnetometer = numpy.array([MAGx, MAGy, MAGz])
             euler = numpy.array([0.0,0.0,0.0])
+            rotationMat = numpy.array([[0.0,0.0,0.0],[0.0,0.0,0.0],[0.0,0.0,0.0]])
             ACCearthFrame = numpy.array([0.0,0.0,0.0])
             ACCLinear = numpy.array([0.0,0.0,0.0])
             ##################### END Data Collection ########################
@@ -186,10 +188,13 @@ class accThr(tr.Thread):
 
             ahrs.update(gyroscope, accelerometer, magnetometer, delta_time)
             euler = ahrs.quaternion.to_euler() #This one is technically a function call
+            rotationMat = ahrs.quaternion.to_matrix()
             ACCearthFrame = ahrs.earth_acceleration #These ones are numpy array objects, this one is acceleration in earth frame with gravity removed
             ACCLinear = ahrs.linear_acceleration #acceleration in device frame with gravity removed
+            EFrameRaw = numpy.matmul(rotationMat, ACCVec)
             ACCmagnitudeE = math.sqrt(ACCearthFrame[0]*ACCearthFrame[0] + ACCearthFrame[1]*ACCearthFrame[1] + ACCearthFrame[2]*ACCearthFrame[2])
             ACCmagnitudeL = math.sqrt(ACCLinear[0]*ACCLinear[0] + ACCLinear[1]*ACCLinear[1] + ACCLinear[2]*ACCLinear[2])
+            
             
             #accDataMag = ACCmagnitudeE
             sampleTime = time.time()
@@ -207,21 +212,22 @@ class accThr(tr.Thread):
 
                 
             
-            if 0: #easy disable all the print statements
+            if 1: #easy disable all the print statements
                 if 0:                       #Change to '0' to stop  showing the angles from the gyro
                     outputString +="\t# GYRX Angle %5.4f  GYRY Angle %5.4f  GYRZ Angle %5.4f # " % (gyroXangle,gyroYangle,gyroZangle)
 
                 if 0:                       #Change to '0' to stop  showing the heading
                     outputString +="\n# EulerX %5.4f  EulerY %5.4f Eulerz %5.4f#" % (euler[0],euler[1],euler[2])
 
-                if 0:                       #Change to '0' to stop showing the acceleration
+                if 1:                       #Change to '0' to stop showing the acceleration
                     outputString +="\n#Raw ACCx %5.4f  ACCy %5.4f  ACCz %5.4f #" % (ACCx,ACCy,ACCz)
-                
+                if 1:                       #Change to '0' to stop showing the acceleration
+                    outputString +="\n#Raw EarthACCx %5.4f  EarthACCy %5.4f  EarthACCz %5.4f #" % (EFrameRaw[0][0],EFrameRaw[1][0],EFrameRaw[2][0])
                 if 1:                       #Change to '0' to stop showing the acceleration
                     outputString +="\n# EarthACCx %5.4f  EarthACCy %5.4f  EarthACCz %5.4f #" % (ACCearthFrame[0],ACCearthFrame[1],ACCearthFrame[2])
                 if 0:                       #Change to '0' to stop showing the acceleration
                     outputString +="\n# LinearACCx %5.4f  LinearACCy %5.4f  LinearACCz %5.4f #" % (ACCLinear[0],ACCLinear[1],ACCLinear[2])
-                if 0:                       #Change to '0' to stop showing the acceleration
+                if 1:                       #Change to '0' to stop showing the acceleration
                     outputString +="\n# EarthMagnitude %5.4f  LinearMagnitude  %5.4f #" % (ACCmagnitudeE,ACCmagnitudeL)
                 # if 1:                       #Change to '0' to stop showing the acceleration
                 #     outputString +="\n# EarthACCx %5.4f  EarthACCy %5.4f  EarthACCz %5.4f #" % (EFrameAccel[0],EFrameAccel[1],EFrameAccel[2])
