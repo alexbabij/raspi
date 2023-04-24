@@ -100,6 +100,8 @@ oldXAccRawValue = 0
 oldYAccRawValue = 0
 oldZAccRawValue = 0
 
+avgMag = 0.0
+counter = 0
 #global accDataMag
 print("acc rec started")
 while True:
@@ -184,8 +186,8 @@ while True:
     #and https://github.com/xioTechnologies/Fusion/tree/main/Python/Python-C-API should contain all the functions
     #look for PyMethodDef and PyGetSetDef 
 
-    #ahrs.update(gyroscope, accelerometer, magnetometer, delta_time)
-    ahrs.update_no_magnetometer(gyroscope, accelerometer, delta_time)
+    ahrs.update(gyroscope, accelerometer, magnetometer, delta_time)
+    #ahrs.update_no_magnetometer(gyroscope, accelerometer, delta_time)
     euler = ahrs.quaternion.to_euler() #This one is technically a function call
     rotationMat = ahrs.quaternion.to_matrix()
     ACCearthFrame = ahrs.earth_acceleration #These ones are numpy array objects, this one is acceleration in earth frame with gravity removed
@@ -198,16 +200,10 @@ while True:
     
     #accDataMag = ACCmagnitudeE
     sampleTime = time.time()
-    with accLock:
-        #Python is weird, if I were to do accDataMag = ACCmagnitudeE, this would not update the global variable, because python would create a new 
-        #local variable in the scope of this function also named accDataMag. To be able to do it this way, I would need to declare global accDataMag 
-        #to make the variable global inside of the scope of the function?
-        #The below does work though, and updates the global variable, assumably because it tries to access the index of the global variable instead of 
-        #trying to create a new one 
-        accDataMag[0] = ACCmagnitudeE
-        accDataMag[1] = sampleTime
-        accDataMag[2:5] = ACCLinear
-        #accDataMag = ACCmagnitudeE
+    
+    counter += 1
+    avgMag = (RawMagnitude + avgMag*(counter-1))/counter
+    
         
 
         
@@ -231,6 +227,8 @@ while True:
             outputString +="\n# Ratio LinearACCx/ACCx %5.4f  LinearACCy/ACCy %5.4f  LinearACCz/ACCz %5.4f #" % (ACCLinear[0]/ACCx,ACCLinear[1]/ACCy,ACCLinear[2]/ACCz)
         if 1:                       #Change to '0' to stop showing the acceleration
             outputString +="\n# EarthMagnitude %5.4f  LinearMagnitude  %5.4f Earth Raw magnitude %5.4f Raw Magnitude %5.4f#" % (ACCmagnitudeE,ACCmagnitudeL,EarthRawMagnitude,RawMagnitude)
+        if 1:                       #Change to '0' to stop showing the acceleration
+            outputString +="\n# AvgRaw %5.5f #" % (avgMag)
         # if 1:                       #Change to '0' to stop showing the acceleration
         #     outputString +="\n# EarthACCx %5.4f  EarthACCy %5.4f  EarthACCz %5.4f #" % (EFrameAccel[0],EFrameAccel[1],EFrameAccel[2])
 
