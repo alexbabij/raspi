@@ -193,7 +193,7 @@ while True:
     #and https://github.com/xioTechnologies/Fusion/tree/main/Python/Python-C-API should contain all the functions
     #look for PyMethodDef and PyGetSetDef 
 
-    q = madgwick.updateMARG(gyroscope, accelerometer, magnetometer, delta_time)
+    q = madgwick.updateMARG(qPrev, gyroscope, accelerometer, magnetometer, delta_time)
     qPrev = q
     r1 = [2*(q[0]*q[0]+q[1]*q[1])-1 , 2*(q[1]*q[2]-q[0]*q[3]) , 2*(q[1]*q[3]+q[0]*q[2])]
     r2 = [2*(q[1]*q[2]+q[0]*q[3]) , 2*(q[0]*q[0]+q[2]*q[2])-1 , 2*(q[2]*q[3]-q[0]*q[1])]
