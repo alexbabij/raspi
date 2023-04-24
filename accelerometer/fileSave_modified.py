@@ -1,5 +1,6 @@
 #The will take the lowest unique available number i.e., if a-2.txt, a-3.txt exists, it will make a-1.txt instead of a-4.txt
 import os
+import time
 #import time
 
 def writeFile(vehicle,data,fileCreated=False,filePath=""):
@@ -64,8 +65,8 @@ def writeFile(vehicle,data,fileCreated=False,filePath=""):
 
     if not fileCreated:
         #dataTime = "2005-06-08T10:34:48.283Z" = typical format
-        dataTime = data[0][0].replace(":","_") #First position of first tuple is first recorded time
-        dataTime = dataTime.replace(".","_ms")
+        dataTime = str(round(time.time(),0)) #First position of first tuple is first recorded time
+        
         #This should always be unique, since we are including the milliseconds in this naming scheme, 
         #and we physically can't poll our gps faster than the resolution of the milliseconds field.
         #We still leave the unique naming function in here, just in case there is some weird case of a collision, and it makes

@@ -10,7 +10,7 @@ import numpy
 import imufusion
 import threading as tr
 
-from fileSave import *
+from fileSave_modified import *
 
 
 targetHz = 50 #Target frequency to run at 
