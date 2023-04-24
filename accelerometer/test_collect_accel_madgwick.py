@@ -36,11 +36,11 @@ accLock = tr.Lock()
 accDataMag = [0.0,0.0,0.0,0.0,0.0]
 #Format is: [magnitude of acceleration in earth frame, pi timestamp, pi frame linear acceleration x, y, z]
 
-# ahrs.settings = imufusion.Settings(imufusion.CONVENTION_NWU,  # convention
-#                                    0.5,  # gain
-#                                    10,  # acceleration rejection
-#                                    20,  # magnetic rejection
-#                                    5 * sample_rate)  # rejection timeout = 5 seconds
+ahrs.settings = imufusion.Settings(imufusion.CONVENTION_NWU,  # convention
+                                   0.5,  # gain
+                                   10,  # acceleration rejection
+                                   20,  # magnetic rejection
+                                   5 * sample_rate)  # rejection timeout = 5 seconds
 
 #The madgwick filter here is actually very fast, but we are limited by the refresh rate we have set for our accelerometer (100Hz), 
 #meaning as currently configured, we cannot loop this faster than every 0.01 seconds
@@ -218,8 +218,10 @@ while True:
             outputString +="\n#Raw EarthACCx %5.4f  EarthACCy %5.4f  EarthACCz %5.4f #" % (EFrameRaw[0][0],EFrameRaw[1][0],EFrameRaw[2][0])
         if 1:                       #Change to '0' to stop showing the acceleration
             outputString +="\n# EarthACCx %5.4f  EarthACCy %5.4f  EarthACCz %5.4f #" % (ACCearthFrame[0],ACCearthFrame[1],ACCearthFrame[2])
-        if 0:                       #Change to '0' to stop showing the acceleration
+        if 1:                       #Change to '0' to stop showing the acceleration
             outputString +="\n# LinearACCx %5.4f  LinearACCy %5.4f  LinearACCz %5.4f #" % (ACCLinear[0],ACCLinear[1],ACCLinear[2])
+        if 1:                       #Change to '0' to stop showing the acceleration
+            outputString +="\n# Ratio LinearACCx/ACCx %5.4f  LinearACCy/ACCy %5.4f  LinearACCz/ACCz %5.4f #" % (ACCLinear[0]/ACCx,ACCLinear[1]/ACCy,ACCLinear[2]/ACCz)
         if 1:                       #Change to '0' to stop showing the acceleration
             outputString +="\n# EarthMagnitude %5.4f  LinearMagnitude  %5.4f Earth Raw magnitude %5.4f Raw Magnitude %5.4f#" % (ACCmagnitudeE,ACCmagnitudeL,EarthRawMagnitude,RawMagnitude)
         # if 1:                       #Change to '0' to stop showing the acceleration
