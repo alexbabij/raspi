@@ -53,7 +53,7 @@ accSampTS = [time.time()]
 #which is kind of negligible compared to our gps sampling rate of 0.2 seconds
 
 
-
+tStart = time.time()
 aStart = datetime.datetime.now()
 
 RAD_TO_DEG = 57.29578
@@ -246,7 +246,7 @@ while True:
 
         print(outputString)
 
-    
+        print("Total Time",time.time()-tStart)
     #Make our script refresh at a consistent rate
     delTime = time.time()-lastTime
     if (delTime) < targetS:

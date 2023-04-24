@@ -296,7 +296,7 @@ if __name__ == "__main__": # I think we don't technically need this since we won
     dispText("Initializing IMU, \ndon't move sensor\n (2)","center",[255,255,255,255],25)
     time.sleep(1)
     dispText("Initializing IMU, \ndon't move sensor\n (1)","center",[255,255,255,255],25)
-    time.sleep(1)
+    time.sleep(1.01)
     gpsThread.start()
     dispThread.start()
 
