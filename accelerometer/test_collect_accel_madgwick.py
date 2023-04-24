@@ -186,6 +186,7 @@ while True:
     EFrameRaw = numpy.matmul(rotationMat, ACCVec)
     ACCmagnitudeE = math.sqrt(ACCearthFrame[0]*ACCearthFrame[0] + ACCearthFrame[1]*ACCearthFrame[1] + ACCearthFrame[2]*ACCearthFrame[2])
     ACCmagnitudeL = math.sqrt(ACCLinear[0]*ACCLinear[0] + ACCLinear[1]*ACCLinear[1] + ACCLinear[2]*ACCLinear[2])
+    EarthRawMagnitude = math.sqrt(EFrameRaw[0][0]*EFrameRaw[0][0] + EFrameRaw[1][0]*EFrameRaw[1][0] + EFrameRaw[2][0]*EFrameRaw[2][0])
     RawMagnitude = math.sqrt(ACCx*ACCx + ACCy*ACCy + ACCz*ACCz)
     
     #accDataMag = ACCmagnitudeE
@@ -220,7 +221,7 @@ while True:
         if 0:                       #Change to '0' to stop showing the acceleration
             outputString +="\n# LinearACCx %5.4f  LinearACCy %5.4f  LinearACCz %5.4f #" % (ACCLinear[0],ACCLinear[1],ACCLinear[2])
         if 1:                       #Change to '0' to stop showing the acceleration
-            outputString +="\n# EarthMagnitude %5.4f  LinearMagnitude  %5.4f Raw Magnitude %5.4f#" % (ACCmagnitudeE,ACCmagnitudeL,RawMagnitude)
+            outputString +="\n# EarthMagnitude %5.4f  LinearMagnitude  %5.4f Earth Raw magnitude %5.4f Raw Magnitude %5.4f#" % (ACCmagnitudeE,ACCmagnitudeL,RawMagnitude)
         # if 1:                       #Change to '0' to stop showing the acceleration
         #     outputString +="\n# EarthACCx %5.4f  EarthACCy %5.4f  EarthACCz %5.4f #" % (EFrameAccel[0],EFrameAccel[1],EFrameAccel[2])
 
