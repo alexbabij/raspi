@@ -89,10 +89,11 @@ magZmax =  139848
 ############### END Calibration offsets #################
 #1G = 9.80665 as a standard
 #F_grav at calibration location in spokane: 9.80674
-#localG = 9.80674/9.80665 = 1.00000917745
-#for 2dot IMU (1st one) avg felt acceleration magnitude while stationary: 
+#localG = 9.80674/9.80665 = 1.00000917745 = basically negligible
+#for 2dot IMU (1st one) avg felt acceleration magnitude while stationary: 1.03226 -> this should = 1G or technically 1.00000917745G
 #for 1dot IMU (2nd one) avg felt acceleration magnitude while stationary: 
-
+#Lets scale our acceleration readings by this factor
+accScale = 1/1.03226
 
 gyroXangle = 0.0
 gyroYangle = 0.0
@@ -171,6 +172,10 @@ while True:
     ACCx = (ACCx * 0.244)/1000
     ACCy= (ACCy * 0.244)/1000
     ACCz= (ACCz * 0.244)/1000
+    ACCx = ACCx*accScale
+    ACCy= ACCy*accScale
+    ACCz= ACCz*accScale
+
 
     #Convert magnetometer to uT from G
     MAGx  = MAGx * 100
