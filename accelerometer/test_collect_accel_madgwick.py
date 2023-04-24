@@ -54,8 +54,7 @@ accSampTS = [time.time()]
 #which is kind of negligible compared to our gps sampling rate of 0.2 seconds
 
 
-tStart = time.time()
-aStart = datetime.datetime.now()
+
 
 RAD_TO_DEG = 57.29578
 M_PI = 3.14159265358979323846
@@ -130,6 +129,8 @@ while time.time()<startup:
         MAGz = IMU.readMAGz()
 
 
+tStart = time.time()
+aStart = datetime.datetime.now()
 try:
     sensorDataLog = []
     processedDataLog = []
