@@ -65,7 +65,7 @@ def writeFile(vehicle,data,fileCreated=False,filePath=""):
 
     if not fileCreated:
         #dataTime = "2005-06-08T10:34:48.283Z" = typical format
-        dataTime = str(round(time.time(),0)) #First position of first tuple is first recorded time
+        dataTime = str(int(round(time.time(),0))) #First position of first tuple is first recorded time
         
         #This should always be unique, since we are including the milliseconds in this naming scheme, 
         #and we physically can't poll our gps faster than the resolution of the milliseconds field.
