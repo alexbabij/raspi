@@ -113,7 +113,8 @@ counter1 = 0
 print("acc rec started")
 
 try:
-    dataLog = []
+    sensorDataLog = []
+    processedDataLog = []
     while True:
         lastTime = time.time() 
 
@@ -221,11 +222,11 @@ try:
             avgMag = (RawMagnitude + avgMag*(counter-1))/counter
             
             
-        dataLog.append([(time.time()-tStart),
+        sensorDataLog.append([(time.time()-tStart),
                         rate_gyr_x,rate_gyr_y,rate_gyr_z,
                         ACCx, ACCy, ACCz,
                         MAGx, MAGy, MAGz])
-            
+        processedDataLog.append()
         
         if 1: #easy disable all the print statements
             if 0:                       #Change to '0' to stop  showing the angles from the gyro
@@ -267,5 +268,9 @@ except (KeyboardInterrupt, SystemExit): #when you press ctrl+c
             print("\nExiting.")
             filePath = ""
             fileCreated = False
-            vehicle = "test1"
-            filePath, fileCreated = writeFile(vehicle,dataLog,fileCreated,filePath)
+            vehicle = "raw_data"
+            filePath, fileCreated = writeFile(vehicle,sensorDataLog,fileCreated,filePath)
+            # filePath2 = ""
+            # fileCreated2 = False
+            # vehicle2 = "sensor_data"
+            # filePath2, fileCreated2 = writeFile(vehicle2,processedDataLog,fileCreated2,filePath2)

@@ -72,7 +72,7 @@ def writeFile(vehicle,data,fileCreated=False,filePath=""):
         #We still leave the unique naming function in here, just in case there is some weird case of a collision, and it makes
         #testing this without actually getting unique data much easier
 
-        new_path=next_path(vehicle+"_"+dataTime+"-"+"%s"+".txt")
+        new_path=next_path(vehicle+"_"+dataTime+"-"+"%s"+".csv")
         filePath = new_path
         print("Creating new file at:",new_path)
     
