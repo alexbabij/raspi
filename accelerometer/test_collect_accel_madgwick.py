@@ -248,10 +248,10 @@ while True:
 
     
     #Make our script refresh at a consistent rate
-    delTime = time.time()-lastTime
-    if (delTime) < targetS:
-        #print("\nSurplus time:",targetS-delTime)
-        time.sleep(targetS-delTime)
+    # delTime = time.time()-lastTime
+    # if (delTime) < targetS:
+    #     #print("\nSurplus time:",targetS-delTime)
+    #     time.sleep(targetS-delTime)
 
     
     #EFrameAccel
