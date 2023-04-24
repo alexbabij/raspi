@@ -28,7 +28,17 @@ print("sending command")
 #sendCommand("AT+UGUBX=\"B5 62 06 24 24 00 FF FF 02 01 00 00 00 00 10 27 00 00 05 00 FA 00 FA 00 64 00 2C 01 00 00 00 00 10 27 00 00 00 00 00 00 00 00 47 11\"")
 #airborne <4g
 #sendCommand("AT+UGUBX=\"B5 62 06 24 24 00 FF FF 08 03 00 00 00 00 10 27 00 00 05 00 FA 00 FA 00 64 00 2C 01 00 00 00 00 10 27 00 00 00 00 00 00 00 00 4F 1F\"")
-#automotive
-sendCommand("AT+UGUBX=\"B5 62 06 24 24 00 FF FF 04 03 00 00 00 00 10 27 00 00 05 00 FA 00 FA 00 64 00 2C 01 00 00 00 00 10 27 00 00 00 00 00 00 00 00 4B 97\"")
 
+
+#automotive
+#sendCommand("AT+UGUBX=\"B5 62 06 24 24 00 FF FF 04 03 00 00 00 00 10 27 00 00 05 00 FA 00 FA 00 64 00 2C 01 00 00 00 00 10 27 00 00 00 00 00 00 00 00 4B 97\"")
+start = time.time()
+print('start 1st command send')
+#set update rate 4Hz
+sendCommand("AT+UGUBX=\"B5 62 06 08 06 00 FA 00 01 00 01 00 10 96\"")
+print('end 1st send')
+time.sleep(1.0)
+#set update rate 2Hz
+sendCommand("AT+UGUBX=\"B5 62 06 08 06 00 F4 01 01 00 01 00 0B 77\"")
+print('elapsed time', time.time()-start)
 print("\nEnd Setup")

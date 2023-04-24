@@ -137,8 +137,13 @@ if (updateRate != 1) & (updateRate in updateRDict):
 else:
     print("Invalid or already set update rate")
 
-"""
-Need to add a selection for a vehicle solve instead of staionary
-"""
+time.sleep(1.0)
+print('configuring dynamic model')
+#contains ubx binary strings for different vehicle model configurations
+modelDict = {'automotive': 'B5 62 06 24 24 00 FF FF 04 03 00 00 00 00 10 27 00 00 05 00 FA 00 FA 00 64 00 2C 01 00 00 00 00 10 27 00 00 00 00 00 00 00 00 4B 97',
+'portable': 'B5 62 06 24 24 00 FF FF 00 03 00 00 00 00 10 27 00 00 05 00 FA 00 FA 00 64 00 2C 01 00 00 00 00 10 27 00 00 00 00 00 00 00 00 47 0F'}
+#automotive
+sendCommand("AT+UGUBX=\""+modelDict['automotive']+"\"")
+
 
 print("\nEnd Setup")
