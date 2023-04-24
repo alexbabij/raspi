@@ -285,12 +285,18 @@ class piScreen(tr.Thread):
 if __name__ == "__main__": # I think we don't technically need this since we won't be importing this file into anything probably. 
                             #stuff in here wont run if we import this into something
     dispBackground([0,0,0]) #Set display screen to black background
-    dispText("Starting","center",[255,255,255,255],25)
+    
     accThread = accThr()
     gpsThread = gpsThr()
     dispThread = piScreen()
     accThread.start()
-    time.sleep(1) #have the accelerometer script start first so the values in it can start to even out since it is running a madgwick filter
+    dispText("Initializing IMU, \ndon't move sensor\n (3)","center",[255,255,255,255],25)
+    time.sleep(1)
+    #have the accelerometer script start first so the values in it can start to even out since it is running a madgwick filter
+    dispText("Initializing IMU, \ndon't move sensor\n (2)","center",[255,255,255,255],25)
+    time.sleep(1)
+    dispText("Initializing IMU, \ndon't move sensor\n (1)","center",[255,255,255,255],25)
+    time.sleep(1)
     gpsThread.start()
     dispThread.start()
 
