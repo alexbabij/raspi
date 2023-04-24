@@ -112,6 +112,24 @@ counter1 = 0
 #global accDataMag
 print("acc rec started")
 
+startup = time.time() + 5
+
+
+while time.time()<startup:
+        
+
+        #Read the accelerometer,gyroscope and magnetometer values
+        ACCx = IMU.readACCx()
+        ACCy = IMU.readACCy()
+        ACCz = IMU.readACCz()
+        GYRx = IMU.readGYRx()
+        GYRy = IMU.readGYRy()
+        GYRz = IMU.readGYRz()
+        MAGx = IMU.readMAGx()
+        MAGy = IMU.readMAGy()
+        MAGz = IMU.readMAGz()
+
+
 try:
     sensorDataLog = []
     processedDataLog = []
