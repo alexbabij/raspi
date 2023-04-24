@@ -19,15 +19,14 @@ def sendCommand(command,readall=False): #optional function input for timeout
     time.sleep(PAUSE)
     return response
 
-
+print("sending command")
 ##portable:
 #sendCommand("AT+UGUBX=\"B5 62 06 24 24 00 FF FF 00 02 00 00 00 00 10 27 00 00 05 00 FA 00 FA 00 64 00 2C 01 00 00 00 00 10 27 00 00 00 00 00 00 00 00 46 EE\"")
+#update rate 5hz? idk maybe 2 
 #sendCommand("AT+UGUBX=\"B5 62 06 08 06 00 F4 01 01 00 01 00 0B 77\"")
-#STationary 2d only
-print("sending command")
-sendCommand("AT+UGUBX=\"B5 62 06 24 24 00 FF FF 02 01 00 00 00 00 10 27 00 00 05 00 FA 00 FA 00 64 00 2C 01 00 00 00 00 10 27 00 00 00 00 00 00 00 00 47 11\"")
-
-
+##STationary 2d only
+#sendCommand("AT+UGUBX=\"B5 62 06 24 24 00 FF FF 02 01 00 00 00 00 10 27 00 00 05 00 FA 00 FA 00 64 00 2C 01 00 00 00 00 10 27 00 00 00 00 00 00 00 00 47 11\"")
+sendCommand("AT+UGUBX=\"B5 62 06 24 24 00 FF FF 08 03 00 00 00 00 10 27 00 00 05 00 FA 00 FA 00 64 00 2C 01 00 00 00 00 10 27 00 00 00 00 00 00 00 00 4F 1F\"")
 
 
 print("\nEnd Setup")
