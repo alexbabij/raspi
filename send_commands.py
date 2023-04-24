@@ -23,9 +23,9 @@ def sendCommand(command,readall=False): #optional function input for timeout
 ##portable:
 #sendCommand("AT+UGUBX=\"B5 62 06 24 24 00 FF FF 00 02 00 00 00 00 10 27 00 00 05 00 FA 00 FA 00 64 00 2C 01 00 00 00 00 10 27 00 00 00 00 00 00 00 00 46 EE\"")
 #sendCommand("AT+UGUBX=\"B5 62 06 08 06 00 F4 01 01 00 01 00 0B 77\"")
-#STationary 
+#STationary 2d only
 print("sending command")
-sendCommand("AT+UGUBX=\"B5 62 06 24 24 00 FF FF 02 03 00 00 00 00 10 27 00 00 05 00 FA 00 FA 00 64 00 2C 01 00 00 00 00 10 27 00 00 00 00 00 00 00 00 49 53\"")
+sendCommand("AT+UGUBX=\"B5 62 06 24 24 00 FF FF 02 01 00 00 00 00 10 27 00 00 05 00 FA 00 FA 00 64 00 2C 01 00 00 00 00 10 27 00 00 00 00 00 00 00 00 47 11\"")
 
 
 
