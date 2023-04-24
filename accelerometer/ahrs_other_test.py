@@ -104,7 +104,7 @@ avgMag = 0.0
 counter = 0
 counter1 = 0
 
-qPrev = numpy.array([1,0,0,0])
+qPrev = numpy.array([[0.7071], [0.0], [0.7071], [0.0]])
 #global accDataMag
 print("acc rec started")
 while True:
@@ -180,10 +180,10 @@ while True:
     MAGz  = MAGz * 1E5
 
     
-    gyroscope = numpy.array([rate_gyr_x,rate_gyr_y,rate_gyr_z])
-    accelerometer = numpy.array([ACCx, ACCy, ACCz])
+    gyroscope = numpy.array([[rate_gyr_x],[rate_gyr_y],[rate_gyr_z]])
+    accelerometer = numpy.array([[ACCx], [ACCy], [ACCz]])
     ACCVec = numpy.array([[ACCx], [ACCy], [ACCz]])
-    magnetometer = numpy.array([MAGx, MAGy, MAGz])
+    magnetometer = numpy.array([[MAGx], [MAGy], [MAGz]])
     euler = numpy.array([0.0,0.0,0.0])
     rotationMat = numpy.array([[0.0,0.0,0.0],[0.0,0.0,0.0],[0.0,0.0,0.0]])
     ACCearthFrame = numpy.array([0.0,0.0,0.0])
