@@ -184,7 +184,8 @@ while True:
     #and https://github.com/xioTechnologies/Fusion/tree/main/Python/Python-C-API should contain all the functions
     #look for PyMethodDef and PyGetSetDef 
 
-    ahrs.update(gyroscope, accelerometer, magnetometer, delta_time)
+    #ahrs.update(gyroscope, accelerometer, magnetometer, delta_time)
+    ahrs.update_no_magnetometer(gyroscope, accelerometer, delta_time)
     euler = ahrs.quaternion.to_euler() #This one is technically a function call
     rotationMat = ahrs.quaternion.to_matrix()
     ACCearthFrame = ahrs.earth_acceleration #These ones are numpy array objects, this one is acceleration in earth frame with gravity removed
