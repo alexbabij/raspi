@@ -110,7 +110,7 @@ while True:
     MAGy = IMU.readMAGy()
     MAGz = IMU.readMAGz()
 
-    lastTime = time.time()
+    
     bFin = datetime.datetime.now() - aStart
     aStart = datetime.datetime.now()
     LP = bFin.microseconds/(1000000*1.0) #loop time
