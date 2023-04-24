@@ -71,13 +71,19 @@ ACC_LPF_FACTOR = 0.4    # Low pass filter constant for accelerometer
 # Calibrating the compass isnt mandatory, however a calibrated
 # compass will result in a more accurate heading value.
 
-magXmin =  122893
-magYmin =  123672
-magZmin =  123152
-magXmax =  138807
-magYmax =  139808
-magZmax =  140640
+# magXmin =  122893
+# magYmin =  123672
+# magZmin =  123152
+# magXmax =  138807
+# magYmax =  139808
+# magZmax =  140640
 
+magXmin =  122318
+magYmin =  123508
+magZmin =  122284
+magXmax =  138371
+magYmax =  139716
+magZmax =  139848
 
 
 ############### END Calibration offsets #################
