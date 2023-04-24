@@ -134,6 +134,7 @@ updateRDict = {1: 'B5 62 06 08 06 00 E8 03 01 00 01 00 01 39', 2: 'B5 62 06 08 0
 #We also don't want to send an incomplete binary string somehow i.e. AT+UGUBX="wrong"
 if (updateRate != 1) & (updateRate in updateRDict):
     sendCommand("AT+UGUBX=\""+updateRDict[updateRate]+"\"")
+    print('setting update rate to: '+str(updateRate)+"Hz")
 else:
     print("Invalid or already set update rate")
 
