@@ -87,7 +87,11 @@ magZmax =  139848
 
 
 ############### END Calibration offsets #################
-
+#1G = 9.80665 as a standard
+#F_grav at calibration location in spokane: 9.80674
+#localG = 9.80674/9.80665 = 1.00000917745
+#for 2dot IMU (1st one) avg felt acceleration magnitude while stationary: 
+#for 1dot IMU (2nd one) avg felt acceleration magnitude while stationary: 
 
 
 gyroXangle = 0.0
@@ -102,6 +106,7 @@ oldZAccRawValue = 0
 
 avgMag = 0.0
 counter = 0
+counter1 = 0
 #global accDataMag
 print("acc rec started")
 while True:
@@ -201,9 +206,11 @@ while True:
     #accDataMag = ACCmagnitudeE
     sampleTime = time.time()
     
-    counter += 1
-    avgMag = (RawMagnitude + avgMag*(counter-1))/counter
-    
+    counter1 +=1
+    if counter1 > 500: #wait 10 seconds before averaging to let readings stabilize
+        counter += 1
+        avgMag = (RawMagnitude + avgMag*(counter-1))/counter
+        
         
 
         
