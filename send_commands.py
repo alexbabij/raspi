@@ -39,7 +39,7 @@ sendCommand("AT+UGUBX=\"B5 62 06 08 06 00 FA 00 01 00 01 00 10 96\"")
 print('end 1st send')
 time.sleep(1.0)
 #set update rate 2Hz
-#sendCommand("AT+UGUBX=\"B5 62 06 08 06 00 F4 01 01 00 01 00 0B 77\"")
+sendCommand("AT+UGUBX=\"B5 62 06 08 06 00 F4 01 01 00 01 00 0B 77\"")
 #portable 2d only
 sendCommand("AT+UGUBX=\"B5 62 06 24 24 00 FF FF 00 01 00 00 00 00 10 27 00 00 05 00 FA 00 FA 00 64 00 2C 01 00 00 00 00 10 27 00 00 00 00 00 00 00 00 45 CD\"")
 print('elapsed time', time.time()-start)
