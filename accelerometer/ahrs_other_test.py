@@ -30,7 +30,7 @@ IMU.initIMU()       #Initialise the accelerometer, gyroscope and compass
 
 # Instantiate algorithms
 sample_rate = targetHz #Hz
-madgwick = Madgwick()
+madgwick = Madgwick(frequency=50)
 
 
 
