@@ -105,7 +105,7 @@ class accThr(tr.Thread):
         print("acc rec started")
         while self.running == True:
             
-
+            lastTime = time.time()
             #Read the accelerometer,gyroscope and magnetometer values
             ACCx = IMU.readACCx()
             ACCy = IMU.readACCy()
@@ -118,7 +118,7 @@ class accThr(tr.Thread):
             MAGz = IMU.readMAGz()
             with accLock:
                 accSampTS[0] = time.time()
-            lastTime = time.time()
+            
             bFin = datetime.datetime.now() - aStart
             aStart = datetime.datetime.now()
             LP = bFin.microseconds/(1000000*1.0) #loop time

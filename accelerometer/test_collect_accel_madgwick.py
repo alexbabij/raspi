@@ -36,11 +36,11 @@ accLock = tr.Lock()
 accDataMag = [0.0,0.0,0.0,0.0,0.0]
 #Format is: [magnitude of acceleration in earth frame, pi timestamp, pi frame linear acceleration x, y, z]
 
-ahrs.settings = imufusion.Settings(imufusion.CONVENTION_NWU,  # convention
-                                   0.5,  # gain
-                                   10,  # acceleration rejection
-                                   20,  # magnetic rejection
-                                   5 * sample_rate)  # rejection timeout = 5 seconds
+# ahrs.settings = imufusion.Settings(imufusion.CONVENTION_NWU,  # convention
+#                                    0.5,  # gain
+#                                    10,  # acceleration rejection
+#                                    20,  # magnetic rejection
+#                                    5 * sample_rate)  # rejection timeout = 5 seconds
 
 #The madgwick filter here is actually very fast, but we are limited by the refresh rate we have set for our accelerometer (100Hz), 
 #meaning as currently configured, we cannot loop this faster than every 0.01 seconds
