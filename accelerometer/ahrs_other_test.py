@@ -7,7 +7,7 @@ import IMU
 import datetime
 import os
 import numpy
-import imufusion
+from ahrs.filters import Madgwick
 import threading as tr
 
 
@@ -30,17 +30,12 @@ IMU.initIMU()       #Initialise the accelerometer, gyroscope and compass
 
 # Instantiate algorithms
 sample_rate = targetHz #Hz
-offset = imufusion.Offset(sample_rate)
-ahrs = imufusion.Ahrs()
-accLock = tr.Lock()
-accDataMag = [0.0,0.0,0.0,0.0,0.0]
+madgwick = Madgwick()
+
+
+
 #Format is: [magnitude of acceleration in earth frame, pi timestamp, pi frame linear acceleration x, y, z]
 
-ahrs.settings = imufusion.Settings(imufusion.CONVENTION_NWU,  # convention
-                                   0.5,  # gain
-                                   10,  # acceleration rejection
-                                   20,  # magnetic rejection
-                                   5 * sample_rate)  # rejection timeout = 5 seconds
 
 #The madgwick filter here is actually very fast, but we are limited by the refresh rate we have set for our accelerometer (100Hz), 
 #meaning as currently configured, we cannot loop this faster than every 0.01 seconds
@@ -108,6 +103,8 @@ oldZAccRawValue = 0
 avgMag = 0.0
 counter = 0
 counter1 = 0
+
+qPrev = numpy.array([1,0,0,0])
 #global accDataMag
 print("acc rec started")
 while True:
@@ -177,10 +174,10 @@ while True:
     ACCz= ACCz*accScale
 
 
-    #Convert magnetometer to uT from G
-    MAGx  = MAGx * 100
-    MAGy  = MAGy * 100
-    MAGz  = MAGz * 100
+    #Convert magnetometer to nT from G
+    MAGx  = MAGx * 1E5
+    MAGy  = MAGy * 1E5
+    MAGz  = MAGz * 1E5
 
     
     gyroscope = numpy.array([rate_gyr_x,rate_gyr_y,rate_gyr_z])
@@ -196,12 +193,14 @@ while True:
     #and https://github.com/xioTechnologies/Fusion/tree/main/Python/Python-C-API should contain all the functions
     #look for PyMethodDef and PyGetSetDef 
 
-    ahrs.update(gyroscope, accelerometer, magnetometer, delta_time)
+    q = madgwick.updateMARG(gyroscope, accelerometer, magnetometer, delta_time)
+    qPrev = q
+    r1 = [2*(q[0]*q[0]+q[1]*q[1])-1 , 2*(q[1]*q[2]-q[0]*q[3]) , 2*(q[1]*q[3]+q[0]*q[2])]
+    r2 = [2*(q[1]*q[2]+q[0]*q[3]) , 2*(q[0]*q[0]+q[2]*q[2])-1 , 2*(q[2]*q[3]-q[0]*q[1])]
+    r3 = [2*(q[1]*q[3]-q[0]*q[2]) , 2*(q[2]*q[3]+q[0]*q[1]) , 2*(q[0]*q[0]+q[3]*q[3])-1]
+    rotationMat = numpy.array([r1,r2,r3])
     #ahrs.update_no_magnetometer(gyroscope, accelerometer, delta_time)
-    euler = ahrs.quaternion.to_euler() #This one is technically a function call
-    rotationMat = ahrs.quaternion.to_matrix()
-    ACCearthFrame = ahrs.earth_acceleration #These ones are numpy array objects, this one is acceleration in earth frame with gravity removed
-    ACCLinear = ahrs.linear_acceleration #acceleration in device frame with gravity removed
+    
     EFrameRaw = numpy.matmul(rotationMat, ACCVec)
     ACCmagnitudeE = math.sqrt(ACCearthFrame[0]*ACCearthFrame[0] + ACCearthFrame[1]*ACCearthFrame[1] + ACCearthFrame[2]*ACCearthFrame[2])
     ACCmagnitudeL = math.sqrt(ACCLinear[0]*ACCLinear[0] + ACCLinear[1]*ACCLinear[1] + ACCLinear[2]*ACCLinear[2])
