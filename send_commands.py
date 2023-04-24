@@ -33,6 +33,7 @@ print("sending command")
 #automotive
 #sendCommand("AT+UGUBX=\"B5 62 06 24 24 00 FF FF 04 03 00 00 00 00 10 27 00 00 05 00 FA 00 FA 00 64 00 2C 01 00 00 00 00 10 27 00 00 00 00 00 00 00 00 4B 97\"")
 start = time.time()
+sendCommand("AT+UGUBX=\"B5 62 06 24 24 00 FF FF 00 02 00 00 00 00 10 27 00 00 05 00 FA 00 FA 00 64 00 2C 01 00 00 00 00 10 27 00 00 00 00 00 00 00 00 46 EE\"")
 print('start 1st command send')
 # #set update rate 4Hz
 sendCommand("AT+UGUBX=\"B5 62 06 08 06 00 FA 00 01 00 01 00 10 96\"")
