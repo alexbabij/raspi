@@ -76,7 +76,10 @@ YP_11 = 0.0
 KFangleX = 0.0
 KFangleY = 0.0
 
-
+counter = 0
+totGyrx = 0.0
+totGyry = 0.0
+totGyrz = 0.0
 
 def kalmanFilterY ( accAngle, gyroRate, DT):
     y=0.0
@@ -378,11 +381,20 @@ while True:
     ACCyt= (ACCy * 0.244)/1000
     ACCzt= (ACCz * 0.244)/1000
 
+    counter += 1
+    totGyrx += (gyroXangle + totGyrx*(counter-1))/counter
+    totGyry += (gyroYangle + totGyry*(counter-1))/counter
+    totGyrz += (gyroZangle + totGyrz*(counter-1))/counter
+
     if 0:                       #Change to '0' to stop showing the angles from the accelerometer
         outputString += "#  ACCX Angle %5.2f ACCY Angle %5.2f  #  " % (AccXangle, AccYangle)
 
     if 1:                       #Change to '0' to stop  showing the angles from the gyro
-        outputString +="\t# GYRX Angle %5.2f  GYRY Angle %5.2f  GYRZ Angle %5.2f # " % (gyroXangle,gyroYangle,gyroZangle)
+        outputString +="\n# GYRX Angle %5.2f  GYRY Angle %5.2f  GYRZ Angle %5.2f # " % (gyroXangle,gyroYangle,gyroZangle)
+    if 1:                       #Change to '0' to stop  showing the angles from the gyro
+        outputString +="\n# GYRX Raw %5.2f  GYRY Raw %5.2f  GYRZ Raw %5.2f # " % (rate_gyr_x,rate_gyr_x,rate_gyr_x)
+    if 1:                       #Change to '0' to stop  showing the angles from the gyro
+        outputString +="\n# GYRX Raw AVG %5.2f  GYRY Raw AVG %5.2f  GYRZ Raw AVG %5.2f # " % (totGyrx,totGyry,totGyrz)
 
     if 1:                       #Change to '0' to stop  showing the angles from the complementary filter
         outputString +="\n#  CFangleX Angle %5.2f   CFangleY Angle %5.2f  #" % (CFangleX,CFangleY)
@@ -400,6 +412,7 @@ while True:
         outputString +="\n# ACCx %5.2f  ACCy %5.2f  ACCz %5.2f #" % (ACCxt,ACCyt,ACCzt)
     
 
+    
 
     #Everything above this is not my own work, I considered trying to implement a madgwick filter instead of kalman but so far no luck
     psi = kalmanX * M_PI/180
