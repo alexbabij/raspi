@@ -1,5 +1,5 @@
 import serial, time
-port = "/dev/ttyGSM2"
+port = "/dev/ttyGSM1"
 ser = serial.Serial(port, baudrate = 115200, timeout = 1) #make the timeout pretty big because it takes a second for it to open the serial channel I think
 PAUSE = 0.1
 print("Startup\n")
