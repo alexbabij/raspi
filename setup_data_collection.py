@@ -32,7 +32,7 @@ button.when_pressed = whenPressed
 try:
  
      while goodFix == False:
-        print("running")        
+        #print("running")        
         report = gpsd.next()
         #print(report) 
         prevString = ""
@@ -49,8 +49,8 @@ try:
                     padding = " " * (len(prevString) + 1) #blank character for overwriting varying length string with carriage return
                 else:
                     padding = ""
-                print(f"{prevString}{padding}\r",end="") #fstring format, end="" prevents newline being made
-                print("1")
+                print(f"{newString}{padding}\r",end="") #fstring format, end="" prevents newline being made
+                #print("1")
                 prevString = newString
                 buttonEnabled = False
                 
@@ -62,7 +62,7 @@ try:
                     padding = " " * (len(prevString) + 1) #blank character for overwriting varying length string with carriage return
                 else:
                     padding = ""
-                print(f"{prevString}{padding}\r",end="")
+                print(f"{newString}{padding}\r",end="")
                 prevString = newString
 
                 buttonEnabled = True
