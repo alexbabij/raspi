@@ -93,6 +93,12 @@ magZmax =  139848
 #for 2dot IMU (1st one) avg felt acceleration magnitude while stationary: 1.03226 -> this should = 1G or technically 1.00000917745G
 #for 1dot IMU (2nd one) avg felt acceleration magnitude while stationary: 
 #Lets scale our acceleration readings by this factor
+
+#experimental gyro offset error:
+#2dot IMU : x: 0.9018 y: -3.2358 z: -0.6810 (deg/s)
+gyrOffsetX = 0.9018
+gyrOffsetY = -3.2358
+gyrOffsetZ = -0.6810
 accScale = 1/1.03226
 
 gyroXangle = 0.0
@@ -188,9 +194,9 @@ try:
         oldZAccRawValue = ACCz
 
         #Convert Gyro raw to degrees per second
-        rate_gyr_x =  GYRx * G_GAIN
-        rate_gyr_y =  GYRy * G_GAIN
-        rate_gyr_z =  GYRz * G_GAIN
+        rate_gyr_x =  GYRx * G_GAIN - gyrOffsetX
+        rate_gyr_y =  GYRy * G_GAIN - gyrOffsetY
+        rate_gyr_z =  GYRz * G_GAIN - gyrOffsetZ
 
         #Convert accelerometer data to g's
         ACCx = (ACCx * 0.244)/1000
