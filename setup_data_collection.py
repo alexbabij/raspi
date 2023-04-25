@@ -43,14 +43,14 @@ try:
             #print("mode:"+str(getattr(report,'mode',0))) #debug
             
             if mode <= 1:
-                
+
                 newString = "Waiting for fix, status: "+modeDict[mode]+" ("+str(round((time.time()-startTime),1))+")s"
                 if len(prevString)>len(newString):
                     padding = " " * (len(prevString) + 1) #blank character for overwriting varying length string with carriage return
                 else:
                     padding = ""
                 print(f"{prevString}{padding}\r",end="") #fstring format, end="" prevents newline being made
-                
+                print("1")
                 prevString = newString
                 buttonEnabled = False
                 
@@ -62,7 +62,7 @@ try:
                     padding = " " * (len(prevString) + 1) #blank character for overwriting varying length string with carriage return
                 else:
                     padding = ""
-                print(prevString)
+                print(f"{prevString}{padding}\r",end="")
                 prevString = newString
 
                 buttonEnabled = True
