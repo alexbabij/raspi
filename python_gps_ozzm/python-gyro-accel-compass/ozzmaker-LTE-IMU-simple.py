@@ -172,6 +172,8 @@ while True:
         outputString += "#  ACCX Angle %5.2f ACCY Angle %5.2f  #  " % (AccXangle, AccYangle)
     if 1:                       #Change to '0' to stop showing the angles from the accelerometer
         outputString += "#  GYRx Raw %5.2f GYRy Raw %5.2f GYRz Raw %5.2f #  " % (GYRx, GYRy, GYRz)
+    if 1:                       #Change to '0' to stop showing the angles from the accelerometer
+        outputString += "#  ACCx Raw %5.2f ACCy Raw %5.2f ACCz Raw %5.2f #  " % (ACCx, ACCy, ACCz)
 
     if 1:                       #Change to '0' to stop  showing the angles from the gyro
         outputString +="\t# GRYX Angle %5.2f  GYRY Angle %5.2f  GYRZ Angle %5.2f # " % (gyroXangle,gyroYangle,gyroZangle)
