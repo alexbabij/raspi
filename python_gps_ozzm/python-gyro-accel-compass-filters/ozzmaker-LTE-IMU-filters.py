@@ -382,9 +382,9 @@ while True:
     ACCzt= (ACCz * 0.244)/1000
 
     counter += 1
-    totGyrx = (gyroXangle + totGyrx*(counter-1))/counter
-    totGyry = (gyroYangle + totGyry*(counter-1))/counter
-    totGyrz = (gyroZangle + totGyrz*(counter-1))/counter
+    totGyrx = (rate_gyr_x + totGyrx*(counter-1))/counter
+    totGyry = (rate_gyr_y + totGyry*(counter-1))/counter
+    totGyrz = (rate_gyr_z + totGyrz*(counter-1))/counter
 
     if 0:                       #Change to '0' to stop showing the angles from the accelerometer
         outputString += "#  ACCX Angle %5.2f ACCY Angle %5.2f  #  " % (AccXangle, AccYangle)
@@ -392,7 +392,7 @@ while True:
     if 1:                       #Change to '0' to stop  showing the angles from the gyro
         outputString +="\n# GYRX Angle %5.2f  GYRY Angle %5.2f  GYRZ Angle %5.2f # " % (gyroXangle,gyroYangle,gyroZangle)
     if 1:                       #Change to '0' to stop  showing the angles from the gyro
-        outputString +="\n# GYRX Raw %5.4f  GYRY Raw %5.4f  GYRZ Raw %5.4f # " % (rate_gyr_x,rate_gyr_x,rate_gyr_x)
+        outputString +="\n# GYRX Raw %5.4f  GYRY Raw %5.4f  GYRZ Raw %5.4f # " % (rate_gyr_x,rate_gyr_y,rate_gyr_z)
     if 1:                       #Change to '0' to stop  showing the angles from the gyro
         outputString +="\n# GYRX Raw AVG %5.4f  GYRY Raw AVG %5.4f  GYRZ Raw AVG %5.4f # " % (totGyrx,totGyry,totGyrz)
 
