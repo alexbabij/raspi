@@ -52,7 +52,9 @@ try:
          
     
 except KeyError:
+        print("keyerror")
         pass #We would rather just skip if we cannot get good data rather than have our stuff error out
+        
 except (KeyboardInterrupt, SystemExit): #when you press ctrl+c
     print("\nExiting.")
 else:
