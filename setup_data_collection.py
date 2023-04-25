@@ -45,26 +45,27 @@ try:
             if mode <= 1:
 
                 newString = "Waiting for fix, status: "+modeDict[mode]+" ("+str(round((time.time()-startTime),1))+")s"
-                if len(prevString)>len(newString):
-                    padding = " " * (len(prevString) + 1) #blank character for overwriting varying length string with carriage return
-                else:
-                    padding = ""
-                print(f"{newString}{padding}\r",end="") #fstring format, end="" prevents newline being made
+                # if len(prevString)>len(newString):
+                #     padding = " " * (len(prevString) + 1) #blank character for overwriting varying length string with carriage return
+                # else:
+                #     padding = ""
+                # print(f"{newString}{padding}\r",end="") #fstring format, end="" prevents newline being made
                 #print("1")
-                prevString = newString
+                # prevString = newString
+                print(newString)
                 buttonEnabled = False
                 
                 
             elif (mode == 2) | (mode == 3):
 
                 newString = "Status: "+modeDict[mode]+" ready to start - push button to begin data collection"
-                if len(prevString)>len(newString):
-                    padding = " " * (len(prevString) + 1) #blank character for overwriting varying length string with carriage return
-                else:
-                    padding = ""
-                print(f"{newString}{padding}\r",end="")
-                prevString = newString
-
+                # if len(prevString)>len(newString):
+                #     padding = " " * (len(prevString) + 1) #blank character for overwriting varying length string with carriage return
+                # else:
+                #     padding = ""
+                # print(f"{newString}{padding}\r",end="")
+                # prevString = newString
+                print(newString)
                 buttonEnabled = True
                 startTime = time.time()
         
