@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import serial, time
  
-port = "/dev/ttyGSM1"
+port = "/dev/ttyGSM2"
 PAUSE = 0.1
  
 def sendCommand(command):
