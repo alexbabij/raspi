@@ -155,8 +155,8 @@ def initIMU():
         writeByte(LSM6DSL_ADDRESS,LSM6DSL_CTRL3_C,0b01000100)            #Enable Block Data update, increment during multi byte read
 
         #initialise the gyroscope
-        writeByte(LSM6DSL_ADDRESS,LSM6DSL_CTRL2_G,0b10011100)            #ODR 3.3 kHz, 2000 dps
-
+        #writeByte(LSM6DSL_ADDRESS,LSM6DSL_CTRL2_G,0b10011100)            #ODR 3.3 kHz, 2000 dps
+        writeByte(LSM6DSL_ADDRESS,LSM6DSL_CTRL2_G,0b10010100)             #ODR 3.3 kHz, 500 dps
 
         #Enable compass, Continuous measurement mode, 100Hz
         writeByte(MMC5983MA_ADDRESS,MMC5983MA_CONTROL_0,0b00001000)     #"deGauss" magnetometer

@@ -21,7 +21,8 @@ import datetime
 
 RAD_TO_DEG = 57.29578
 M_PI = 3.14159265358979323846
-G_GAIN = 0.070  # [deg/s/LSB]  If you change the dps for gyro, you need to update this value accordingly
+G_GAIN = 0.0175 #500 dps
+#G_GAIN = 0.070  # [deg/s/LSB]  If you change the dps for gyro, you need to update this value accordingly
 AA =  0.40      # Complementary filter constant
 mRes = 1.0/16384.0
 MMC5983MA_offset = 131072.0
