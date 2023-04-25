@@ -248,8 +248,10 @@ try:
         #processedDataLog.append()
         
         if 1: #easy disable all the print statements
-            if 0:                       #Change to '0' to stop  showing the angles from the gyro
+            if 1:                       #Change to '0' to stop  showing the angles from the gyro
                 outputString +="\t# GYRX Angle %5.4f  GYRY Angle %5.4f  GYRZ Angle %5.4f # " % (gyroXangle,gyroYangle,gyroZangle)
+            if 1:                       #Change to '0' to stop  showing the angles from the gyro
+                outputString +="\t# GYRX Raw %5.4f  GYRY Raw %5.4f  GYRZ v %5.4f # " % (rate_gyr_x,rate_gyr_y,rate_gyr_z)
 
             if 0:                       #Change to '0' to stop  showing the heading
                 outputString +="\n# EulerX %5.4f  EulerY %5.4f Eulerz %5.4f#" % (euler[0],euler[1],euler[2])
@@ -285,10 +287,10 @@ try:
 
 except (KeyboardInterrupt, SystemExit): #when you press ctrl+c
             print("\nExiting.")
-            filePath = ""
-            fileCreated = False
-            vehicle = "raw_data"
-            filePath, fileCreated = writeFile(vehicle,sensorDataLog,fileCreated,filePath)
+            # filePath = ""
+            # fileCreated = False
+            # vehicle = "raw_data"
+            # filePath, fileCreated = writeFile(vehicle,sensorDataLog,fileCreated,filePath)
             # filePath2 = ""
             # fileCreated2 = False
             # vehicle2 = "sensor_data"

@@ -381,7 +381,7 @@ while True:
     if 0:                       #Change to '0' to stop showing the angles from the accelerometer
         outputString += "#  ACCX Angle %5.2f ACCY Angle %5.2f  #  " % (AccXangle, AccYangle)
 
-    if 0:                       #Change to '0' to stop  showing the angles from the gyro
+    if 1:                       #Change to '0' to stop  showing the angles from the gyro
         outputString +="\t# GYRX Angle %5.2f  GYRY Angle %5.2f  GYRZ Angle %5.2f # " % (gyroXangle,gyroYangle,gyroZangle)
 
     if 1:                       #Change to '0' to stop  showing the angles from the complementary filter
