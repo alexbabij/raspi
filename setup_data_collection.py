@@ -34,22 +34,41 @@ try:
      while goodFix == False:
         print("running")        
         report = gpsd.next()
-        print(report) 
+        #print(report) 
+        prevString = ""
+        
         if report['class'] == 'TPV': 
         #This a lame way to select the correct json object since gpsd will return multiple different objects in repeating order
             mode = getattr(report,'mode',0)
-            print("mode:"+str(getattr(report,'mode',0))) #debug
-
+            #print("mode:"+str(getattr(report,'mode',0))) #debug
+            
             if mode <= 1:
-                print("Waiting for fix, status:",modeDict[mode], "("+str(round((time.time()-startTime),1))+")s")
+                
+                newString = "Waiting for fix, status: "+modeDict[mode]+" ("+str(round((time.time()-startTime),1))+")s"
+                if len(prevString)>len(newString):
+                    padding = " " * (len(prevString) + 1) #blank character for overwriting varying length string with carriage return
+                else:
+                    padding = ""
+                print(f"{prevString}{padding}\r",end="") #fstring format, end="" prevents newline being made
+                
+                prevString = newString
                 buttonEnabled = False
                 
+                
             elif (mode == 2) | (mode == 3):
-                print("Status:",modeDict[mode],"ready to start - push button to begin data collection")
+
+                newString = "Status: "+modeDict[mode]+" ready to start - push button to begin data collection"
+                if len(prevString)>len(newString):
+                    padding = " " * (len(prevString) + 1) #blank character for overwriting varying length string with carriage return
+                else:
+                    padding = ""
+                print(prevString)
+                prevString = newString
+
                 buttonEnabled = True
                 startTime = time.time()
         
-        time.sleep(1)                
+        time.sleep(0.5)                
 
          
     
