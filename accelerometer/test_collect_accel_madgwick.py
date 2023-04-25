@@ -293,10 +293,10 @@ try:
 
 except (KeyboardInterrupt, SystemExit): #when you press ctrl+c
             print("\nExiting.")
-            # filePath = ""
-            # fileCreated = False
-            # vehicle = "raw_data"
-            # filePath, fileCreated = writeFile(vehicle,sensorDataLog,fileCreated,filePath)
+            filePath = ""
+            fileCreated = False
+            vehicle = "raw_data"
+            filePath, fileCreated = writeFile(vehicle,sensorDataLog,fileCreated,filePath)
             # filePath2 = ""
             # fileCreated2 = False
             # vehicle2 = "sensor_data"
