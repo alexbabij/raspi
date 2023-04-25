@@ -7,7 +7,7 @@ from gpiozero import Button
 
 #We want to not allow the user to start taking data until we have an adequate fix, but we don't really want to terminate it partway 
 #through a run if we end up losing the fix
-modeDict = {'0':'unkown','1':'no fix','2':'2D fix','3':'3D fix'}
+modeDict = {0:'unkown',1:'no fix',2:'2D fix',3:'3D fix'}
 
 gpsd = gps(mode=WATCH_ENABLE|WATCH_NEWSTYLE) 
 goodFix = False  
@@ -37,14 +37,14 @@ try:
         print(report) 
         if report['class'] == 'TPV': 
         #This a lame way to select the correct json object since gpsd will return multiple different objects in repeating order
-            mode = getattr(report,'mode','0')
-            print("mode:",str(getattr(report,'mode','0')))
+            mode = getattr(report,'mode',0)
+            print("mode:",str(getattr(report,'mode',0)))
 
-            if int(mode) <= 1:
+            if mode <= 1:
                 print("Waiting for fix, status:",modeDict[mode], "("+round((time.time()-startTime),1)+")s")
                 buttonEnabled = False
                 
-            elif (mode == '2') | (mode == '3'):
+            elif (mode == 2) | (mode == 3):
                 print("Status:",modeDict[mode],"ready to start - push button to begin data collection")
                 buttonEnabled = True
                 startTime = time.time()
