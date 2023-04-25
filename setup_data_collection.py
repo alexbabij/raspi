@@ -33,11 +33,13 @@ try:
  
      while goodFix == False:
         print("running")        
-        report = gpsd.next() #
+        report = gpsd.next()
+        print(report) 
         if report['class'] == 'TPV': 
         #This a lame way to select the correct json object since gpsd will return multiple different objects in repeating order
             mode = getattr(report,'mode','0')
             print("mode:",str(getattr(report,'mode','0')))
+
             if int(mode) <= 1:
                 print("Waiting for fix, status:",modeDict[mode], "("+round((time.time()-startTime),1)+")s")
                 buttonEnabled = False
