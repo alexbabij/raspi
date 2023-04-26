@@ -51,7 +51,7 @@ maxSpeed = False #Set to true upon reaching our configured cutoff speed, ends th
 #instead of timing out based on writes, meaning if we have a period of unsuccessful writes/data it will still timeout normally
 
 
-
+global gpsData
 
 sys.path.append(os.path.join(os.path.dirname(__file__), 'accelerometer'))
 #This adds the folder "accelerometer to the path python searches in to import stuff"
@@ -77,6 +77,7 @@ class gpsThr(tr.Thread):
 
     def run(self):
         #this function definition of run(self) is a special method from threading. this function will automatically run when .start() is used 
+
         try:
             self.running = True
             self.dataOut = [0.0]*5 #initialize with values so other things can still use it as normal
@@ -84,6 +85,7 @@ class gpsThr(tr.Thread):
             self.accMag = 0.0
             self.runComplete = False
             self.timedOut = False
+            self.finalTime = 0.0
            
             #This is just in here too because in theory we could do gpsThread.start() again to restart data collection
             
@@ -98,9 +100,11 @@ class gpsThr(tr.Thread):
             fileCreated = False
             collectingData = False
             totstart = time.time()
+            global gpsData
             gpsData = []
             rollingGpsData = []
             counter = 0
+            finSampCounter = 0
             print("gps rec started")
             currentData = ['',float('nan'),0.0,0.0,0.0]
             #currentData.extend(accDataMag) #could use + instead to concatenate this to the list, doing it with .extend() modifies the same variable in memory
@@ -119,11 +123,12 @@ class gpsThr(tr.Thread):
 
                         
                         
-                        #We record gps time, velocity, and time offset since starting script as measured by the pi
+                        
                         with accLock:
+                            #extract data from the accelerometer
                             curAccDataMag = accDataMag[0]
-                            self.accMag = curAccDataMag
                             accTime = accDataMag[1]
+                            self.accMag = curAccDataMag
                             print("accDataMag",accDataMag[0])
                         
                         print("currentData",currentData)
@@ -132,7 +137,8 @@ class gpsThr(tr.Thread):
                        
                         #Our format is: [gps time(yyyy-mm-ddThr:min:ms), gps speed(m/s), pi time offset(s), accelerometer acceleration magnitude in earth frame(G), 
                                                             # difference between time of this measurement and accel measurement(s)] (5 elements long)
-                        currentData = [getattr(report,'time',''),getattr(report,'speed','nan'),(time.time()-totstart),curAccDataMag,(time.time()-accTime)]
+                                                            #our last value here is a negative number, since our data was taken before it was logged. 
+                        currentData = [getattr(report,'time',''),getattr(report,'speed','nan'),(time.time()-totstart),curAccDataMag,(accTime-time.time())]
                         #currentData[:3] = [getattr(report,'time',''),getattr(report,'speed','nan'),(time.time()-totstart)]
                         #doing it this way somehow manages to also update the value in gpsData after this step, I think this may have to do with the
                         #same weirdness that lets me update accDataMag without declaring it a global variable, because gpsData is assigned the same object
@@ -163,7 +169,7 @@ class gpsThr(tr.Thread):
                             print("\n\nself.dataOut",self.dataOut,"\n")
 
                             print("Time since start:",time.time()-totstart)
-                            print(currentData)
+                            print(currentData) #debug
                             with accLock:
                                 gpsSampTS[0] = time.time() #timestamp of when latest gps sample became available
 
@@ -179,17 +185,32 @@ class gpsThr(tr.Thread):
                                 rollingGpsData = rollingGpsData[len(rollingGpsData)-samplesC:] 
                                 #this covers the case where its randomly longer than 11 which it should never be
                                 #This in effect inserts the 1 second of data before we reach our target acceleration into our log txt file
-                                print("len(rollingGpsData)",len(rollingGpsData))
+                                print("len(rollingGpsData)",len(rollingGpsData)) #debug
                             if collectingData: 
-                                gpsData.append(currentData)
+                                if self.runComplete==False:
+                                    gpsData.append(currentData)
+                                    """
+investigate this (gpsData length vs written file)
+#########################################
+#########################################
+#########################################
+#########################################
+#########################################
+#########################################
+#########################################
+
+
+                                    """
+                                #This is so we can store extra samples in our log file after hitting max speed
                                 counter += 1
 
                         if collectingData & (len(gpsData)==0):
+                            #We cant compare to previous reading if we dont have a previous reading yet, so we log only the first reading with no check
                             gpsData.append(currentData)
-                            counter += 1 #We save our file after 1 second of data collection while collectingData = true
+                            counter += 1 #We save our file after 1 second of data collection while collectingData = true, counter is used to track this
 
                             print("Time since start:",time.time()-totstart)
-                            print(currentData)
+                            print(currentData) #debug
                         
                             
                     # end = time.time()
@@ -203,15 +224,19 @@ class gpsThr(tr.Thread):
                             print("Saved data:",rollingGpsData)
                             rollingGpsData = []
                             
-                        if gpsData[-1][1] >= (cutoffSpeed*1.1):
+                        if finSampCounter >=5 :
+                            totSamplesC = time.time()*2 #Basically disable the timeouts if we get to here so we don't get a weird edge case where we finish our run less than 5 measurements
+                            globalTimeout = time.time()*2 #before either of our timeout periods
                             collectingData = False
                             self.runComplete = True
+                            #This is to allow us to write 5 more samples to the file but not have them in gpsData
                             #self.running = False
                         
                         if gpsData[-1][1] >= (cutoffSpeed):
-                            collectingData = False
+                            #collectingData = False
                             self.runComplete = True
                             #self.running = False
+                            finSampCounter +=1
                              
                         if (time.time() > totSamplesC) or (time.time() > globalTimeout):
                             collectingData = False
@@ -250,7 +275,7 @@ class piScreen(tr.Thread):
         self.running = True
         self.refreshRate = 1/screenRefreshRate #I dont think this is even necessary
 
-        
+    global gpsData
     
     def run(self):
         totrefreshTime = 1.0 #have to be careful not to initialize to zero since we divide by it
@@ -269,8 +294,19 @@ class piScreen(tr.Thread):
             #then we write that image to the screen
             if gpsThread.timedOut:
                 string = "Time: Run timed out"
+                
+            elif (gpsThread.timedOut == False) & (gpsThread.runComplete):
+                string = "Completed in: "+str(round(finalTime(gpsData,cutoffSpeed),2))+"s"
             else:
                 string = "Time: "+str(round(elapsedTime,2))+"s"
+            
+            """
+            turn this into an elif and another one if self.timedout = false
+            """
+
+
+
+
             string+="\nVelocity: "+str(round(velocity,1))+" "+displayUnits
             string += "\nAcceleration: "+str(round(acceleration,2))+"g"
             string += "\nRefresh: "+str(round(1/totrefreshTime,1))+" fps" #dont forget you can't use commas to combine strings like you could in print()
@@ -317,8 +353,31 @@ if __name__ == "__main__": # I think we don't technically need this since we won
         print("Threads successfully closed.")
 
 
+#Calculates final time from data using accelerometer offsets and linear interpolation of last 2 gps readings
+def finalTime(gpsData,cutoffSpeed):
+    
+    #Our format is: [gps time(yyyy-mm-ddThr:min:ms), gps speed(m/s), pi time offset(s), accelerometer acceleration magnitude in earth frame(G), 
+                                                            # difference between time of this measurement and accel measurement(s)] (5 elements long)
+                                                            #our last value here is a negative number, since our data was taken before it was logged.
 
+    finVel_2 = gpsData[-1][1] #This should be the first velocity past the threshold since data recording should stop after this point
+    finVel_1 = gpsData[-2][1] #This should always be below the next measurement or it would have completed already
+    finTime_2 = gpsData[-1][2]
+    finTime_1 = gpsData[-2][2]
+    finTime = finTime_1 + (cutoffSpeed-finVel_1) * (finTime_2-finTime_1)/(finVel_2-finVel_1)#linear interpolation
+    startVel = gpsData[0][1] #we just kinda assume they started at 0 mph instead of actually using this
+    #We could average the rolling data we keep before this starting velocity to try to mitigate the gps noise, but for the purposes of getting 0-60, its not really worth it, since a car doing a 0-60
+    #run doesn't have a nice linear acceleration curve, and this curve is different between naturally aspirated, supercharged, turbocharged cars, etc. 
+    #The alternative to doing this would be to fit a curve to the entire 0-60 run and then interpolate on that. 
+    startTime = gpsData[0][3] -gpsData[0][5]#pi time offset starts from when we turn enable data collection not start the run
+    #That means this doesnt start at 0, we also add in the time offset from the accelerometer which should be at best 0 or 
+    #usually negative, meaning it pushes back our starttime
+        
+    runTime = finTime - startTime
+    return runTime
 
+    
+    
 
 
 # """
