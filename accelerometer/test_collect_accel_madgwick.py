@@ -96,9 +96,14 @@ magZmax =  139848
 
 #experimental gyro offset error:
 #2dot IMU : x: 0.9018 y: -3.2358 z: -0.6810 (deg/s)
-gyrOffsetX = 0.9018
-gyrOffsetY = -3.2358
-gyrOffsetZ = -0.6810
+# gyrOffsetX = 0.9018
+# gyrOffsetY = -3.2358
+# gyrOffsetZ = -0.6810
+#1dot IMU : (deg/s)S
+# gyrOffsetX = 0.9018
+# gyrOffsetY = -3.2358
+# gyrOffsetZ = -0.6810
+
 accScale = 1/1.03226
 
 gyroXangle = 0.0
