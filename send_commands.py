@@ -43,6 +43,8 @@ start = time.time()
 # sendCommand("AT+UGUBX=\"B5 62 06 08 06 00 F4 01 01 00 01 00 0B 77\"")
 # #portable 2d only
 # sendCommand("AT+UGUBX=\"B5 62 06 24 24 00 FF FF 00 01 00 00 00 00 10 27 00 00 05 00 FA 00 FA 00 64 00 2C 01 00 00 00 00 10 27 00 00 00 00 00 00 00 00 45 CD\"")
+
+#Reset the gps
 sendCommand("AT+UGUBX=\"b56206040400ffff02000e61\"")
 print('elapsed time', time.time()-start)
 print("\nEnd Setup")
