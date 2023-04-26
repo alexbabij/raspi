@@ -99,12 +99,13 @@ magZmax =  139848
 # gyrOffsetX = 0.9018
 # gyrOffsetY = -3.2358
 # gyrOffsetZ = -0.6810
+#accScale = 1/1.03226
 #1dot IMU : (deg/s)S
 gyrOffsetX = 1.43
 gyrOffsetY = -2.875
 gyrOffsetZ = -0.55
+accScale = 1.0
 
-accScale = 1/1.03226
 
 gyroXangle = 0.0
 gyroYangle = 0.0
