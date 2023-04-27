@@ -12,7 +12,7 @@ import threading as tr
 
 
 
-targetHz = 50 #Target frequency to run at 
+targetHz = 100 #Target frequency to run at 
 targetS = 1/targetHz
 #Ideally, we want to align our refresh rate with a multiple of our gps refresh rate so we can grab relevant accelerometer data.
 #GPS data is precisely aligned to seconds i.e. at 5Hz signals are sent from gps at 03:21:15.00, 03:21:15.20, etc. (I think, this may not include time offset to our location)
@@ -78,13 +78,17 @@ class accThr(tr.Thread):
         # Calibrating the compass isnt mandatory, however a calibrated
         # compass will result in a more accurate heading value.
 
-        magXmin =  122893
-        magYmin =  123672
-        magZmin =  123152
-        magXmax =  138807
-        magYmax =  139808
-        magZmax =  140640
-
+        #1dot IMU : (deg/s)S
+        gyrOffsetX = 1.43
+        gyrOffsetY = -2.875
+        gyrOffsetZ = -0.55
+        accScale = 1.0
+        magXmin =  122225 #These in theory should be recalculated often since they are affected by magnets
+        magYmin =  122984
+        magZmin =  122504
+        magXmax =  138604
+        magYmax =  139516
+        magZmax =  140280
 
 
         ############### END Calibration offsets #################
@@ -157,10 +161,10 @@ class accThr(tr.Thread):
             oldYAccRawValue = ACCy
             oldZAccRawValue = ACCz
 
-            #Convert Gyro raw to degrees per second
-            rate_gyr_x =  GYRx * G_GAIN
-            rate_gyr_y =  GYRy * G_GAIN
-            rate_gyr_z =  GYRz * G_GAIN
+            #Convert Gyro raw to degrees per second, also apply our offset
+            rate_gyr_x =  GYRx * G_GAIN - gyrOffsetX
+            rate_gyr_y =  GYRy * G_GAIN - gyrOffsetY
+            rate_gyr_z =  GYRz * G_GAIN - gyrOffsetZ
 
             #Convert accelerometer data to g's
             ACCx = (ACCx * 0.244)/1000
@@ -239,3 +243,29 @@ class accThr(tr.Thread):
             #EFrameAccel
 
 print("acc class done")
+
+
+#Note: My gyro on this gps is broken? and super noisy for some reason, same as on the other one I tried 
+# (although this one is worse) Im talking +/-25 deg/s on the z-axis between consecutive readings which is insanely bad. 
+#My fix for this is to not deal with it. There is also some offset error in the xyz gyro readings. These are compensated for
+#by taking the average readings (deg/s) while it is sitting completely still for a few minutes, then using those to correct
+#the offset errors. I should eventually get around to finding the source of the noise for this, but for now, it really 
+#doesnt matter, since currently, the accelerometer is only really used to determine the start of a 0-60 run, so we have a pretty big
+#margin of error to consider a run "started".
+#The gyro reading is used in this madgwick filter to calculate the quaternion used to subtract the force of gravity from our accelerometer
+#readings. This means that as long as we fix the offset error, and the quaternion isnt super misaligned, we will mostly subtract
+#out gravity along the correct vector, giving us a nearish to zero resultant accelerometer reading when at rest.
+#If the quaternion is misaligned, its actually pretty bad, since we can end up "adding" additional acceleration. 
+#(Think if you add the gravity vector upside down, you now are measuring 2g of acceleration (but to  a lesser extent in our case)).
+
+#Since we are currently working with just the magnitude of the device (car) acceleration to determine our start point, 
+#We can technically avoid the filter completely, and do the following:
+#Take magnitude of raw xyz acceleration: sqrt(0.1^2 + -0.04^2 + 1^2) = m = 1.00578, sqrt(m^2 -1) = sqrt(a_x^2 + a_y^2) 
+#sqrt(a_x^2 + a_y^2) = acceleration with force of gravity removed. 
+#This ONLY works if we assume that our only accelerations besides gravity are perpendicular to the force of gravity
+#Or in other words, we only have acceleration in the a_x and a_y axes (in the Earth frame), and CANNOT have any acceleration
+#other than gravity in the a_z direction. In the device frame, the measured accelerations will be different 
+# i.e. a_x = -0.6, a_y = 0.8, a_z = 0.1077, if the device is not perfectly aligned to the Earth frame, but this doesn't matter,
+#and the calculation still works, as long as the above assumptions are met.
+#This is not actually a completely unreasonable assumption to make, since a proper 0-60 run should be performed on flat
+#ground, and we only care about the magnitude of the acceleration, not total acceleration for starting 0-60 runs.

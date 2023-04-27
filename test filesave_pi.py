@@ -1,5 +1,6 @@
 with open('configDevice.txt') as mycfgfile:
     config = mycfgfile.read().splitlines() #Read in each line as a list i.e. [a:1, b:2]
+    config.pop(0)
     config = dict([eachLine.split(":") for eachLine in config]) 
 #We are parsing the first line description at the top of the file, but its a dictionary, so we really don't care
     print(config)

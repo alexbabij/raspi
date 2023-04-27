@@ -119,6 +119,7 @@ else:
 #Configure gps settings including update rate
 with open('configDevice.txt') as mycfgfile:
     config = mycfgfile.read().splitlines() #Read in each line as a list i.e. [a:1, b:2]
+    config.pop(0)
     config = dict([eachLine.split(":") for eachLine in config]) #Split by ":" and turn into dict
 
 print("\n")

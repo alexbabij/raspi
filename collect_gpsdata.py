@@ -15,6 +15,7 @@ import threading as tr #we don technically need this since threading gets import
 #Configure gps settings including update rate
 with open('configDevice.txt') as mycfgfile:
     config = mycfgfile.read().splitlines() #Read in each line as a list i.e. [a:1, b:2]
+    config.pop(0) #Remove the first line from our config file, it is just a description and we don't want it in here
     config = dict([eachLine.split(":") for eachLine in config]) #Split by ":" and turn into dict
 updateRate = int(config["updateRate"])
 sleepInterval = 1/(updateRate*10) #Maybe tweak this depending on performance

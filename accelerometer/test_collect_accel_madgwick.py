@@ -71,19 +71,9 @@ ACC_LPF_FACTOR = 0.4    # Low pass filter constant for accelerometer
 # Calibrating the compass isnt mandatory, however a calibrated
 # compass will result in a more accurate heading value.
 
-# magXmin =  122893
-# magYmin =  123672
-# magZmin =  123152
-# magXmax =  138807
-# magYmax =  139808
-# magZmax =  140640
 
-magXmin =  122318
-magYmin =  123508
-magZmin =  122284
-magXmax =  138371
-magYmax =  139716
-magZmax =  139848
+
+
 
 
 ############### END Calibration offsets #################
@@ -100,11 +90,25 @@ magZmax =  139848
 # gyrOffsetY = -3.2358
 # gyrOffsetZ = -0.6810
 #accScale = 1/1.03226
+# magXmin =  122893 These may not be right
+# magYmin =  123672
+# magZmin =  123152
+# magXmax =  138807
+# magYmax =  139808
+# magZmax =  140640
+
 #1dot IMU : (deg/s)S
 gyrOffsetX = 1.43
 gyrOffsetY = -2.875
 gyrOffsetZ = -0.55
 accScale = 1.0
+magXmin =  122225 #These in theory should be recalculated often since they are affected by magnets
+magYmin =  122984
+magZmin =  122504
+magXmax =  138604
+magYmax =  139516
+magZmax =  140280
+
 
 
 gyroXangle = 0.0
