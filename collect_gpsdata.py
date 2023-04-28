@@ -307,7 +307,7 @@ class piScreen(tr.Thread):
             refresh = str(round(1/totrefreshTime,1))
             if gpsThread.timedOut:
                 string = "Time: Run timed out"
-                backgroundColor = [217,7,7,255]
+                backgroundColor = '#d90707'
                 fontColor = [255,255,255,255]
                 
             elif (gpsThread.timedOut == False) & (gpsThread.runComplete):
@@ -315,11 +315,11 @@ class piScreen(tr.Thread):
                 #print("gpsdata",gpsData) #DEBUG
                 #print("Final Time",str(round(self.finalTime(gpsData,cutoffSpeed),2))) #DEBUG
                 string = "Completed in: "+str(round(self.finalTime(gpsData,cutoffSpeed),2))+"s"
-                backgroundColor = [50,168,82,255]
+                backgroundColor = '#33a852'
                 fontColor = [255,255,255,255]
             else:
                 string = "Time: "+str(round(elapsedTime,2))+"s"
-                backgroundColor = [0,0,0]
+                backgroundColor = '#000000'
                 fontColor = [255,255,255,255]
 
 
@@ -372,12 +372,12 @@ if __name__ == "__main__": # I think we don't technically need this since we won
     gpsThread = gpsThr()
     dispThread = piScreen()
     accThread.start()
-    dispText("Initializing IMU, \ndon't move sensor\n (3)","center",[255,255,255,255],15)
+    dispText("Initializing IMU, \ndon't move sensor (3)","center",fontColor=[255,255,255,255],FONTSIZE=15)
     time.sleep(1)
     #have the accelerometer script start first so the values in it can start to even out since it is running a madgwick filter
-    dispText("Initializing IMU, \ndon't move sensor\n (2)","center",[255,255,255,255],15)
+    dispText("Initializing IMU, \ndon't move sensor (2)","center",fontColor=[255,255,255,255],FONTSIZE=15)
     time.sleep(1)
-    dispText("Initializing IMU, \ndon't move sensor\n (1)","center",[255,255,255,255],15)
+    dispText("Initializing IMU, \ndon't move sensor (1)","center",fontColor=[255,255,255,255],FONTSIZE=15)
     time.sleep(1.01)
     gpsThread.start()
     dispThread.start()
