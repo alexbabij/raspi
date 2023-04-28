@@ -1,4 +1,5 @@
 import serial, time
+import subprocess
 port = "/dev/ttyGSM1"
 ser = serial.Serial(port, baudrate = 115200, timeout = 1) #make the timeout pretty big because it takes a second for it to open the serial channel I think
 PAUSE = 0.1
@@ -150,5 +151,5 @@ else:
 # #automotive
 # sendCommand("AT+UGUBX=\""+modelDict['automotive']+"\"")
 
-
+subprocess.run(["run_cgps.sh"])
 print("\nEnd Setup")
