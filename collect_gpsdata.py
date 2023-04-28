@@ -180,7 +180,7 @@ class gpsThr(tr.Thread):
                             self.dataOut = currentData
                             #print("\n\nself.dataOut",self.dataOut,"\n") #DEBUG
 
-                            print("Time since start:",time.time()-totstart)
+                            #print("Time since start:",time.time()-totstart)
                             #print(currentData) #debug
                             with accLock:
                                 gpsSampTS[0] = time.time() #timestamp of when latest gps sample became available
@@ -188,7 +188,7 @@ class gpsThr(tr.Thread):
                         elif (prevData[0] != currentData[0]):
                             prevData = currentData
                             self.dataOut = currentData
-                            print("\n\nself.dataOut",self.dataOut,"\n")
+                            #print("\n\nself.dataOut",self.dataOut,"\n") #DEBUG
                             rollingGpsData.append(currentData)
                             if (not collectingData) & (len(rollingGpsData) > samplesC):
                                 #rollingGpsData normally gets saved every 1 second (actually comes from "storage inteval" setting) so its length should correspond to that 
@@ -197,7 +197,7 @@ class gpsThr(tr.Thread):
                                 rollingGpsData = rollingGpsData[len(rollingGpsData)-samplesC:] 
                                 #this covers the case where its randomly longer than 11 which it should never be
                                 #This in effect inserts the 1 second of data before we reach our target acceleration into our log txt file
-                                print("len(rollingGpsData)",len(rollingGpsData)) #debug
+                                #print("len(rollingGpsData)",len(rollingGpsData)) #debug
                             if collectingData: 
                                 if self.runComplete==False:
                                     gpsData.append(currentData)
