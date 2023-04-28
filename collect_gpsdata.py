@@ -307,7 +307,7 @@ class piScreen(tr.Thread):
             refresh = str(round(1/totrefreshTime,1))
             if gpsThread.timedOut:
                 string = "Time: Run timed out"
-                backgroundColor = '#d90707'
+                backgroundColor = [217,7,7]
                 fontColor = [255,255,255,255]
                 
             elif (gpsThread.timedOut == False) & (gpsThread.runComplete):
@@ -315,11 +315,11 @@ class piScreen(tr.Thread):
                 #print("gpsdata",gpsData) #DEBUG
                 #print("Final Time",str(round(self.finalTime(gpsData,cutoffSpeed),2))) #DEBUG
                 string = "Completed in: "+str(round(self.finalTime(gpsData,cutoffSpeed),2))+"s"
-                backgroundColor = '#33a852'
+                backgroundColor = [50,168,82]
                 fontColor = [255,255,255,255]
             else:
                 string = "Time: "+str(round(elapsedTime,2))+"s"
-                backgroundColor = '#000000'
+                backgroundColor = [0,0,0]
                 fontColor = [255,255,255,255]
 
 

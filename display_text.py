@@ -39,7 +39,7 @@ else:
 
 
 
-def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,width=diwidth,height=diheight,backColor="#000000",refreshRate=False):
+def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,width=diwidth,height=diheight,backColor=[0,0,0],refreshRate=False):
     
     #fontColor = [R,G,B,opacity (0-255)]
     startTime = time.time()
@@ -53,7 +53,7 @@ def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,wid
     draw = ImageDraw.Draw(image)
 
     if 1:
-        draw.rectangle((0, 0, width, height), fill=backColor)
+        draw.rectangle((0, 0, width, height), fill=tuple(backColor))
 
     
     fstrt = time.time()
@@ -72,7 +72,7 @@ def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,wid
             (width-(dfont_width),height-(dfont_height)),
             refreshString,
             font=dfont,
-            fill='#ffffff',)
+            fill=(fontColor[2], fontColor[1], fontColor[0], fontColor[3]),)
 
 
     #debugString = "time to process output: "+str(time.time()-startTime)+"\n"#DEBUG
@@ -134,7 +134,7 @@ def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,wid
 #         print(debugString)
 #  #DEBUG
 
-def dispBackground(backColor='#0000ff',width=diwidth,height=diheight):
+def dispBackground(backColor=[0,0,255],width=diwidth,height=diheight):
     startTime = time.time()
     # First define some constants to allow easy resizing of shapes.
     #BORDER = 20
@@ -146,7 +146,7 @@ def dispBackground(backColor='#0000ff',width=diwidth,height=diheight):
     draw = ImageDraw.Draw(image)
 
     # Draw a green filled box as the background
-    draw.rectangle((0, 0, width, height), fill=backColor)
+    draw.rectangle((0, 0, width, height), fill=tuple(backColor))
     #disp.image(image)
   
     
