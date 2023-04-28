@@ -5,6 +5,10 @@ ser = serial.Serial(port, baudrate = 115200, timeout = 1) #make the timeout pret
 PAUSE = 0.1
 print("Startup\n")
 
+#We are connecting to the gps through the cellular module and sending AT commands to setup different things.
+#AT commands documentation: 
+#https://content.u-blox.com/sites/default/files/SARA-R5_ATCommands_UBX-19047455.pdf
+
 #time.sleep(10.0) #Give it time to set up the multiplexing with cmux
 #Start by running our multipex configuration script
 
@@ -71,6 +75,7 @@ with open("initialize_agps.py") as f:
 
 time.sleep(1.0)
 
+#1 = gps on, 4 = assitnow online aiding, 71 = algebraic sum of gps systems to use: 1= GPS + 2= SBAS + 4= Galileo + 64= GLONAS = 71
 GPSParams = '1,4,71'
 print("\nTurning on GPS with AT+UGPS="+GPSParams)
 

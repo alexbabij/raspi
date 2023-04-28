@@ -10,6 +10,9 @@ from gpiozero import Button
 
 
 gpsd = gps(mode=WATCH_ENABLE|WATCH_NEWSTYLE) 
+#This is how we get data from gpsd. using gpsd.next() will read the latest item in its buffer. This data is a json string
+#that contains the information it got from the NMEA strings of the gps. We need to read this constantly, or else it will start
+#to fill up and either provide old data, or overflow and stop working. 
 goodFix = False  
 startTime = time.time()
 buttonEnabled = False
@@ -99,7 +102,7 @@ try:
                 buttonEnabled = True
                 startTime = time.time()
         
-        time.sleep(0.5)#if we dont read the data in fast enough, the buffer fills up and we just continually pull super old data                
+        time.sleep(0.5)
 
          
     

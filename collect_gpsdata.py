@@ -88,7 +88,7 @@ class gpsThr(tr.Thread):
             self.timedOut = False
             self.finalTime = 0.0
            
-            #This is just in here too because in theory we could do gpsThread.start() again to restart data collection
+            
             
             gpsd = gps(mode=WATCH_ENABLE|WATCH_NEWSTYLE)
             start = time.time()
@@ -153,12 +153,12 @@ class gpsThr(tr.Thread):
                         
                         #we want to have the acceleration value variable locked for as little time as possible
 
-                        # #DEBUG
-                        # if debug1 & (collectingData & (time.time() > self.runStart+10)):
-                        #     #Run this after 10 seconds of data collection
-                        #     currentData = ['debug',(cutoffSpeed+1),(time.time()-totstart),curAccDataMag,(accTime-time.time())]
-                        #     debug1 = False
-                        # #DEBUG
+                        #DEBUG
+                        if debug1 & (collectingData & (time.time() > self.runStart+10)):
+                            #Run this after 10 seconds of data collection
+                            currentData = ['debug',(cutoffSpeed+1),(time.time()-totstart),curAccDataMag,(accTime-time.time())]
+                            debug1 = False
+                        #DEBUG
 
 
                         
@@ -307,7 +307,7 @@ class piScreen(tr.Thread):
             refresh = str(round(1/totrefreshTime,1))
             if gpsThread.timedOut:
                 string = "Time: Run timed out"
-                backgroundColor = [217,7,7]
+                backgroundColor = [217,7,7] #Red
                 fontColor = [255,255,255,255]
                 
             elif (gpsThread.timedOut == False) & (gpsThread.runComplete):
@@ -315,11 +315,11 @@ class piScreen(tr.Thread):
                 #print("gpsdata",gpsData) #DEBUG
                 #print("Final Time",str(round(self.finalTime(gpsData,cutoffSpeed),2))) #DEBUG
                 string = "Completed in: "+str(round(self.finalTime(gpsData,cutoffSpeed),2))+"s"
-                backgroundColor = [50,168,82]
+                backgroundColor = [50,168,82] #Green
                 fontColor = [255,255,255,255]
             else:
                 string = "Time: "+str(round(elapsedTime,2))+"s"
-                backgroundColor = [0,0,0]
+                backgroundColor = [0,0,0] #Black
                 fontColor = [255,255,255,255]
 
 
