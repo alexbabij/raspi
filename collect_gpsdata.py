@@ -287,7 +287,7 @@ class piScreen(tr.Thread):
         self.running = True
         self.refreshRate = 1/screenRefreshRate #I dont think this is even necessary
 
-    #global gpsData We dont need to define it as global in here if we dont want to change it 
+    global gpsData #We dont need to define it as global in here if we dont want to change it 
     
     def run(self):
         totrefreshTime = 1.0 #have to be careful not to initialize to zero since we divide by it
@@ -309,6 +309,7 @@ class piScreen(tr.Thread):
                 
             elif (gpsThread.timedOut == False) & (gpsThread.runComplete):
                 print("\n\n\nrun complete\n\n\n") #DEBUG
+                print("gpsdata",gpsData)
                 print("Final Time",str(round(self.finalTime(gpsData,cutoffSpeed),2)))
                 string = "Completed in: "+str(round(self.finalTime(gpsData,cutoffSpeed),2))+"s"
             else:
