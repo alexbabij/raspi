@@ -63,11 +63,11 @@ def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,wid
     #text = "Hello Worldaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!"
     # 0,0 = top left corner of display
     #fontColor = [0,0,0]
-    dfont = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 9)
+    dfont = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 8)
     if refreshRate != False:
         refreshString = refreshRate+" fps"
 
-        (dfont_width, dfont_height) = dfont.getsize_multiline(textIn)
+        (dfont_width, dfont_height) = dfont.getsize_multiline(refreshString)
         draw.text(
             (width-(dfont_width),height-(dfont_height)),
             refreshString,
