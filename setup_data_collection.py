@@ -4,7 +4,7 @@ from gps import *
 import time
 import threading as tr
 from gpiozero import Button
-
+from display_text import *
 #We want to not allow the user to start taking data until we have an adequate fix, but we don't really want to terminate it partway 
 #through a run if we end up losing the fix
 
@@ -75,6 +75,7 @@ try:
 
             if usedSats == -1:
                 print("parsing error")
+                dispBackground(backColor=[255,0,0])
             elif usedSats < 6:
 
                 newString = str(int(usedSats))+"/6 sats"+" ("+str(round((time.time()-startTime),1))+")s"
@@ -86,6 +87,7 @@ try:
                 #print("1")
                 # prevString = newString
                 print(newString)
+                dispBackground(backColor=[255,255,0])
                 buttonEnabled = False
                 
                 
@@ -100,6 +102,7 @@ try:
                 # prevString = newString
                 print(newString)
                 buttonEnabled = True
+                dispBackground(backColor=[0,255,0])
                 startTime = time.time()
         
         time.sleep(0.5)
