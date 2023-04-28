@@ -39,10 +39,13 @@ try:
         
         if report['class'] == 'TPV': 
         #This a lame way to select the correct json object since gpsd will return multiple different objects in repeating order
-            mode = getattr(report,'mode',0)
+            mode = getattr(report,'mode',-1)
             #print("mode:"+str(getattr(report,'mode',0))) #debug
             
-            if mode <= 1:
+
+            if mode == -1:
+                print("parsing error")
+            elif mode <= 1:
 
                 newString = "Waiting for fix, status: "+modeDict[mode]+" ("+str(round((time.time()-startTime),1))+")s"
                 # if len(prevString)>len(newString):
