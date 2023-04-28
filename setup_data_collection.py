@@ -74,7 +74,7 @@ try:
                 buttonEnabled = True
                 startTime = time.time()
         
-        time.sleep(0.5)                
+        time.sleep(0.01)                
 
          
     
