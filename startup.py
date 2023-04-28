@@ -152,4 +152,5 @@ else:
 # sendCommand("AT+UGUBX=\""+modelDict['automotive']+"\"")
 
 subprocess.run(["./run_cgps.sh"])
+#This is the workaround for one of the most annoying and impossible to troubleshoot issues out there that I won't even get into
 print("\nEnd Setup")
