@@ -156,7 +156,7 @@ class gpsThr(tr.Thread):
                         #DEBUG
                         if debug1 & (collectingData & (time.time() > self.runStart+10)):
                             #Run this after 10 seconds of data collection
-                            currentData = [getattr(report,'time',''),(cutoffSpeed+1),(time.time()-totstart),curAccDataMag,(accTime-time.time())]
+                            currentData = ['debug',(cutoffSpeed+1),(time.time()-totstart),curAccDataMag,(accTime-time.time())]
                             debug1 = False
                         #DEBUG
 
