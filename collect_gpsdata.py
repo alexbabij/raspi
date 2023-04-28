@@ -158,6 +158,7 @@ class gpsThr(tr.Thread):
                             #Run this after 10 seconds of data collection
                             currentData = ['debug',(cutoffSpeed+1),(time.time()-totstart),curAccDataMag,(accTime-time.time())]
                             debug1 = False
+                            print("\n\nran once\n\n")
                         #DEBUG
 
 
@@ -186,6 +187,7 @@ class gpsThr(tr.Thread):
                                 gpsSampTS[0] = time.time() #timestamp of when latest gps sample became available
 
                         elif (prevData[0] != currentData[0]):
+                            print("currentData", currentData)
                             prevData = currentData
                             self.dataOut = currentData
                             #print("\n\nself.dataOut",self.dataOut,"\n") #DEBUG
