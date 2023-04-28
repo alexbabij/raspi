@@ -58,7 +58,7 @@ try:
     time.sleep(2.0)
     while goodFix == False: #& self.running:
         #print("running")        
-        
+        print('goodFix',goodFix)
         #print(report) 
         prevString = ""
         
@@ -99,7 +99,7 @@ try:
                 buttonEnabled = True
                 startTime = time.time()
         
-        time.sleep(0.5)#if we dont read the data in fast enough, the buffer fills up and we just continuall pull super old data                
+        time.sleep(0.5)#if we dont read the data in fast enough, the buffer fills up and we just continually pull super old data                
 
          
     
