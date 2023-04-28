@@ -113,7 +113,7 @@ try:
                 buttonEnabled = True
                 backgroundColor = [0,255,0] #Green
                 fontColor = [0,0,0,255] #Black
-                string = str(int(usedSats))+" sats"+"\n Ready"+"\nPush Button"+"\nTo Start"
+                string = str(int(usedSats))+" sats"+"\nReady"+"\nPush Button"+"\nTo Start"
                 dispText(string,textLoc='center',fontColor=fontColor,FONTSIZE=15,backColor=backgroundColor)
                 startTime = time.time()
         
@@ -132,6 +132,10 @@ except (KeyboardInterrupt, SystemExit): #when you press ctrl+c
 else:
     gpsThread.running=False
     gpsThread.join()
+    backgroundColor = [0,255,0] #Green
+    fontColor = [0,0,0,255] #Black
+    string = "Starting data collection"
+    dispText(string,textLoc='center',fontColor=fontColor,FONTSIZE=15,backColor=backgroundColor)
     print("Running data collection\n")
 
 
