@@ -112,6 +112,9 @@ class gpsThr(tr.Thread):
             #currentData.extend(accDataMag) #could use + instead to concatenate this to the list, doing it with .extend() modifies the same variable in memory
             #while using + creates a new variable with the same name
             prevData = False
+
+            debug1 = True #DEBUG
+
             #global accDataMag
             while (self.running == True):
                 
@@ -151,10 +154,10 @@ class gpsThr(tr.Thread):
                         #we want to have the acceleration value variable locked for as little time as possible
 
                         #DEBUG
-                        if collectingData & (time.time() > self.runStart+10):
+                        if debug1 & (collectingData & (time.time() > self.runStart+10)):
                             #Run this after 10 seconds of data collection
                             currentData = [getattr(report,'time',''),(cutoffSpeed+1),(time.time()-totstart),curAccDataMag,(accTime-time.time())]
-                            
+                            debug1 = False
                         #DEBUG
 
 
@@ -371,7 +374,12 @@ def finalTime(gpsData,cutoffSpeed):
     finVel_1 = gpsData[-2][1] #This should always be below the next measurement or it would have completed already
     finTime_2 = gpsData[-1][2]
     finTime_1 = gpsData[-2][2]
-    finTime = finTime_1 + (cutoffSpeed-finVel_1) * (finTime_2-finTime_1)/(finVel_2-finVel_1)#linear interpolation
+    if abs(finVel_2-finVel_1) < 1E-5: #dont use == for floats :)
+        #We dont want to divide by 0:
+        finTime = finTime_2
+    else:
+        finTime = finTime_1 + (cutoffSpeed-finVel_1) * (finTime_2-finTime_1)/(finVel_2-finVel_1)#linear interpolation
+
     startVel = gpsData[0][1] #we just kinda assume they started at 0 mph instead of actually using this
     #We could average the rolling data we keep before this starting velocity to try to mitigate the gps noise, but for the purposes of getting 0-60, its not really worth it, since a car doing a 0-60
     #run doesn't have a nice linear acceleration curve, and this curve is different between naturally aspirated, supercharged, turbocharged cars, etc. 
