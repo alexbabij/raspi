@@ -351,7 +351,7 @@ class piScreen(tr.Thread):
         #We could average the rolling data we keep before this starting velocity to try to mitigate the gps noise, but for the purposes of getting 0-60, its not really worth it, since a car doing a 0-60
         #run doesn't have a nice linear acceleration curve, and this curve is different between naturally aspirated, supercharged, turbocharged cars, etc. 
         #The alternative to doing this would be to fit a curve to the entire 0-60 run and then interpolate on that. 
-        startTime = gpsData[0][3] -gpsData[0][5]#pi time offset starts from when we turn enable data collection not start the run
+        startTime = gpsData[0][2] -gpsData[0][4]#pi time offset starts from when we turn enable data collection not start the run
         #That means this doesnt start at 0, we also add in the time offset from the accelerometer which should be at best 0 or 
         #usually negative, meaning it pushes back our starttime
             
