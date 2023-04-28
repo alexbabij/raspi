@@ -33,7 +33,7 @@ def whenPressed():
     global goodFix
     if buttonEnabled:
         print("button Pressed")
-        #goodFix = True
+        goodFix = True
 
 button = Button(21) #This is gpio 21, not pin 21
 #Normally, .when_pressed only stays "active" while the script is being executed, so signal.pause() would need to be used to keep
@@ -54,7 +54,8 @@ gpsThread.start()
 #         self.running = True 
 
 try:
-    time.sleep(1.0)
+    print("Waiting for data")
+    time.sleep(2.0)
     while goodFix == False: #& self.running:
         #print("running")        
         
@@ -87,7 +88,7 @@ try:
                 
             elif (usedSats >=6):
 
-                newString = str(int(usedSats))+" sats: ready to start - push button to begin data collection"
+                newString = str(int(usedSats))+" sats: ready to start - push button to initialize data collection"
                 # if len(prevString)>len(newString):
                 #     padding = " " * (len(prevString) + 1) #blank character for overwriting varying length string with carriage return
                 # else:
