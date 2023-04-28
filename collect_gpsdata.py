@@ -306,15 +306,17 @@ class piScreen(tr.Thread):
             #then we write that image to the screen
             if gpsThread.timedOut:
                 string = "Time: Run timed out"
+                backgroundColor = [217,7,7,255]
                 
             elif (gpsThread.timedOut == False) & (gpsThread.runComplete):
-                print("\n\n\nrun complete\n\n\n") #DEBUG
-                print("gpsdata",gpsData)
+                #print("\n\n\nrun complete\n\n\n") #DEBUG
+                #print("gpsdata",gpsData) #DEBUG
                 print("Final Time",str(round(self.finalTime(gpsData,cutoffSpeed),2)))
                 string = "Completed in: "+str(round(self.finalTime(gpsData,cutoffSpeed),2))+"s"
+                backgroundColor = [50,168,82,255]
             else:
                 string = "Time: "+str(round(elapsedTime,2))+"s"
-            
+                backgroundColor = [255,255,255,255]
             
 
 
@@ -323,7 +325,7 @@ class piScreen(tr.Thread):
             string+="\nVelocity: "+str(round(velocity,1))+" "+displayUnits
             string += "\nAcceleration: "+str(round(acceleration,2))+"g"
             string += "\nRefresh: "+str(round(1/totrefreshTime,1))+" fps" #dont forget you can't use commas to combine strings like you could in print()
-            dispText(string,"nw",[255,255,255,255],14)
+            dispText(string,"nw",backgroundColor,14)
             elapsedR = time.time()-startTime
             #attempt to refresh at the selected rate, if not possible, refresh as fast as possible
             if (self.refreshRate) > elapsedR:
