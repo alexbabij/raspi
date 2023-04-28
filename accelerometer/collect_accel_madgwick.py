@@ -82,7 +82,7 @@ class accThr(tr.Thread):
         gyrOffsetX = 1.43
         gyrOffsetY = -2.875
         gyrOffsetZ = -0.55
-        accScale = 1.0
+        accScale = 1.0 
         magXmin =  122225 #These in theory should be recalculated often since they are affected by magnets
         magYmin =  122984
         magZmin =  122504

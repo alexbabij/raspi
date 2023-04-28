@@ -70,7 +70,7 @@ with open("initialize_agps.py") as f:
 
 time.sleep(1.0)
 
-GPSParams = '1,4,1'
+GPSParams = '1,4,71'
 print("\nTurning on GPS with AT+UGPS="+GPSParams)
 
 def sendCommand(command,readall=False): #optional function input for timeout
