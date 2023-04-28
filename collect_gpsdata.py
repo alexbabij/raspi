@@ -287,7 +287,7 @@ class piScreen(tr.Thread):
         self.running = True
         self.refreshRate = 1/screenRefreshRate #I dont think this is even necessary
 
-    global gpsData
+    #global gpsData We dont need to define it as global in here if we dont want to change it 
     
     def run(self):
         totrefreshTime = 1.0 #have to be careful not to initialize to zero since we divide by it
@@ -309,8 +309,8 @@ class piScreen(tr.Thread):
                 
             elif (gpsThread.timedOut == False) & (gpsThread.runComplete):
                 print("\n\n\nrun complete\n\n\n") #DEBUG
-                print("Final Time",str(round(finalTime(gpsData,cutoffSpeed),2)))
-                string = "Completed in: "+str(round(finalTime(gpsData,cutoffSpeed),2))+"s"
+                print("Final Time",str(round(self.finalTime(gpsData,cutoffSpeed),2)))
+                string = "Completed in: "+str(round(self.finalTime(gpsData,cutoffSpeed),2))+"s"
             else:
                 string = "Time: "+str(round(elapsedTime,2))+"s"
             
@@ -328,6 +328,34 @@ class piScreen(tr.Thread):
             if (self.refreshRate) > elapsedR:
                 time.sleep(self.refreshRate-elapsedR)
             totrefreshTime = time.time()-startTime
+
+    #Calculates final time from data using accelerometer offsets and linear interpolation of last 2 gps readings
+    def finalTime(self,gpsData,cutoffSpeed):
+        
+        #Our format is: [gps time(yyyy-mm-ddThr:min:ms), gps speed(m/s), pi time offset(s), accelerometer acceleration magnitude in earth frame(G), 
+                                                                # difference between time of this measurement and accel measurement(s)] (5 elements long)
+                                                                #our last value here is a negative number, since our data was taken before it was logged.
+
+        finVel_2 = gpsData[-1][1] #This should be the first velocity past the threshold since data recording should stop after this point
+        finVel_1 = gpsData[-2][1] #This should always be below the next measurement or it would have completed already
+        finTime_2 = gpsData[-1][2]
+        finTime_1 = gpsData[-2][2]
+        if abs(finVel_2-finVel_1) < 1E-5: #dont use == for floats :)
+            #We dont want to divide by 0:
+            finTime = finTime_2
+        else:
+            finTime = finTime_1 + (cutoffSpeed-finVel_1) * (finTime_2-finTime_1)/(finVel_2-finVel_1)#linear interpolation
+
+        startVel = gpsData[0][1] #we just kinda assume they started at 0 mph instead of actually using this
+        #We could average the rolling data we keep before this starting velocity to try to mitigate the gps noise, but for the purposes of getting 0-60, its not really worth it, since a car doing a 0-60
+        #run doesn't have a nice linear acceleration curve, and this curve is different between naturally aspirated, supercharged, turbocharged cars, etc. 
+        #The alternative to doing this would be to fit a curve to the entire 0-60 run and then interpolate on that. 
+        startTime = gpsData[0][3] -gpsData[0][5]#pi time offset starts from when we turn enable data collection not start the run
+        #That means this doesnt start at 0, we also add in the time offset from the accelerometer which should be at best 0 or 
+        #usually negative, meaning it pushes back our starttime
+            
+        runTime = finTime - startTime
+        return runTime
 
 
 if __name__ == "__main__": # I think we don't technically need this since we won't be importing this file into anything probably. 
@@ -365,33 +393,7 @@ if __name__ == "__main__": # I think we don't technically need this since we won
         print("Threads successfully closed.")
 
 
-#Calculates final time from data using accelerometer offsets and linear interpolation of last 2 gps readings
-def finalTime(gpsData,cutoffSpeed):
-    
-    #Our format is: [gps time(yyyy-mm-ddThr:min:ms), gps speed(m/s), pi time offset(s), accelerometer acceleration magnitude in earth frame(G), 
-                                                            # difference between time of this measurement and accel measurement(s)] (5 elements long)
-                                                            #our last value here is a negative number, since our data was taken before it was logged.
 
-    finVel_2 = gpsData[-1][1] #This should be the first velocity past the threshold since data recording should stop after this point
-    finVel_1 = gpsData[-2][1] #This should always be below the next measurement or it would have completed already
-    finTime_2 = gpsData[-1][2]
-    finTime_1 = gpsData[-2][2]
-    if abs(finVel_2-finVel_1) < 1E-5: #dont use == for floats :)
-        #We dont want to divide by 0:
-        finTime = finTime_2
-    else:
-        finTime = finTime_1 + (cutoffSpeed-finVel_1) * (finTime_2-finTime_1)/(finVel_2-finVel_1)#linear interpolation
-
-    startVel = gpsData[0][1] #we just kinda assume they started at 0 mph instead of actually using this
-    #We could average the rolling data we keep before this starting velocity to try to mitigate the gps noise, but for the purposes of getting 0-60, its not really worth it, since a car doing a 0-60
-    #run doesn't have a nice linear acceleration curve, and this curve is different between naturally aspirated, supercharged, turbocharged cars, etc. 
-    #The alternative to doing this would be to fit a curve to the entire 0-60 run and then interpolate on that. 
-    startTime = gpsData[0][3] -gpsData[0][5]#pi time offset starts from when we turn enable data collection not start the run
-    #That means this doesnt start at 0, we also add in the time offset from the accelerometer which should be at best 0 or 
-    #usually negative, meaning it pushes back our starttime
-        
-    runTime = finTime - startTime
-    return runTime
 
     
     
