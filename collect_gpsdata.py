@@ -132,11 +132,11 @@ class gpsThr(tr.Thread):
                             curAccDataMag = accDataMag[0]
                             accTime = accDataMag[1]
                             self.accMag = curAccDataMag
-                            print("accDataMag",accDataMag[0])
+                            #print("accDataMag",accDataMag[0]) #DEBUG
                         
-                        print("currentData",currentData)
+                        #print("currentData",currentData) #DEBUG
                       
-                        print("counter",counter)
+                        #print("counter",counter) #DEBUG
                        
                         #Our format is: [gps time(yyyy-mm-ddThr:min:ms), gps speed(m/s), pi time offset(s), accelerometer acceleration magnitude in earth frame(G), 
                                                             # difference between time of this measurement and accel measurement(s)] (5 elements long)
@@ -178,10 +178,10 @@ class gpsThr(tr.Thread):
                             rollingGpsData.append(currentData)
                             prevData = currentData
                             self.dataOut = currentData
-                            print("\n\nself.dataOut",self.dataOut,"\n")
+                            #print("\n\nself.dataOut",self.dataOut,"\n") #DEBUG
 
                             print("Time since start:",time.time()-totstart)
-                            print(currentData) #debug
+                            #print(currentData) #debug
                             with accLock:
                                 gpsSampTS[0] = time.time() #timestamp of when latest gps sample became available
 
@@ -308,7 +308,7 @@ class piScreen(tr.Thread):
                 string = "Time: Run timed out"
                 
             elif (gpsThread.timedOut == False) & (gpsThread.runComplete):
-                print("run complete")
+                print("\n\n\nrun complete\n\n\n")
                 string = "Completed in: "+str(round(finalTime(gpsData,cutoffSpeed),2))+"s"
             else:
                 string = "Time: "+str(round(elapsedTime,2))+"s"
