@@ -47,7 +47,7 @@ try:
 
             if usedSats == -1:
                 print("parsing error")
-            elif usedSats <= 1:
+            elif usedSats < 6:
 
                 newString = str(int(usedSats))+"/6 sats"+" ("+str(round((time.time()-startTime),1))+")s"
                 # if len(prevString)>len(newString):
@@ -63,7 +63,7 @@ try:
                 
             elif (usedSats >=6):
 
-                newString = str(int(usedSats))+" sats ready to start - push button to begin data collection"
+                newString = str(int(usedSats))+" sats: ready to start - push button to begin data collection"
                 # if len(prevString)>len(newString):
                 #     padding = " " * (len(prevString) + 1) #blank character for overwriting varying length string with carriage return
                 # else:
