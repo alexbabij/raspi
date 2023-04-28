@@ -25,8 +25,8 @@ class gpsDataT(tr.Thread):
         while self.running:
             self.report = gpsd.next()
             time.sleep(0.02)
-            print('elapsed',time.time()-t1)
-            t1 = time.time()
+            #print('elapsed',time.time()-t1) #DEBUG
+            t1 = time.time() 
 
 
 def whenPressed():
@@ -48,9 +48,14 @@ button.when_pressed = whenPressed
 gpsThread = gpsDataT() #We use this so we dont have to print out super fast
 gpsThread.start()
 
+# class buttonT(tr.Thread):
+#     def __init__(self):
+#         super().__init__()
+#         self.running = True 
+
 try:
  
-     while goodFix == False:
+     while goodFix == False: #& self.running:
         #print("running")        
         
         #print(report) 
@@ -60,7 +65,7 @@ try:
         #This a lame way to select the correct json object since gpsd will return multiple different objects in repeating order
             usedSats = getattr(gpsDataT.report,'uSat',-1)
             #print('uSat:',usedSats) #DEBUG
-            print('report',gpsDataT.report)#DEBUG
+            #print('report',gpsDataT.report)#DEBUG
             #print("mode:"+str(getattr(report,'mode',0))) #debug
             
 
@@ -93,7 +98,7 @@ try:
                 buttonEnabled = True
                 startTime = time.time()
         
-        time.sleep(0.01)#if we dont read the data in fast enough, the buffer fills up and we just continuall pull super old data                
+        time.sleep(0.5)#if we dont read the data in fast enough, the buffer fills up and we just continuall pull super old data                
 
          
     
