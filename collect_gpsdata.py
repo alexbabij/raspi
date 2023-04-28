@@ -159,7 +159,7 @@ class gpsThr(tr.Thread):
                         #     currentData = ['debug',(cutoffSpeed+1),(time.time()-totstart),curAccDataMag,(accTime-time.time())]
                         #     debug1 = False
                         #     print("\n\nran once\n\n") 
-                        # #DEBUG
+                        # #DEBUG 
 
 
                         
