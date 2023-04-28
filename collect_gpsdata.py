@@ -308,7 +308,8 @@ class piScreen(tr.Thread):
                 string = "Time: Run timed out"
                 
             elif (gpsThread.timedOut == False) & (gpsThread.runComplete):
-                print("\n\n\nrun complete\n\n\n")
+                print("\n\n\nrun complete\n\n\n") #DEBUG
+                print("Final Time",str(round(finalTime(gpsData,cutoffSpeed),2)))
                 string = "Completed in: "+str(round(finalTime(gpsData,cutoffSpeed),2))+"s"
             else:
                 string = "Time: "+str(round(elapsedTime,2))+"s"
