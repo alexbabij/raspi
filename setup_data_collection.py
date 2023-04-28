@@ -40,8 +40,8 @@ try:
         if report['class'] == 'SKY': 
         #This a lame way to select the correct json object since gpsd will return multiple different objects in repeating order
             usedSats = getattr(report,'uSat',-1)
-            print('uSat:',usedSats)
-            print('report',report)
+            #print('uSat:',usedSats) #DEBUG
+            #print('report',report)#DEBUG
             #print("mode:"+str(getattr(report,'mode',0))) #debug
             
 
@@ -63,7 +63,7 @@ try:
                 
             elif (usedSats >=6):
 
-                newString = str(int(usedSats))+"sats ready to start - push button to begin data collection"
+                newString = str(int(usedSats))+" sats ready to start - push button to begin data collection"
                 # if len(prevString)>len(newString):
                 #     padding = " " * (len(prevString) + 1) #blank character for overwriting varying length string with carriage return
                 # else:
