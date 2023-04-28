@@ -224,7 +224,7 @@ investigate this (gpsData length vs written file)
                             counter += 1 #We save our file after 1 second of data collection while collectingData = true, counter is used to track this
 
                             print("Time since start:",time.time()-totstart)
-                            print(currentData) #debug
+                            #print(currentData) #debug
                         
                             
                     # end = time.time()
@@ -241,6 +241,7 @@ investigate this (gpsData length vs written file)
                         if finSampCounter >=5 :
                             totSamplesC = time.time()*2 #Basically disable the timeouts if we get to here so we don't get a weird edge case where we finish our run less than 5 measurements
                             globalTimeout = time.time()*2 #before either of our timeout periods
+                            filePath, fileCreated = writeFile(vehicle,rollingGpsData,fileCreated,filePath) #Write last data chunk
                             collectingData = False
                             self.runComplete = True
                             #This is to allow us to write 5 more samples to the file but not have them in gpsData
@@ -253,14 +254,14 @@ investigate this (gpsData length vs written file)
                             
                         if self.runComplete & collectingData:
                             finSampCounter +=1
-                            print("\nFinsample counter:\n", finSampCounter) 
+                            #print("\nFinsample counter:\n", finSampCounter) #DEBUG
                         if (time.time() > totSamplesC) or (time.time() > globalTimeout):
                             collectingData = False
                             self.runComplete = True
                             self.timedOut = True
 
                         #Record data up until reaching slightly past (10%) target speed, or 1 second after reaching target speed, whichever is first
-                print("\n\ncollecting data:",collectingData)
+                #print("\n\ncollecting data:",collectingData) #DEBUG
                 time.sleep(sleepInterval) 
             
         except KeyError:
