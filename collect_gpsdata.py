@@ -364,39 +364,38 @@ class piScreen(tr.Thread):
         return runTime
 
 
-if __name__ == "__main__": # I think we don't technically need this since we won't be importing this file into anything probably. 
-                            #stuff in here wont run if we import this into something
-    dispBackground([0,0,0]) #Set display screen to black background
-    
-    accThread = accThr()
-    gpsThread = gpsThr()
-    dispThread = piScreen()
-    accThread.start()
-    dispText("Initializing IMU, \ndon't move \nsensor (3)","center",fontColor=[255,255,255,255],FONTSIZE=15)
-    time.sleep(1)
-    #have the accelerometer script start first so the values in it can start to even out since it is running a madgwick filter
-    dispText("Initializing IMU, \ndon't move \nsensor (2)","center",fontColor=[255,255,255,255],FONTSIZE=15)
-    time.sleep(1)
-    dispText("Initializing IMU, \ndon't move \nsensor (1)","center",fontColor=[255,255,255,255],FONTSIZE=15)
-    time.sleep(1.01)
-    gpsThread.start()
-    dispThread.start()
+
+dispBackground([0,0,0]) #Set display screen to black background
+
+accThread = accThr()
+gpsThread = gpsThr()
+dispThread = piScreen()
+accThread.start()
+dispText("Initializing IMU, \ndon't move \nsensor (3)","center",fontColor=[255,255,255,255],FONTSIZE=15)
+time.sleep(1)
+#have the accelerometer script start first so the values in it can start to even out since it is running a madgwick filter
+dispText("Initializing IMU, \ndon't move \nsensor (2)","center",fontColor=[255,255,255,255],FONTSIZE=15)
+time.sleep(1)
+dispText("Initializing IMU, \ndon't move \nsensor (1)","center",fontColor=[255,255,255,255],FONTSIZE=15)
+time.sleep(1.01)
+gpsThread.start()
+dispThread.start()
 
 
-    try: #since both our gps and accelerometer are running in separate threads, we use this to be able to catch keyboard exceptions whenever we want
-        while True:
-            time.sleep(1)
-            print("running")
+try: #since both our gps and accelerometer are running in separate threads, we use this to be able to catch keyboard exceptions whenever we want
+    while True:
+        time.sleep(1)
+        print("running")
 
-    except KeyboardInterrupt:
-        print("Attempting to close threads...")
-        accThread.running = False
-        gpsThread.running = False
-        dispThread.running = False
-        accThread.join()
-        gpsThread.join()
-        dispThread.join()
-        print("Threads successfully closed.")
+except KeyboardInterrupt:
+    print("Attempting to close threads...")
+    accThread.running = False
+    gpsThread.running = False
+    dispThread.running = False
+    accThread.join()
+    gpsThread.join()
+    dispThread.join()
+    print("Threads successfully closed.")
 
 
 
