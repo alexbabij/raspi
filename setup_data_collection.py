@@ -18,7 +18,7 @@ def whenPressed():
     global goodFix
     if buttonEnabled:
         print("button Pressed")
-        #goodFix = True
+        goodFix = True
 
 button = Button(21) #This is gpio 21, not pin 21
 #Normally, .when_pressed only stays "active" while the script is being executed, so signal.pause() would need to be used to keep
@@ -40,6 +40,7 @@ try:
         if report['class'] == 'TPV': 
         #This a lame way to select the correct json object since gpsd will return multiple different objects in repeating order
             mode = getattr(report,'mode',-1)
+            print('mode:',mode)
             #print("mode:"+str(getattr(report,'mode',0))) #debug
             
 
