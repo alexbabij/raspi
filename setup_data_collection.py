@@ -41,6 +41,7 @@ try:
         #This a lame way to select the correct json object since gpsd will return multiple different objects in repeating order
             mode = getattr(report,'mode',-1)
             print('mode:',mode)
+            print('report',report)
             #print("mode:"+str(getattr(report,'mode',0))) #debug
             
 
