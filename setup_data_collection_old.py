@@ -7,7 +7,7 @@ from gpiozero import Button
 
 #We want to not allow the user to start taking data until we have an adequate fix, but we don't really want to terminate it partway 
 #through a run if we end up losing the fix
-
+modeDict = {0:'unknown',1:'no fix',2:'2D fix',3:'3D fix'}
 
 gpsd = gps(mode=WATCH_ENABLE|WATCH_NEWSTYLE) 
 goodFix = False  
@@ -37,19 +37,19 @@ try:
         #print(report) 
         prevString = ""
         
-        if report['class'] == 'SKY': 
+        if report['class'] == 'TPV': 
         #This a lame way to select the correct json object since gpsd will return multiple different objects in repeating order
-            usedSats = getattr(report,'uSat',-1)
-            print('uSat:',usedSats)
+            mode = getattr(report,'mode',-1)
+            print('mode:',mode)
             print('report',report)
             #print("mode:"+str(getattr(report,'mode',0))) #debug
             
 
-            if usedSats == -1:
+            if mode == -1:
                 print("parsing error")
-            elif usedSats <= 1:
+            elif mode <= 1:
 
-                newString = str(int(usedSats))+"/6 sats"+" ("+str(round((time.time()-startTime),1))+")s"
+                newString = "Waiting for fix, status: "+modeDict[mode]+" ("+str(round((time.time()-startTime),1))+")s"
                 # if len(prevString)>len(newString):
                 #     padding = " " * (len(prevString) + 1) #blank character for overwriting varying length string with carriage return
                 # else:
@@ -61,9 +61,9 @@ try:
                 buttonEnabled = False
                 
                 
-            elif (usedSats >=6):
+            elif (mode == 2) | (mode == 3):
 
-                newString = str(int(usedSats))+"sats ready to start - push button to begin data collection"
+                newString = "Status: "+modeDict[mode]+" ready to start - push button to begin data collection"
                 # if len(prevString)>len(newString):
                 #     padding = " " * (len(prevString) + 1) #blank character for overwriting varying length string with carriage return
                 # else:
