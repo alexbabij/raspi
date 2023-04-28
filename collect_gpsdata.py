@@ -106,6 +106,7 @@ class gpsThr(tr.Thread):
             rollingGpsData = []
             counter = 0
             finSampCounter = 0
+            totSamplesC = 0.0
             print("gps rec started")
             currentData = ['',float('nan'),0.0,0.0,0.0]
             #currentData.extend(accDataMag) #could use + instead to concatenate this to the list, doing it with .extend() modifies the same variable in memory
@@ -122,9 +123,7 @@ class gpsThr(tr.Thread):
                     #If the data is bad we just ignore it, the format for this is to return NaN for numbers and empty for strings: ''
                     #Not sure how much an effect on performance this has
 
-                        
-                        
-                        
+                       
                         with accLock:
                             #extract data from the accelerometer
                             curAccDataMag = accDataMag[0]
@@ -150,6 +149,15 @@ class gpsThr(tr.Thread):
                         #We are capable of getting duplicate results, so we filter them out
                         
                         #we want to have the acceleration value variable locked for as little time as possible
+
+                        #DEBUG
+                        if (time.time() > totSamplesC-0.5*float(config["timeout"])):
+                            #Run this halfway through our run timeout
+                            currentData = [getattr(report,'time',''),(cutoffSpeed+1),(time.time()-totstart),curAccDataMag,(accTime-time.time())]
+                            
+                        #DEBUG
+
+
                         
                         if (curAccDataMag >= accMin) and (self.runComplete == False):
                             collectingData = True
@@ -301,9 +309,7 @@ class piScreen(tr.Thread):
             else:
                 string = "Time: "+str(round(elapsedTime,2))+"s"
             
-            """
-            turn this into an elif and another one if self.timedout = false
-            """
+            
 
 
 
