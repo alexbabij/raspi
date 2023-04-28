@@ -53,7 +53,7 @@ def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,wid
     draw = ImageDraw.Draw(image)
 
     if 1:
-        draw.rectangle((0, 0, width, height), fill=tuple(backColor))
+        draw.rectangle((0, 0, width, height), fill=(backColor[2],backColor[1],backColor[0]))
 
     
     fstrt = time.time()
@@ -78,7 +78,7 @@ def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,wid
     #debugString = "time to process output: "+str(time.time()-startTime)+"\n"#DEBUG
     # Load a TTF Font
     
-    #For some reason, the R and B in the RGBA values are swapped, but only for fill in draw.text, I have no idea why
+    #For some reason, the R and B in the RGBA values are swapped, I have no idea why
     if textLoc == "center":
         (font_width, font_height) = font.getsize_multiline(textIn)
         draw.text(
@@ -146,7 +146,7 @@ def dispBackground(backColor=[0,0,255],width=diwidth,height=diheight):
     draw = ImageDraw.Draw(image)
 
     # Draw a green filled box as the background
-    draw.rectangle((0, 0, width, height), fill=tuple(backColor))
+    draw.rectangle((0, 0, width, height), fill=(backColor[2],backColor[1],backColor[0]))
     #disp.image(image)
   
     
