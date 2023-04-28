@@ -18,7 +18,7 @@ class gpsDataT(tr.Thread):
     def __init__(self):
         super().__init__()
         self.running = True    
-        self.report = []
+        self.report
 
     def run(self):
         t1 = time.time()
