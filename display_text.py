@@ -39,7 +39,7 @@ else:
 
 
 
-def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,width=diwidth,height=diheight,backColor=[0,0,0]):
+def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,width=diwidth,height=diheight,backColor=[0,0,0],refreshRate=False):
     
     #fontColor = [R,G,B,opacity (0-255)]
     startTime = time.time()
@@ -55,8 +55,7 @@ def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,wid
     if 1:
         draw.rectangle((0, 0, width, height), fill=tuple(backColor))
 
-    debugString = "time to process output: "+str(time.time()-startTime)+"\n"
-    # Load a TTF Font
+    
     fstrt = time.time()
     font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", FONTSIZE)
     debugString+= "time to load font: "+str(time.time()-fstrt)+"\n"
@@ -64,7 +63,21 @@ def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,wid
     #text = "Hello Worldaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!"
     # 0,0 = top left corner of display
     #fontColor = [0,0,0]
+    dfont = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 9)
+    if refreshRate != False:
+        refreshString = refreshRate+" fps"
 
+        (dfont_width, dfont_height) = dfont.getsize_multiline(textIn)
+        draw.text(
+            (width-(dfont_width),height-(dfont_height)),
+            refreshString,
+            font=font,
+            fill=(fontColor[2], fontColor[1], fontColor[0], fontColor[3]),)
+
+
+    #debugString = "time to process output: "+str(time.time()-startTime)+"\n"#DEBUG
+    # Load a TTF Font
+    
     #For some reason, the R and B in the RGBA values are swapped, but only for fill in draw.text, I have no idea why
     if textLoc == "center":
         (font_width, font_height) = font.getsize_multiline(textIn)
@@ -116,10 +129,10 @@ def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,wid
         )
     # Display image.
     disp.image(image)
-    debugString += "Elapsed time: "+str(time.time()-startTime)+"\n"
-    if 0:
-        print(debugString)
- 
+#     debugString += "Elapsed time: "+str(time.time()-startTime)+"\n"#DEBUG
+#     if 0:
+#         print(debugString)
+#  #DEBUG
 
 def dispBackground(backColor=[0,0,255],width=diwidth,height=diheight):
     startTime = time.time()

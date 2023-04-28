@@ -304,6 +304,7 @@ class piScreen(tr.Thread):
             #This is the quick and dirty way. If we instead implement a function to just draw individual text blocks at given xy locations, we can vary
             #things like font size, color, etc. on a per character basis if we really wanted to, since we can draw successive things into an image,
             #then we write that image to the screen
+            refresh = str(round(1/totrefreshTime,1))
             if gpsThread.timedOut:
                 string = "Time: Run timed out"
                 backgroundColor = [217,7,7,255]
@@ -325,9 +326,9 @@ class piScreen(tr.Thread):
 
 
             string+="\nVelocity: "+str(round(velocity,1))+" "+displayUnits
-            string += "\nAcceleration: "+str(round(acceleration,2))+"g"
-            string += "\nRefresh: "+str(round(1/totrefreshTime,1))+" fps" #dont forget you can't use commas to combine strings like you could in print()
-            dispText(string,"nw",backColor=backgroundColor,FONTSIZE=14,fontColor=fontColor)
+            string += "\nAcceleration: "+str(round(acceleration,2))+"g" #dont forget you can't use commas to combine strings like you could in print()
+             
+            dispText(string,"nw",backColor=backgroundColor,FONTSIZE=14,fontColor=fontColor,refreshRate=refresh)
             elapsedR = time.time()-startTime
             #attempt to refresh at the selected rate, if not possible, refresh as fast as possible
             if (self.refreshRate) > elapsedR:
@@ -371,12 +372,12 @@ if __name__ == "__main__": # I think we don't technically need this since we won
     gpsThread = gpsThr()
     dispThread = piScreen()
     accThread.start()
-    dispText("Initializing IMU, \ndon't move sensor\n (3)","center",[255,255,255,255],25)
+    dispText("Initializing IMU, \ndon't move sensor\n (3)","center",[255,255,255,255],15)
     time.sleep(1)
     #have the accelerometer script start first so the values in it can start to even out since it is running a madgwick filter
-    dispText("Initializing IMU, \ndon't move sensor\n (2)","center",[255,255,255,255],25)
+    dispText("Initializing IMU, \ndon't move sensor\n (2)","center",[255,255,255,255],15)
     time.sleep(1)
-    dispText("Initializing IMU, \ndon't move sensor\n (1)","center",[255,255,255,255],25)
+    dispText("Initializing IMU, \ndon't move sensor\n (1)","center",[255,255,255,255],15)
     time.sleep(1.01)
     gpsThread.start()
     dispThread.start()
