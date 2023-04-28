@@ -260,7 +260,7 @@ investigate this (gpsData length vs written file)
                             self.timedOut = True
 
                         #Record data up until reaching slightly past (10%) target speed, or 1 second after reaching target speed, whichever is first
-                
+                print("\n\ncollecting data:",collectingData)
                 time.sleep(sleepInterval) 
             
         except KeyError:
