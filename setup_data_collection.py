@@ -26,7 +26,7 @@ class gpsDataT(tr.Thread):
             self.report = gpsd.next()
             time.sleep(0.02)
             #print('elapsed',time.time()-t1) #DEBUG
-            t1 = time.time() 
+            t1 = time.time()
 
 
 def whenPressed():
@@ -61,9 +61,9 @@ try:
         #print(report) 
         prevString = ""
         
-        if gpsDataT.report['class'] == 'SKY': 
+        if gpsThread.report['class'] == 'SKY': 
         #This a lame way to select the correct json object since gpsd will return multiple different objects in repeating order
-            usedSats = getattr(gpsDataT.report,'uSat',-1)
+            usedSats = getattr(gpsThread.report,'uSat',-1)
             #print('uSat:',usedSats) #DEBUG
             #print('report',gpsDataT.report)#DEBUG
             #print("mode:"+str(getattr(report,'mode',0))) #debug
