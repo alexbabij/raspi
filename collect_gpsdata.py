@@ -248,8 +248,10 @@ investigate this (gpsData length vs written file)
                             #collectingData = False
                             self.runComplete = True
                             #self.running = False
+                            
+                        if self.runComplete & collectingData:
                             finSampCounter +=1
-                             
+                            print("\nFinsample counter:\n", finSampCounter) 
                         if (time.time() > totSamplesC) or (time.time() > globalTimeout):
                             collectingData = False
                             self.runComplete = True
