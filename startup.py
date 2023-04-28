@@ -151,5 +151,5 @@ else:
 # #automotive
 # sendCommand("AT+UGUBX=\""+modelDict['automotive']+"\"")
 
-subprocess.run(["run_cgps.sh"])
+subprocess.run(["./run_cgps.sh"])
 print("\nEnd Setup")
