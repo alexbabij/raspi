@@ -58,7 +58,7 @@ def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,wid
     
     fstrt = time.time()
     font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", FONTSIZE)
-    debugString+= "time to load font: "+str(time.time()-fstrt)+"\n"
+    #debugString+= "time to load font: "+str(time.time()-fstrt)+"\n" #DEBUG
     # Draw Some Text
     #text = "Hello Worldaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!"
     # 0,0 = top left corner of display
