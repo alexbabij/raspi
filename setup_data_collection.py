@@ -18,7 +18,7 @@ class gpsDataT(tr.Thread):
     def __init__(self):
         super().__init__()
         self.running = True    
-        self.report
+        self.report = []
 
     def run(self):
         t1 = time.time()
@@ -54,8 +54,8 @@ gpsThread.start()
 #         self.running = True 
 
 try:
- 
-     while goodFix == False: #& self.running:
+    time.sleep(1.0)
+    while goodFix == False: #& self.running:
         #print("running")        
         
         #print(report) 
