@@ -134,7 +134,7 @@ else:
     gpsThread.join()
     backgroundColor = [0,255,0] #Green
     fontColor = [0,0,0,255] #Black
-    string = "Starting data collection"
+    string = "Starting data\ncollection"
     dispText(string,textLoc='center',fontColor=fontColor,FONTSIZE=15,backColor=backgroundColor)
     print("Running data collection\n")
 
