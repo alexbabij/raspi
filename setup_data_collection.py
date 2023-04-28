@@ -7,7 +7,7 @@ from gpiozero import Button
 
 #We want to not allow the user to start taking data until we have an adequate fix, but we don't really want to terminate it partway 
 #through a run if we end up losing the fix
-modeDict = {0:'unkown',1:'no fix',2:'2D fix',3:'3D fix'}
+modeDict = {0:'unknown',1:'no fix',2:'2D fix',3:'3D fix'}
 
 gpsd = gps(mode=WATCH_ENABLE|WATCH_NEWSTYLE) 
 goodFix = False  

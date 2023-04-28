@@ -71,7 +71,7 @@ def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,wid
         draw.text(
             (width-(dfont_width),height-(dfont_height)),
             refreshString,
-            font=font,
+            font=dfont,
             fill=(fontColor[2], fontColor[1], fontColor[0], fontColor[3]),)
 
 
