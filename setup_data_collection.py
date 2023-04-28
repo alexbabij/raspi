@@ -2,7 +2,7 @@
 #The purpose of this is to wait to allow the user to begin collecting data until we have an adequate gps fix
 from gps import *
 import time
-import subprocess
+import threading as tr
 from gpiozero import Button
 
 #We want to not allow the user to start taking data until we have an adequate fix, but we don't really want to terminate it partway 
@@ -13,6 +13,21 @@ gpsd = gps(mode=WATCH_ENABLE|WATCH_NEWSTYLE)
 goodFix = False  
 startTime = time.time()
 buttonEnabled = False
+
+class gpsDataT(tr.Thread):
+    def __init__(self):
+        super().__init__()
+        self.running = True    
+        self.report = []
+
+    def run(self):
+        t1 = time.time()
+        while self.running:
+            self.report = gpsd.next()
+            time.sleep(0.02)
+            print('elapsed',time.time()-t1)
+            t1 = time.time()
+
 
 def whenPressed():
     global goodFix
@@ -29,11 +44,15 @@ button.when_pressed = whenPressed
 #This implementation is still a little bit of a workaround, though, and we basically need to wait out an entire while loop cycle before
 #it actually stops from the button press.
 
+
+gpsThread = gpsDataT() #We use this so we dont have to print out super fast
+gpsThread.start()
+
 try:
  
      while goodFix == False:
         #print("running")        
-        report = gpsd.next()
+        
         #print(report) 
         prevString = ""
         
@@ -74,7 +93,7 @@ try:
                 buttonEnabled = True
                 startTime = time.time()
         
-        time.sleep(0.01)                
+        time.sleep(0.01)#if we dont read the data in fast enough, the buffer fills up and we just continuall pull super old data                
 
          
     
@@ -83,9 +102,16 @@ except KeyError:
         pass #We would rather just skip if we cannot get good data rather than have our stuff error out
         
 except (KeyboardInterrupt, SystemExit): #when you press ctrl+c
+    gpsThread.running=False
+    gpsThread.join()
     print("\nExiting.")
 else:
+    gpsThread.running=False
+    gpsThread.join()
     print("Running data collection\n")
+
+
+
 
 print("end")
 #subprocess.run(["python","collect_data.py"])
