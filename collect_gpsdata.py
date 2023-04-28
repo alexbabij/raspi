@@ -327,6 +327,7 @@ class piScreen(tr.Thread):
 
             string+="\nVelocity: "+str(round(velocity,1))+" "+displayUnits
             string += "\nAcceleration: "+str(round(acceleration,2))+"g" #dont forget you can't use commas to combine strings like you could in print()
+            string += "\nTarget: "+str(round(cutoffSpeed*conversionDict[displayUnits],0))+"mph"
              
             dispText(string,"nw",backColor=backgroundColor,FONTSIZE=14,fontColor=fontColor,refreshRate=refresh)
             elapsedR = time.time()-startTime

@@ -75,7 +75,13 @@ try:
 
             if usedSats == -1:
                 print("parsing error")
-                dispBackground(backColor=[255,0,0])
+
+                string = "parsing error"
+                backgroundColor = [255,0,0] #Red
+                fontColor = [0,0,0,255] #Black
+                dispText(string,textLoc='center',fontColor=fontColor,FONTSIZE=15,backColor=backgroundColor)
+
+                
             elif usedSats < 6:
 
                 newString = str(int(usedSats))+"/6 sats"+" ("+str(round((time.time()-startTime),1))+")s"
@@ -87,7 +93,10 @@ try:
                 #print("1")
                 # prevString = newString
                 print(newString)
-                dispBackground(backColor=[255,255,0])
+                string = newString
+                backgroundColor = [255,255,0] #Yellow
+                fontColor = [0,0,0,255] #Black
+                dispText(string,textLoc='center',fontColor=fontColor,FONTSIZE=15,backColor=backgroundColor)
                 buttonEnabled = False
                 
                 
@@ -102,7 +111,10 @@ try:
                 # prevString = newString
                 print(newString)
                 buttonEnabled = True
-                dispBackground(backColor=[0,255,0])
+                backgroundColor = [0,255,0] #Green
+                fontColor = [0,0,0,255] #Black
+                string = str(int(usedSats))+" sats"+"\n Ready"+"\nPush Button"+"\nTo Start"
+                dispText(string,textLoc='center',fontColor=fontColor,FONTSIZE=15,backColor=backgroundColor)
                 startTime = time.time()
         
         time.sleep(0.5)
