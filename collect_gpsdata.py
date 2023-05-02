@@ -111,17 +111,19 @@ class gpsThr(tr.Thread):
         self.counter = 0
         self.finSampCounter = 0
         self.totSamplesC = 0.0
-        print("gps rec started")
+        
         self.currentData = ['',float('nan'),0.0,0.0,0.0]
         #self.currentData.extend(accDataMag) #could use + instead to concatenate this to the list, doing it with .extend() modifies the same variable in memory
         #while using + creates a new variable with the same name
         self.prevData = False
+        print('gps data restarted')
+        print("gps rec started")
 
     def run(self):
         #this function definition of run(self) is a special method from threading. this function will automatically run when .start() is used 
 
         try:
-            self.restart(self)
+            self.restart()
             global gpsData
             gpsData = []
             
