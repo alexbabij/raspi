@@ -135,7 +135,7 @@ class gpsThr(tr.Thread):
             self.restart()
             global gpsData
             gpsData = []
-            
+            start = time.time() #DEBUG
             gpsd = gps(mode=WATCH_ENABLE|WATCH_NEWSTYLE)
             
             debug1 = True #DEBUG
@@ -150,8 +150,10 @@ class gpsThr(tr.Thread):
                     if (math.isfinite(getattr(report,'speed',float('nan')))) & (getattr(report,'time','') !=''):
                     #If the data is bad we just ignore it, the format for this is to return NaN for numbers and empty for strings: ''
                     #Not sure how much an effect on performance this has
-
-                       
+                        
+                        print('GPS frequency:',str(start-time.time())) #DEBUG
+                        start = time.time() #DEBUG
+                        
                         with accLock:
                             #extract data from the accelerometer
                             accData = accDataMag.copy()
@@ -199,6 +201,7 @@ class gpsThr(tr.Thread):
                         
                         #we want to have the acceleration value variable locked for as little time as possible
 
+
                         # #DEBUG
                         # #print('self.collectingData',self.collectingData) #DEBUG
                         # if debug1 & (self.collectingData & (time.time() > self.runStart+5)):
@@ -239,18 +242,7 @@ class gpsThr(tr.Thread):
                             if self.collectingData: 
                                 if self.runComplete==False:
                                     gpsData.append(self.currentData)
-                                    """
-investigate this (gpsData length vs written file)
-#########################################
-#########################################
-#########################################
-#########################################
-#########################################
-#########################################
-#########################################
 
-
-                                    """
                                 #This is so we can store extra samples in our log file after hitting max speed
                                 self.counter += 1
 
@@ -282,10 +274,7 @@ investigate this (gpsData length vs written file)
                             self.runComplete = True #should be redundant I think #investigate
                             #This is to allow us to write 5 more samples to the file but not have them in gpsData
                             #self.running = False
-                        """
-Investigate this I think its not saving all 5 data points at the end
-####################################################################
-                        """
+
                         if gpsData[-1][1] >= (cutoffSpeed):
                             #self.collectingData = False
                             self.runComplete = True
