@@ -87,7 +87,7 @@ class gpsThr(tr.Thread):
             self.runComplete = False
             self.timedOut = False
             self.finalTime = 0.0
-           
+            #We put this stuff in here so when we want to start another run we restart the thread by rerunning this function
             
             
             gpsd = gps(mode=WATCH_ENABLE|WATCH_NEWSTYLE)
@@ -129,14 +129,34 @@ class gpsThr(tr.Thread):
                        
                         with accLock:
                             #extract data from the accelerometer
-                            curAccDataMag = accDataMag[0]
-                            accTime = accDataMag[1]
-                            self.accMag = curAccDataMag
+                            accData = accDataMag.copy()
                             #print("accDataMag",accDataMag[0]) #DEBUG
+                        curAccDataMag = accData[0]
+                        accTime = accData[1]
+                        
+                            
                         
                         #print("currentData",currentData) #DEBUG
                       
                         #print("counter",counter) #DEBUG
+                       
+                        if (accData[5] >= accMin) and (self.runComplete == False):
+                            collectingData = True
+                            curAccDataMag = accData[5]
+                            accTime = accData[6]
+                            print("Accleration Threshold Reached")
+                            if (self.runStart == False):
+                                self.runStart = time.time()
+                                totSamplesC = float(config["timeout"]) + time.time()
+                                if totSamplesC > globalTimeout:
+                                    globalTimeout = totSamplesC + 1
+                                    #if we would globally timeout before our local timeout, dont
+                            #This should run only once, when we first hit our target acceleration
+                        #The problem with this is that we are basically hoping to "catch" our acceleration value in a stream that updates 50 times/second
+                        #while we are only checking it 5 times/second. We fix this by just reassigning it with our special tracked acceleration and time 
+                        #value which is stored in collect_accel_madgwick.py
+                        
+                        self.accMag = curAccDataMag #We do this so we can use this value outside of gpsThr class (in the screen class piScreen)
                        
                         #Our format is: [gps time(yyyy-mm-ddThr:min:ms), gps speed(m/s), pi time offset(s), accelerometer acceleration magnitude in earth frame(G), 
                                                             # difference between time of this measurement and accel measurement(s)] (5 elements long)
@@ -153,27 +173,16 @@ class gpsThr(tr.Thread):
                         
                         #we want to have the acceleration value variable locked for as little time as possible
 
-                        # #DEBUG
-                        # if debug1 & (collectingData & (time.time() > self.runStart+10)):
-                        #     #Run this after 10 seconds of data collection
-                        #     currentData = ['debug',(cutoffSpeed+1),(time.time()-totstart),curAccDataMag,(accTime-time.time())]
-                        #     debug1 = False
-                        #     print("\n\nran once\n\n") 
-                        # #DEBUG 
+                        #DEBUG
+                        if debug1 & (collectingData & (time.time() > self.runStart+5)):
+                            #Run this after 10 seconds of data collection
+                            currentData = ['debug',(cutoffSpeed+1),(time.time()-totstart),curAccDataMag,(accTime-time.time())]
+                            debug1 = False
+                            print("\n\nran once\n\n") 
+                        #DEBUG 
 
 
                         
-                        if (curAccDataMag >= accMin) and (self.runComplete == False):
-                            collectingData = True
-                            if (self.runStart == False):
-                                self.runStart = time.time()
-                                totSamplesC = float(config["timeout"]) + time.time()
-                                if totSamplesC > globalTimeout:
-                                    globalTimeout = totSamplesC + 1
-                                    #if we would timeout before our local timeout, dont
-                            #This should run only once, when we first hit our target acceleration
-                            
-                            
 
                         if prevData == False:
                             rollingGpsData.append(currentData)
@@ -243,7 +252,7 @@ investigate this (gpsData length vs written file)
                             globalTimeout = time.time()*2 #before either of our timeout periods
                             filePath, fileCreated = writeFile(vehicle,rollingGpsData,fileCreated,filePath) #Write last data chunk
                             collectingData = False
-                            self.runComplete = True
+                            self.runComplete = True #should be redundant I think #investigate
                             #This is to allow us to write 5 more samples to the file but not have them in gpsData
                             #self.running = False
                         """

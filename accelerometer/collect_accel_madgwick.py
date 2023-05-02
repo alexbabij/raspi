@@ -12,6 +12,8 @@ import threading as tr
 
 
 
+
+
 targetHz = 50 #Target frequency to run at 
 targetS = 1/targetHz
 #Ideally, we want to align our refresh rate with a multiple of our gps refresh rate so we can grab relevant accelerometer data.
@@ -33,7 +35,7 @@ sample_rate = targetHz #Hz
 offset = imufusion.Offset(sample_rate)
 ahrs = imufusion.Ahrs()
 accLock = tr.Lock()
-accDataMag = [0.0,0.0,0.0,0.0,0.0]
+accDataMag = [0.0,0.0,0.0,0.0,0.0,0.0,0.0]
 #Format is: [magnitude of acceleration in earth frame, pi timestamp, pi frame linear acceleration x, y, z]
 
 ahrs.settings = imufusion.Settings(imufusion.CONVENTION_NWU,  # convention
@@ -58,6 +60,14 @@ class accThr(tr.Thread):
         self.running = True
         #self.aStart = datetime.datetime.now()
         #self.lastTime = time.time()
+        with open('configDevice.txt') as mycfgfile:
+            config = mycfgfile.read().splitlines() #Read in each line as a list i.e. [a:1, b:2]
+            config.pop(0) #Remove the first line from our config file, it is just a description and we don't want it in here
+            config = dict([eachLine.split(":") for eachLine in config]) #Split by ":" and turn into dict
+            #If this doesn't work, need to move working directory or change to ../configDevice.txt maybe
+        self.accMin = float(config["acceleration threshold"])
+        self.accStarted = False
+            
     
     def run(self):
         lastTime = time.time()
@@ -205,10 +215,19 @@ class accThr(tr.Thread):
                 #trying to create a new one 
                 accDataMag[0] = ACCmagnitudeE
                 accDataMag[1] = sampleTime
-                accDataMag[2:5] = ACCLinear
+                accDataMag[2:5] = ACCLinear #using : skips the last index i.e. skips index 5 so pulls: 2,3,4
+               
+
+
                 #accDataMag = ACCmagnitudeE
                 
-
+            if (self.accStarted==False) & (ACCmagnitudeE >= self.accMin):
+                with accLock:
+                    accDataMag[5] = ACCmagnitudeE
+                    accDataMag[6] = sampleTime
+                self.accStarted = True
+                #This should only run once and will log the first time that the acceleration threshold is crossed so that #collect_gpsdata can get the actual first
+                #instance where the accleration threshold was reached, while still being able to run at a different frequency 
                 
             
             if 0: #easy disable all the print statements
