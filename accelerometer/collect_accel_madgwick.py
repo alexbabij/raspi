@@ -227,7 +227,7 @@ class accThr(tr.Thread):
                 #We need to wait for the filter to initialize first, though 
                 with accLock:
                     accDataMag[5] = ACCmagnitudeE
-                    accDataMag[6] = sampleTime
+                    accDataMag[6] = sampleTime - 100 
                 self.accStarted = True
                 #This should only run once and will log the first time that the acceleration threshold is crossed so that #collect_gpsdata can get the actual first
                 #instance where the accleration threshold was reached, while still being able to run at a different frequency 
