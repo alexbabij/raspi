@@ -35,7 +35,7 @@ sample_rate = targetHz #Hz
 offset = imufusion.Offset(sample_rate)
 ahrs = imufusion.Ahrs()
 accLock = tr.Lock()
-accDataMag = [0.0,0.0,0.0,0.0,0.0,0.0,0.0]
+accDataMag = [0.0,0.0,0.0,0.0,0.0,0.0,0.0] #initialize these two to false so we can compare to them
 #Format is: [magnitude of acceleration in earth frame, pi timestamp, pi frame linear acceleration x, y, z]
 
 ahrs.settings = imufusion.Settings(imufusion.CONVENTION_NWU,  # convention

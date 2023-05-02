@@ -144,7 +144,7 @@ class gpsThr(tr.Thread):
                             collectingData = True
                             curAccDataMag = accData[5]
                             accTime = accData[6]
-                            print("Accleration Threshold Reached")
+                            print("Accleration Threshold Reached, accData[5]",accData[5])
                             if (self.runStart == False):
                                 self.runStart = time.time()
                                 totSamplesC = float(config["timeout"]) + time.time()
