@@ -85,7 +85,7 @@ class gpsThr(tr.Thread):
         # self.accMag = 0.0
         # self.runComplete = False
         # self.timedOut = False
-        self.restart()
+        # self.restart()
         gpsSampTS = [time.time()]
 
         
@@ -349,6 +349,8 @@ class piScreen(tr.Thread):
             acceleration = gpsThread.accMag #g's
             if (gpsThread.runComplete == False) and (gpsThread.runStart != False):
                 elapsedTime = time.time()-gpsThread.runStart #s
+            else:
+                elapsedTime = 0.000
             #construct our string to write to the screen
             #This is the quick and dirty way. If we instead implement a function to just draw individual text blocks at given xy locations, we can vary
             #things like font size, color, etc. on a per character basis if we really wanted to, since we can draw successive things into an image,
