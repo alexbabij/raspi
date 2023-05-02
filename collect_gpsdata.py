@@ -148,7 +148,7 @@ class gpsThr(tr.Thread):
 
                 if report['class'] == 'SKY':
                     self.usedSats = getattr(report,'uSat',-1)
-                    
+                    print('self.usedSats',self.usedSats)
 
                 if report['class'] == 'TPV': 
                 #This a lame way to select the correct json object since gpsd will return multiple different objects in repeating order
@@ -377,9 +377,9 @@ class piScreen(tr.Thread):
             
             satsString = str(int(gpsThread.usedSats))+" sats"
             satsfontColor = [255,255,255,255] #White
-            satsImg = dispText(satsString,textLoc='sw',fontColor=satsfontColor,FONTSIZE=10,refreshRate=False,updateScreen=False)
+            satsImg = dispText(satsString,textLoc='sw',fontColor=satsfontColor,backColor=backgroundColor,FONTSIZE=10,refreshRate=False,updateScreen=False)
 
-            dispText(string,"nw",backColor=backgroundColor,FONTSIZE=14,fontColor=fontColor,refreshRate=refresh,imgIn=satsImg)
+            dispText(string,"nw",FONTSIZE=14,fontColor=fontColor,backColor=False,refreshRate=refresh,imgIn=satsImg)
             elapsedR = time.time()-startTime
             #attempt to refresh at the selected rate, if not possible, refresh as fast as possible
             if (self.refreshRate) > elapsedR:
