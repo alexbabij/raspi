@@ -61,9 +61,20 @@ sys.path.append(os.path.join(os.path.dirname(__file__), 'accelerometer'))
 #from collect_accel_madgwick import *
 from accelerometer.collect_accel_madgwick import *
 
+class restartCollection(Exception):
+    pass
+
+def whenPressed():
+    print('\n\nbutton pressed\n\n') #DEBUG
+    #gpsThread.restart() #Kind of a convoluted way to do this 
+    ##buttonEnabled = False 
+    #gpsThread.
+
+buttongps = Button(21)    
+buttongps.when_pressed = whenPressed
 
 from fileSave import *
-gpsSampTS = [time.time()]
+
 
 class gpsThr(tr.Thread):
     def __init__(self):
@@ -74,9 +85,10 @@ class gpsThr(tr.Thread):
         self.accMag = 0.0
         self.runComplete = False
         self.timedOut = False
+        gpsSampTS = [time.time()]
         
-        
-
+    def restart(self):
+        raise restartCollection
 
     def run(self):
         #this function definition of run(self) is a special method from threading. this function will automatically run when .start() is used 
@@ -119,7 +131,7 @@ class gpsThr(tr.Thread):
 
             #global accDataMag
             while (self.running == True):
-                
+                print('gps running') #DEBUG
                 report = gpsd.next()
                 if report['class'] == 'TPV': 
                 #This a lame way to select the correct json object since gpsd will return multiple different objects in repeating order
@@ -286,6 +298,11 @@ Investigate this I think its not saving all 5 data points at the end
             print("\nExiting.")
             if collectingData:
                 filePath, fileCreated = writeFile(vehicle,rollingGpsData,fileCreated,filePath)
+        except restartCollection:
+            print('Restarting')
+            if collectingData:
+                filePath, fileCreated = writeFile(vehicle,rollingGpsData,fileCreated,filePath)
+            
         else:
             if collectingData:
                 if not counter == 0: #dont write to the file on exit if we just wrote to it 
@@ -384,24 +401,6 @@ class piScreen(tr.Thread):
             
         runTime = finTime - startTime
         return runTime
-
-
-
-def whenPressed():
-    print('\n\nbutton pressed\n\n') #DEBUG
-    string = "button pressed"
-    backgroundColor = [0,255,0] #Red
-    fontColor = [0,0,0,255] #Black
-    dispText(string,textLoc='center',fontColor=fontColor,FONTSIZE=15,backColor=backgroundColor)
-    buttonEnabled = False 
-
-
-buttongps = Button(21)    
-buttongps.when_pressed = whenPressed
-
-   
-    
-
 
 
 
