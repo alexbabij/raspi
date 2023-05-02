@@ -103,7 +103,7 @@ def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,wid
             font=font,
             fill=(fontColor[2], fontColor[1], fontColor[0], fontColor[3]),
         )
-    elif textLoc in ["southwest", "sw"]:
+    elif textLoc in ["southeast", "se"]:
         (font_width, font_height) = font.getsize_multiline(textIn)
         draw.text(
             (width-(BORDER+font_width),height-(BORDER+font_height)),
@@ -111,7 +111,7 @@ def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,wid
             font=font,
             fill=(fontColor[2], fontColor[1], fontColor[0], fontColor[3]),
         )
-    elif textLoc in ["northeast", "ne"]:
+    elif textLoc in ["southwest", "sw"]:
         (font_width, font_height) = font.getsize_multiline(textIn)
         draw.text(
             (BORDER,height-(BORDER+font_height)),
@@ -119,7 +119,7 @@ def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,wid
             font=font,
             fill=(fontColor[2], fontColor[1], fontColor[0], fontColor[3]),
         )
-    elif textLoc in ["southeast", "se"]:
+    elif textLoc in ["northeast", "ne"]:
         (font_width, font_height) = font.getsize_multiline(textIn)
         draw.text(
             (width-(BORDER+font_width),BORDER),
