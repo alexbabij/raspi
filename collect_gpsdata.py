@@ -285,7 +285,7 @@ Investigate this I think its not saving all 5 data points at the end
                         if self.runComplete & self.collectingData:
                             self.finSampCounter +=1
                             #print("\nFinsample self.counter:\n", self.finSampCounter) #DEBUG
-                        if (time.time() > self.totSamplesC) or (time.time() > globalTimeout):
+                        if (time.time() > self.totSamplesC) or (time.time() > self.globalTimeout):
                             self.collectingData = False
                             self.runComplete = True
                             self.timedOut = True
