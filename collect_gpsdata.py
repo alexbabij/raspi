@@ -396,7 +396,7 @@ accInitTimeWhole, accInitTimeRem = divmod(accInitTime,1)
 
 #have the accelerometer script start first so the values in it can start to even out since it is running a madgwick filter
 for i in range(int(accInitTimeWhole),0,-1):
-    dispText("Initializing IMU, \ndon't move \nsensor ("+str(i)+")","center",fontColor=[255,255,255,255],FONTSIZE=15)
+    dispText("Initializing IMU, \ndon't move \nsensor ("+str(round(i+accInitTimeRem,1))+")","center",fontColor=[255,255,255,255],FONTSIZE=15)
     time.sleep(1)
     
 dispText("Initializing IMU, \ndon't move \nsensor ("+str(round(0.01+accInitTimeRem,1))+")","center",fontColor=[255,255,255,255],FONTSIZE=15)
