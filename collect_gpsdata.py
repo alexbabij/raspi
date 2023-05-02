@@ -79,13 +79,15 @@ from fileSave import *
 class gpsThr(tr.Thread):
     def __init__(self):
         super().__init__()
-        self.running = True
-        self.dataOut = [0.0]*5 #initialize with values so other things can still use it as normal
-        self.runStart = False
-        self.accMag = 0.0
-        self.runComplete = False
-        self.timedOut = False
+        # self.running = True
+        # self.dataOut = [0.0]*5 #initialize with values so other things can still use it as normal
+        # self.runStart = False
+        # self.accMag = 0.0
+        # self.runComplete = False
+        # self.timedOut = False
+        self.restart()
         gpsSampTS = [time.time()]
+
         
     def restart(self):
         self.running = True
@@ -116,6 +118,13 @@ class gpsThr(tr.Thread):
         #self.currentData.extend(accDataMag) #could use + instead to concatenate this to the list, doing it with .extend() modifies the same variable in memory
         #while using + creates a new variable with the same name
         self.prevData = False
+
+        #We need to clear previous instance of single acceleration value:
+        with accLock:
+            accDataMag[5] = 0.0
+            accDataMag[6] = 0.0 # - 100 #DEBUG
+            accThread.accStarted = False
+
         print('gps data restarted')
         print("gps rec started")
 
