@@ -7,6 +7,7 @@ import time
 import math
 import subprocess
 import threading as tr #we don technically need this since threading gets imported in madgwick_filters
+from gpiozero import Button
 
 
 
@@ -386,11 +387,30 @@ class piScreen(tr.Thread):
 
 
 
+class buttonClass():
+
+    def __init__(self):
+        self.button = Button(21)    
+        self.button.when_pressed = self.whenPressed
+
+    def whenPressed():
+        print('\n\nbutton pressed\n\n') #DEBUG
+        string = "button pressed"
+        backgroundColor = [0,255,0] #Red
+        fontColor = [0,0,0,255] #Black
+        dispText(string,textLoc='center',fontColor=fontColor,FONTSIZE=15,backColor=backgroundColor)
+        buttonEnabled = False    
+        
+
+
+
+
 dispBackground([0,0,0]) #Set display screen to black background
 
 accThread = accThr()
 gpsThread = gpsThr()
 dispThread = piScreen()
+buttonRun = buttonClass()
 accThread.start()
 accInitTimeWhole, accInitTimeRem = divmod(accInitTime,1)
 
@@ -404,6 +424,7 @@ time.sleep(accInitTimeRem+0.01)
 
 gpsThread.start()
 dispThread.start()
+
 
 
 try: #since both our gps and accelerometer are running in separate threads, we use this to be able to catch keyboard exceptions whenever we want
@@ -424,7 +445,7 @@ except KeyboardInterrupt:
 
 
 
-    
+
     
 
 
