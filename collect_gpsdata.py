@@ -148,7 +148,7 @@ class gpsThr(tr.Thread):
 
                 if report['class'] == 'SKY':
                     self.usedSats = getattr(report,'uSat',-1)
-                    print('self.usedSats',self.usedSats)
+                    #print('self.usedSats',self.usedSats) #DEBUG
 
                 if report['class'] == 'TPV': 
                 #This a lame way to select the correct json object since gpsd will return multiple different objects in repeating order
@@ -157,8 +157,8 @@ class gpsThr(tr.Thread):
                     #If the data is bad we just ignore it, the format for this is to return NaN for numbers and empty for strings: ''
                     #Not sure how much an effect on performance this has
                         
-                        print('GPS frequency:',str(time.time()-start)) #DEBUG
-                        start = time.time() #DEBUG
+                        # print('GPS frequency:',str(time.time()-start)) #DEBUG
+                        # start = time.time() #DEBUG
                         
                         with accLock:
                             #extract data from the accelerometer
@@ -377,7 +377,7 @@ class piScreen(tr.Thread):
             
             satsString = str(int(gpsThread.usedSats))+" sats"
             satsfontColor = [255,255,255,255] #White
-            satsImg = dispText(satsString,textLoc='sw',fontColor=satsfontColor,backColor=backgroundColor,FONTSIZE=10,refreshRate=False,updateScreen=False)
+            satsImg = dispText(satsString,textLoc='sw',fontColor=satsfontColor,backColor=backgroundColor,FONTSIZE=11,refreshRate=False,updateScreen=False)
 
             dispText(string,"nw",FONTSIZE=14,fontColor=fontColor,backColor=False,refreshRate=refresh,imgIn=satsImg)
             elapsedR = time.time()-startTime
