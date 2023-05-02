@@ -61,12 +61,12 @@ sys.path.append(os.path.join(os.path.dirname(__file__), 'accelerometer'))
 #from collect_accel_madgwick import *
 from accelerometer.collect_accel_madgwick import *
 
-class restartCollection(Exception):
+class exitGps(Exception): #currently unused
     pass
 
 def whenPressed():
     print('\n\nbutton pressed\n\n') #DEBUG
-    #gpsThread.restart() #Kind of a convoluted way to do this 
+    gpsThread.restart()
     ##buttonEnabled = False 
     #gpsThread.
 
@@ -88,7 +88,13 @@ class gpsThr(tr.Thread):
         gpsSampTS = [time.time()]
         
     def restart(self):
-        raise restartCollection
+        self.running = True
+        self.dataOut = [0.0]*5 #initialize with values so other things can still use it as normal
+        self.runStart = False
+        self.accMag = 0.0
+        self.runComplete = False
+        self.timedOut = False
+        gpsSampTS = [time.time()]
 
     def run(self):
         #this function definition of run(self) is a special method from threading. this function will automatically run when .start() is used 
@@ -298,7 +304,7 @@ Investigate this I think its not saving all 5 data points at the end
             print("\nExiting.")
             if collectingData:
                 filePath, fileCreated = writeFile(vehicle,rollingGpsData,fileCreated,filePath)
-        except restartCollection:
+        except exitGps:
             print('Restarting')
             if collectingData:
                 filePath, fileCreated = writeFile(vehicle,rollingGpsData,fileCreated,filePath)
