@@ -24,6 +24,7 @@ sleepInterval = 1/(updateRate*10) #Maybe tweak this depending on performance
 #than the interval it is timing to run the entire function, unlike using something like:1/(updateRate*2)
 
 #The speed reading that comes out of gpsd is in m/s, this dictionary stores the conversion factor from m/s to [key]
+accInitTime = float(config['accelerometer initialization time'])
 conversionDict = {"mph": 2.2369362912, "kph": 3.6}
 displayUnits = config["units"]
 vehicle = config["current vehicle"]
@@ -390,13 +391,16 @@ accThread = accThr()
 gpsThread = gpsThr()
 dispThread = piScreen()
 accThread.start()
-dispText("Initializing IMU, \ndon't move \nsensor (3)","center",fontColor=[255,255,255,255],FONTSIZE=15)
-time.sleep(1)
+accInitTimeWhole, accInitTimeRem = divmod(accInitTime,1)
+
 #have the accelerometer script start first so the values in it can start to even out since it is running a madgwick filter
-dispText("Initializing IMU, \ndon't move \nsensor (2)","center",fontColor=[255,255,255,255],FONTSIZE=15)
-time.sleep(1)
-dispText("Initializing IMU, \ndon't move \nsensor (1)","center",fontColor=[255,255,255,255],FONTSIZE=15)
-time.sleep(1.01)
+for i in range(int(accInitTimeWhole),0,-1):
+    dispText("Initializing IMU, \ndon't move \nsensor ("+str(i)+")","center",fontColor=[255,255,255,255],FONTSIZE=15)
+    time.sleep(1)
+    
+dispText("Initializing IMU, \ndon't move \nsensor ("+str(round(0.01+accInitTimeRem,1))+")","center",fontColor=[255,255,255,255],FONTSIZE=15)
+time.sleep(accInitTimeRem+0.01)
+
 gpsThread.start()
 dispThread.start()
 

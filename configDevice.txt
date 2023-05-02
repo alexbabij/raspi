@@ -8,3 +8,4 @@ max speed:20
 units:mph
 screen refresh rate:15
 global timeout:300
+accelerometer initialization time:3.2

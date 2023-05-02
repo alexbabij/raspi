@@ -66,7 +66,9 @@ class accThr(tr.Thread):
             config = dict([eachLine.split(":") for eachLine in config]) #Split by ":" and turn into dict
             #If this doesn't work, need to move working directory or change to ../configDevice.txt maybe
         self.accMin = float(config["acceleration threshold"])
+        self.accInitTime = float(config['accelerometer initialization time'])
         self.accStarted = False
+        self.startTime = time.time()
             
     
     def run(self):
@@ -221,7 +223,8 @@ class accThr(tr.Thread):
 
                 #accDataMag = ACCmagnitudeE
                 
-            if (self.accStarted==False) & (ACCmagnitudeE >= self.accMin):
+            if (self.accStarted==False) and (ACCmagnitudeE >= self.accMin) and (time.time() >= (self.startTime + self.accInitTime)): #and is shortcircuit, & is not
+                #We need to wait for the filter to initialize first, though 
                 with accLock:
                     accDataMag[5] = ACCmagnitudeE
                     accDataMag[6] = sampleTime
