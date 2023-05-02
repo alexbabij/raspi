@@ -39,20 +39,28 @@ else:
 
 
 
-def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,width=diwidth,height=diheight,backColor=[0,0,0],refreshRate=False):
+def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,width=diwidth,height=diheight,backColor=[0,0,0],
+             refreshRate=False,updateScreen=True,imgIn=False,drawBackground=True):
+    #updateScreen = True : sends the new image to the screen, if False, returns image that would be sent to screen
+    #drawBackground = True : draws the background
+    #imgIn = ... :can use this in combination with updateScreen = False and drawBackground = False to stack/combine multiple images together
+    #then display the combined image. Basically this lets us draw text of different size at different places on the screen by
+    #calling this function multiple times. This should work because we import this entire file which includes importing PIL
     
     #fontColor = [R,G,B,opacity (0-255)]
     startTime = time.time()
     # First define some constants to allow easy resizing of shapes.
     #BORDER = 20
     #FONTSIZE = 20
-    
-    image = Image.new("RGB", (width, height))
+    if imgIn == False:
+        image = Image.new("RGB", (width, height))
+    else:
+        image = imgIn
 
     # Get drawing object to draw on image.
     draw = ImageDraw.Draw(image)
 
-    if 1:
+    if drawBackground:
         draw.rectangle((0, 0, width, height), fill=(backColor[2],backColor[1],backColor[0]))
 
     
@@ -128,7 +136,10 @@ def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,wid
             fill=(fontColor[2], fontColor[1], fontColor[0], fontColor[3]),
         )
     # Display image.
-    disp.image(image)
+    if updateScreen:
+        disp.image(image)
+    else:
+        return image
 #     debugString += "Elapsed time: "+str(time.time()-startTime)+"\n"#DEBUG
 #     if 0:
 #         print(debugString)

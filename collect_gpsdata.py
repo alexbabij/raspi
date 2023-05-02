@@ -118,6 +118,7 @@ class gpsThr(tr.Thread):
         #self.currentData.extend(accDataMag) #could use + instead to concatenate this to the list, doing it with .extend() modifies the same variable in memory
         #while using + creates a new variable with the same name
         self.prevData = False
+        self.usedSats = -1
 
         #We need to clear previous instance of single acceleration value:
         with accLock:
@@ -144,6 +145,11 @@ class gpsThr(tr.Thread):
             while (self.running == True):
                 #print('gps running') #DEBUG
                 report = gpsd.next()
+
+                if report['class'] == 'SKY':
+                    self.usedSats = getattr(report,'uSat',-1)
+                    
+
                 if report['class'] == 'TPV': 
                 #This a lame way to select the correct json object since gpsd will return multiple different objects in repeating order
                     
@@ -151,7 +157,7 @@ class gpsThr(tr.Thread):
                     #If the data is bad we just ignore it, the format for this is to return NaN for numbers and empty for strings: ''
                     #Not sure how much an effect on performance this has
                         
-                        print('GPS frequency:',str(start-time.time())) #DEBUG
+                        print('GPS frequency:',str(time.time()-start)) #DEBUG
                         start = time.time() #DEBUG
                         
                         with accLock:
@@ -368,8 +374,12 @@ class piScreen(tr.Thread):
             string+="\nVelocity: "+str(round(velocity,1))+" "+displayUnits
             string += "\nAcceleration: "+str(round(acceleration,2))+"g" #dont forget you can't use commas to combine strings like you could in print()
             string += "\nTarget: "+str(round(cutoffSpeed*conversionDict[displayUnits],0))+"mph"
-             
-            dispText(string,"nw",backColor=backgroundColor,FONTSIZE=14,fontColor=fontColor,refreshRate=refresh)
+            
+            satsString = str(int(gpsThread.usedSats))+" sats"
+            satsfontColor = [255,255,255,255] #White
+            satsImg = dispText(satsString,textLoc='sw',fontColor=satsfontColor,FONTSIZE=10,refreshRate=False,updateScreen=False)
+
+            dispText(string,"nw",backColor=backgroundColor,FONTSIZE=14,fontColor=fontColor,refreshRate=refresh,imgIn=satsImg)
             elapsedR = time.time()-startTime
             #attempt to refresh at the selected rate, if not possible, refresh as fast as possible
             if (self.refreshRate) > elapsedR:
