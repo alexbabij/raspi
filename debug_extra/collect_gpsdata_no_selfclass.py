@@ -95,38 +95,63 @@ class gpsThr(tr.Thread):
         self.runComplete = False
         self.timedOut = False
         gpsSampTS = [time.time()]
-
-        #write our data to a file every 1 second 
-        self.samplesC = int(config["storage interval"]) * updateRate #Only whole second intervals are allowed otherwise this counter could be a decimal
+        samplesC = int(config["storage interval"]) * updateRate #Only whole second intervals are allowed otherwise this counter could be a decimal
             
         #Basically a timeout in case we don't stop taking data within timeout period, this starts when we hit our minimum acceleration
-        self.globalTimeout = float(config["global timeout"]) + time.time() #This one starts when we run this, not when we hit minimum acceleration
-        self.filePath = ""
-        self.fileCreated = False
-        self.collectingData = False
-        self.totstart = time.time()
-        
-        
-        self.rollingGpsData = []
-        self.counter = 0
-        self.finSampCounter = 0
-        self.totSamplesC = 0.0
+        globalTimeout = float(config["global timeout"]) + time.time() #This one starts when we run this, not when we hit minimum acceleration
+        filePath = ""
+        fileCreated = False
+        collectingData = False
+        totstart = time.time()
+        global gpsData
+        gpsData = []
+        rollingGpsData = []
+        counter = 0
+        finSampCounter = 0
+        totSamplesC = 0.0
         print("gps rec started")
-        self.currentData = ['',float('nan'),0.0,0.0,0.0]
-        #self.currentData.extend(accDataMag) #could use + instead to concatenate this to the list, doing it with .extend() modifies the same variable in memory
+        currentData = ['',float('nan'),0.0,0.0,0.0]
+        #currentData.extend(accDataMag) #could use + instead to concatenate this to the list, doing it with .extend() modifies the same variable in memory
         #while using + creates a new variable with the same name
-        self.prevData = False
+        prevData = False
 
     def run(self):
         #this function definition of run(self) is a special method from threading. this function will automatically run when .start() is used 
 
         try:
-            self.restart(self)
-            global gpsData
-            gpsData = []
+            self.running = True
+            self.dataOut = [0.0]*5 #initialize with values so other things can still use it as normal
+            self.runStart = False
+            self.accMag = 0.0
+            self.runComplete = False
+            self.timedOut = False
+            self.finalTime = 0.0
+            
+            
             
             gpsd = gps(mode=WATCH_ENABLE|WATCH_NEWSTYLE)
             
+            #write our data to a file every 1 second 
+            samplesC = int(config["storage interval"]) * updateRate #Only whole second intervals are allowed otherwise this counter could be a decimal
+             
+            #Basically a timeout in case we don't stop taking data within timeout period, this starts when we hit our minimum acceleration
+            globalTimeout = float(config["global timeout"]) + time.time() #This one starts when we run this, not when we hit minimum acceleration
+            filePath = ""
+            fileCreated = False
+            collectingData = False
+            totstart = time.time()
+            global gpsData
+            gpsData = []
+            rollingGpsData = []
+            counter = 0
+            finSampCounter = 0
+            totSamplesC = 0.0
+            print("gps rec started")
+            currentData = ['',float('nan'),0.0,0.0,0.0]
+            #currentData.extend(accDataMag) #could use + instead to concatenate this to the list, doing it with .extend() modifies the same variable in memory
+            #while using + creates a new variable with the same name
+            prevData = False
+
             debug1 = True #DEBUG
 
             #global accDataMag
@@ -150,21 +175,21 @@ class gpsThr(tr.Thread):
                         
                             
                         
-                        #print("self.currentData",self.currentData) #DEBUG
+                        #print("currentData",currentData) #DEBUG
                       
-                        #print("self.counter",self.counter) #DEBUG
+                        #print("counter",counter) #DEBUG
                        
                         if (accData[5] >= accMin) and (self.runComplete == False):
-                            self.collectingData = True #This could be inside the if statement below
+                            collectingData = True #This could be inside the if statement below
                             
                             if (self.runStart == False):
                                 self.runStart = time.time()
-                                self.totSamplesC = float(config["timeout"]) + time.time()
+                                totSamplesC = float(config["timeout"]) + time.time()
                                 curAccDataMag = accData[5]
                                 accTime = accData[6]
                                 print("Accleration Threshold Reached, accData[5]",accData[5])
-                                if self.totSamplesC > self.globalTimeout:
-                                    self.globalTimeout = self.totSamplesC + 1
+                                if totSamplesC > globalTimeout:
+                                    globalTimeout = totSamplesC + 1
                                     #if we would globally timeout before our local timeout, dont
                             #This should run only once, when we first hit our target acceleration
                         #The problem with this is that we are basically hoping to "catch" our acceleration value in a stream that updates 50 times/second
@@ -176,12 +201,12 @@ class gpsThr(tr.Thread):
                         #Our format is: [gps time(yyyy-mm-ddThr:min:ms), gps speed(m/s), pi time offset(s), accelerometer acceleration magnitude in earth frame(G), 
                                                             # difference between time of this measurement and accel measurement(s)] (5 elements long)
                                                             #our last value here is a negative number, since our data was taken before it was logged. 
-                        self.currentData = [getattr(report,'time',''),getattr(report,'speed','nan'),(time.time()-self.totstart),curAccDataMag,(accTime-time.time())]
-                        #self.currentData[:3] = [getattr(report,'time',''),getattr(report,'speed','nan'),(time.time()-self.totstart)]
+                        currentData = [getattr(report,'time',''),getattr(report,'speed','nan'),(time.time()-totstart),curAccDataMag,(accTime-time.time())]
+                        #currentData[:3] = [getattr(report,'time',''),getattr(report,'speed','nan'),(time.time()-totstart)]
                         #doing it this way somehow manages to also update the value in gpsData after this step, I think this may have to do with the
                         #same weirdness that lets me update accDataMag without declaring it a global variable, because gpsData is assigned the same object
-                        #in memorry as self.currentData, meaning if I simply update self.currentData's elements, it also updates gpsData, whereas if I redeclare
-                        #self.currentData = [...], I think it makes a new thing. we can get around this by using .copy() instead of just gpsData = self.currentData
+                        #in memorry as currentData, meaning if I simply update currentData's elements, it also updates gpsData, whereas if I redeclare
+                        #currentData = [...], I think it makes a new thing. we can get around this by using .copy() instead of just gpsData = currentData
 
                         #We should never get nan or an empty string since we check for it, but just in case, we don't want this to stop collecting data
                         #We are capable of getting duplicate results, so we filter them out
@@ -189,10 +214,10 @@ class gpsThr(tr.Thread):
                         #we want to have the acceleration value variable locked for as little time as possible
 
                         # #DEBUG
-                        # #print('self.collectingData',self.collectingData) #DEBUG
-                        # if debug1 & (self.collectingData & (time.time() > self.runStart+5)):
+                        # #print('collectingData',collectingData) #DEBUG
+                        # if debug1 & (collectingData & (time.time() > self.runStart+5)):
                         #     #Run this after 10 seconds of data collection
-                        #     self.currentData = ['debug',(cutoffSpeed+1),(time.time()-self.totstart),curAccDataMag,(accTime-time.time())]
+                        #     currentData = ['debug',(cutoffSpeed+1),(time.time()-totstart),curAccDataMag,(accTime-time.time())]
                         #     debug1 = False
                         #     print("\n\nran once\n\n") 
                         # #DEBUG 
@@ -200,34 +225,34 @@ class gpsThr(tr.Thread):
 
                         
 
-                        if self.prevData == False:
-                            self.rollingGpsData.append(self.currentData)
-                            self.prevData = self.currentData
-                            self.dataOut = self.currentData
+                        if prevData == False:
+                            rollingGpsData.append(currentData)
+                            prevData = currentData
+                            self.dataOut = currentData
                             #print("\n\nself.dataOut",self.dataOut,"\n") #DEBUG
 
-                            #print("Time since start:",time.time()-self.totstart)
-                            #print(self.currentData) #debug
+                            #print("Time since start:",time.time()-totstart)
+                            #print(currentData) #debug
                             with accLock:
                                 gpsSampTS[0] = time.time() #timestamp of when latest gps sample became available
 
-                        elif (self.prevData[0] != self.currentData[0]):
-                            #print("self.currentData", self.currentData) #DEBUG
-                            self.prevData = self.currentData
-                            self.dataOut = self.currentData
+                        elif (prevData[0] != currentData[0]):
+                            #print("currentData", currentData) #DEBUG
+                            prevData = currentData
+                            self.dataOut = currentData
                             #print("\n\nself.dataOut",self.dataOut,"\n") #DEBUG
-                            self.rollingGpsData.append(self.currentData)
-                            if (not self.collectingData) & (len(self.rollingGpsData) > self.samplesC):
-                                #self.rollingGpsData normally gets saved every 1 second (actually comes from "storage inteval" setting) so its length should correspond to that 
+                            rollingGpsData.append(currentData)
+                            if (not collectingData) & (len(rollingGpsData) > samplesC):
+                                #rollingGpsData normally gets saved every 1 second (actually comes from "storage inteval" setting) so its length should correspond to that 
                                 #i.e. if at sampling at 5Hz and saving every 1 second, this should always be of length 5. It is nice to have some data before we
-                                #reach our "starting" acceleration though, so we keep a rolling list of the last 1 seconds of measurements until self.collectingData = True
-                                self.rollingGpsData = self.rollingGpsData[len(self.rollingGpsData)-self.samplesC:] 
+                                #reach our "starting" acceleration though, so we keep a rolling list of the last 1 seconds of measurements until collectingData = True
+                                rollingGpsData = rollingGpsData[len(rollingGpsData)-samplesC:] 
                                 #this covers the case where its randomly longer than 11 which it should never be
                                 #This in effect inserts the 1 second of data before we reach our target acceleration into our log txt file
-                                #print("len(self.rollingGpsData)",len(self.rollingGpsData)) #debug
-                            if self.collectingData: 
+                                #print("len(rollingGpsData)",len(rollingGpsData)) #debug
+                            if collectingData: 
                                 if self.runComplete==False:
-                                    gpsData.append(self.currentData)
+                                    gpsData.append(currentData)
                                     """
 investigate this (gpsData length vs written file)
 #########################################
@@ -241,33 +266,33 @@ investigate this (gpsData length vs written file)
 
                                     """
                                 #This is so we can store extra samples in our log file after hitting max speed
-                                self.counter += 1
+                                counter += 1
 
-                        if self.collectingData & (len(gpsData)==0):
+                        if collectingData & (len(gpsData)==0):
                             #We cant compare to previous reading if we dont have a previous reading yet, so we log only the first reading with no check
-                            gpsData.append(self.currentData)
-                            self.counter += 1 #We save our file after 1 second of data collection while self.collectingData = true, self.counter is used to track this
+                            gpsData.append(currentData)
+                            counter += 1 #We save our file after 1 second of data collection while collectingData = true, counter is used to track this
 
-                            print("Time since start:",time.time()-self.totstart)
-                            #print(self.currentData) #debug
+                            print("Time since start:",time.time()-totstart)
+                            #print(currentData) #debug
                         
                             
                     # end = time.time()
                     # elapsed = (end-start)
                     # start = time.time()
                     #print('\nTime/refresh',elapsed)
-                    if self.collectingData:
-                        if (self.counter >= self.samplesC):
-                            self.filePath, self.fileCreated = writeFile(vehicle,self.rollingGpsData,self.fileCreated,self.filePath)
-                            self.counter = 0
-                            print("Saved data:",self.rollingGpsData)
-                            self.rollingGpsData = []
+                    if collectingData:
+                        if (counter >= samplesC):
+                            filePath, fileCreated = writeFile(vehicle,rollingGpsData,fileCreated,filePath)
+                            counter = 0
+                            print("Saved data:",rollingGpsData)
+                            rollingGpsData = []
                             
-                        if self.finSampCounter >=5 :
-                            self.totSamplesC = time.time()*2 #Basically disable the timeouts if we get to here so we don't get a weird edge case where we finish our run less than 5 measurements
-                            self.globalTimeout = time.time()*2 #before either of our timeout periods
-                            self.filePath, self.fileCreated = writeFile(vehicle,self.rollingGpsData,self.fileCreated,self.filePath) #Write last data chunk
-                            self.collectingData = False
+                        if finSampCounter >=5 :
+                            totSamplesC = time.time()*2 #Basically disable the timeouts if we get to here so we don't get a weird edge case where we finish our run less than 5 measurements
+                            globalTimeout = time.time()*2 #before either of our timeout periods
+                            filePath, fileCreated = writeFile(vehicle,rollingGpsData,fileCreated,filePath) #Write last data chunk
+                            collectingData = False
                             self.runComplete = True #should be redundant I think #investigate
                             #This is to allow us to write 5 more samples to the file but not have them in gpsData
                             #self.running = False
@@ -276,42 +301,42 @@ Investigate this I think its not saving all 5 data points at the end
 ####################################################################
                         """
                         if gpsData[-1][1] >= (cutoffSpeed):
-                            #self.collectingData = False
+                            #collectingData = False
                             self.runComplete = True
                             #self.running = False
                             
-                        if self.runComplete & self.collectingData:
-                            self.finSampCounter +=1
-                            #print("\nFinsample self.counter:\n", self.finSampCounter) #DEBUG
-                        if (time.time() > self.totSamplesC) or (time.time() > globalTimeout):
-                            self.collectingData = False
+                        if self.runComplete & collectingData:
+                            finSampCounter +=1
+                            #print("\nFinsample counter:\n", finSampCounter) #DEBUG
+                        if (time.time() > totSamplesC) or (time.time() > globalTimeout):
+                            collectingData = False
                             self.runComplete = True
                             self.timedOut = True
 
                         #Record data up until reaching slightly past (10%) target speed, or 1 second after reaching target speed, whichever is first
-                #print("\n\ncollecting data:",self.collectingData) #DEBUG
+                #print("\n\ncollecting data:",collectingData) #DEBUG
                 time.sleep(sleepInterval) 
             
         except KeyError:
                 pass #We would rather just skip if we cannot get good data rather than have our stuff error out
         except (KeyboardInterrupt, SystemExit): #when you press ctrl+c
             print("\nExiting.")
-            if self.collectingData:
-                self.filePath, self.fileCreated = writeFile(vehicle,self.rollingGpsData,self.fileCreated,self.filePath)
+            if collectingData:
+                filePath, fileCreated = writeFile(vehicle,rollingGpsData,fileCreated,filePath)
         except exitGps:
             print('Restarting')
-            if self.collectingData:
-                self.filePath, self.fileCreated = writeFile(vehicle,self.rollingGpsData,self.fileCreated,self.filePath)
+            if collectingData:
+                filePath, fileCreated = writeFile(vehicle,rollingGpsData,fileCreated,filePath)
             
         else:
-            if self.collectingData:
-                if not self.counter == 0: #dont write to the file on exit if we just wrote to it 
-                    self.filePath, self.fileCreated = writeFile(vehicle,self.rollingGpsData,self.fileCreated,self.filePath)
-                    print("Saved data:",self.rollingGpsData)
+            if collectingData:
+                if not counter == 0: #dont write to the file on exit if we just wrote to it 
+                    filePath, fileCreated = writeFile(vehicle,rollingGpsData,fileCreated,filePath)
+                    print("Saved data:",rollingGpsData)
                     print("Finished collecting data")
                     #Write the rest of the data when we exit the while loop
                 print(gpsData)
-                totend = time.time() - self.totstart
+                totend = time.time() - totstart
                 print("\nCompleted in:",totend)
 
 print("gps class done")
