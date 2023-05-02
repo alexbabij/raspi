@@ -410,7 +410,6 @@ dispBackground([0,0,0]) #Set display screen to black background
 accThread = accThr()
 gpsThread = gpsThr()
 dispThread = piScreen()
-buttonRun = buttonClass()
 accThread.start()
 accInitTimeWhole, accInitTimeRem = divmod(accInitTime,1)
 
