@@ -150,7 +150,7 @@ class gpsThr(tr.Thread):
                         
                             
                         
-                        #print("self.currentData",self.currentData) #DEBUG
+                        print("self.currentData",self.currentData) #DEBUG
                       
                         #print("self.counter",self.counter) #DEBUG
                        
