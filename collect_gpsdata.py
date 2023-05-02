@@ -387,20 +387,20 @@ class piScreen(tr.Thread):
 
 
 
-class buttonClass():
 
-    def __init__(self):
-        self.button = Button(21)    
-        self.button.when_pressed = self.whenPressed
 
-    def whenPressed():
-        print('\n\nbutton pressed\n\n') #DEBUG
-        string = "button pressed"
-        backgroundColor = [0,255,0] #Red
-        fontColor = [0,0,0,255] #Black
-        dispText(string,textLoc='center',fontColor=fontColor,FONTSIZE=15,backColor=backgroundColor)
-        buttonEnabled = False    
-        
+
+buttongps = Button(21)    
+buttongps.when_pressed = whenPressed
+
+def whenPressed():
+    print('\n\nbutton pressed\n\n') #DEBUG
+    string = "button pressed"
+    backgroundColor = [0,255,0] #Red
+    fontColor = [0,0,0,255] #Black
+    dispText(string,textLoc='center',fontColor=fontColor,FONTSIZE=15,backColor=backgroundColor)
+    buttonEnabled = False    
+    
 
 
 
