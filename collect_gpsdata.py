@@ -175,14 +175,14 @@ class gpsThr(tr.Thread):
                         
                         #we want to have the acceleration value variable locked for as little time as possible
 
-                        #DEBUG
-                        print('collectingData',collectingData) #DEBUG
-                        if debug1 & (collectingData & (time.time() > self.runStart+5)):
-                            #Run this after 10 seconds of data collection
-                            currentData = ['debug',(cutoffSpeed+1),(time.time()-totstart),curAccDataMag,(accTime-time.time())]
-                            debug1 = False
-                            print("\n\nran once\n\n") 
-                        #DEBUG 
+                        # #DEBUG
+                        # #print('collectingData',collectingData) #DEBUG
+                        # if debug1 & (collectingData & (time.time() > self.runStart+5)):
+                        #     #Run this after 10 seconds of data collection
+                        #     currentData = ['debug',(cutoffSpeed+1),(time.time()-totstart),curAccDataMag,(accTime-time.time())]
+                        #     debug1 = False
+                        #     print("\n\nran once\n\n") 
+                        # #DEBUG 
 
 
                         
