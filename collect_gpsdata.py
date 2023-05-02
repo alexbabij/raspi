@@ -142,13 +142,14 @@ class gpsThr(tr.Thread):
                         #print("counter",counter) #DEBUG
                        
                         if (accData[5] >= accMin) and (self.runComplete == False):
-                            collectingData = True
-                            curAccDataMag = accData[5]
-                            accTime = accData[6]
-                            print("Accleration Threshold Reached, accData[5]",accData[5])
+                            collectingData = True #This could be inside the if statement below
+                            
                             if (self.runStart == False):
                                 self.runStart = time.time()
                                 totSamplesC = float(config["timeout"]) + time.time()
+                                curAccDataMag = accData[5]
+                                accTime = accData[6]
+                                print("Accleration Threshold Reached, accData[5]",accData[5])
                                 if totSamplesC > globalTimeout:
                                     globalTimeout = totSamplesC + 1
                                     #if we would globally timeout before our local timeout, dont
