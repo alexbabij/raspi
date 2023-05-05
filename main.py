@@ -7,6 +7,7 @@ import subprocess
 print('Main: Running startup')
 import startup
 startup
+subprocess.Popen(['/bin/bash', './run_cgps.sh'],start_new_session=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 #print('running cpgs :(')
 #subprocess.Popen(["./run_cgps.sh"],start_new_session=True)
 #subprocess.Popen(["python","collect_gpsdata.py"],start_new_session=True)
