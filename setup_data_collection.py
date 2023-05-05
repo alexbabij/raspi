@@ -140,6 +140,6 @@ else:
 
 
 
-
+button.close() #release the button so we can use it in collect_gpsdata
 print("end")
 #subprocess.run(["python","collect_data.py"])

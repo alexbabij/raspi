@@ -64,14 +64,14 @@ from accelerometer.collect_accel_madgwick import *
 class exitGps(Exception): #currently unused
     pass
 
-def whenPressed():
+def gpsRestartButton():
     print('\n\nbutton pressed\n\n') #DEBUG
     gpsThread.restart()
     ##buttonEnabled = False 
     #gpsThread.
 
 buttongps = Button(21)    
-buttongps.when_pressed = whenPressed
+buttongps.when_pressed = gpsRestartButton
 
 from fileSave import *
 
@@ -448,6 +448,7 @@ try: #since both our gps and accelerometer are running in separate threads, we u
 
 except KeyboardInterrupt:
     print("Attempting to close threads...")
+    buttongps.close() #Release the button
     accThread.running = False
     gpsThread.running = False
     dispThread.running = False
