@@ -141,5 +141,7 @@ else:
 
 
 button.close() #release the button so we can use it in collect_gpsdata
+#we need to release buttons because the gpiozero library does buttons at a fairly low level, and the process actually
+#monitoring the button is kind of its own thing/thread/process
 print("end")
 #subprocess.run(["python","collect_data.py"])
