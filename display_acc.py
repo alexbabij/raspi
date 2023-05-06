@@ -70,7 +70,7 @@ def gForceMeter(accPos=[0,0],width=diwidth,height=diheight,circles=([120],[]),ax
         #outlineColor is already a variable name, but it gets continually overwritten inside of this loop.
         draw.ellipse([(height/2-diam/2+shift,height/2-diam/2),(relwidth/2+diam/2+shift,height/2+diam/2)],width = linewidth, outline = outlineColor)
     
-    outlineColor = '#000000' #We just set it again here
+    outlineColor = '#ffffff' #We just set it again here
     if axes:
         draw.line([(relwidth/2+shift, border),(relwidth/2+shift, height-border)], width = linewidth, fill = outlineColor)
         draw.line([(shift+border, height/2),(relwidth-border+shift, height/2)], width = linewidth, fill = outlineColor)
@@ -106,6 +106,6 @@ def dispBackground(backColor='#ffffff',width=diwidth,height=diheight):
     print("Elapsed time:",str(time.time()-startTime))
  
 
-dispBackground(backColor='#445afc')
+dispBackground(backColor='#ffffff')
 time.sleep(1) #if we dont wait, it will fail to write the background color to the screen
 gForceMeter(accPos=[45,-23],circles=([120,80,40],['#FF0000','#FF5D00','#FFFF00']),justification ='right')
