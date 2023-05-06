@@ -4,7 +4,7 @@ import board
 import time
 from PIL import Image, ImageDraw, ImageFont
 
-from adafruit_rgb_display import st7735  # pylint: disable=unused-import
+from adafruit_rgb_display import ST7735  # pylint: disable=unused-import
 
 # Configuration for CS and DC pins (these are PiTFT defaults):
 cs_pin = digitalio.DigitalInOut(board.CE0)
@@ -19,7 +19,7 @@ BAUDRATE = 24000000
 spi = board.SPI()
 
 
-disp = st7735.ST7735(spi, rotation=90, cs=cs_pin, dc=dc_pin, rst=reset_pin, baudrate=BAUDRATE)
+disp = ST7735.ST7735(spi, rotation=90, backlight=None, invert=False, cs=cs_pin, dc=dc_pin, rst=reset_pin, baudrate=BAUDRATE)
 # Create blank image for drawing.
 # Make sure to create image with mode 'RGB' for full color.
 if disp.rotation % 180 == 90:
