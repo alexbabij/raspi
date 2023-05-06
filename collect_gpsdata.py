@@ -350,6 +350,7 @@ class piScreen(tr.Thread):
     global gpsData #We dont need to define it as global in here if we dont want to change it 
     
     def run(self):
+        shrinkTime = 0.0
         totrefreshTime = 1.0 #have to be careful not to initialize to zero since we divide by it
         data = [0.0]*5 # initialize this in case gpsThread.dataout isnt ready yet
         elapsedTime = 0.000
@@ -401,12 +402,12 @@ class piScreen(tr.Thread):
                 #add another circle and rescale if our magnitude would be outside of the range
                 if accXYMagnitude > self.accMagScale:
                     rem = accXYMagnitude-self.accMagScale
-                    addCirc = math.ceil(rem/self.baseScale) #Determine how many additional circles need to be added
+                    addCirc = int(math.ceil(rem/self.baseScale)) #Determine how many additional circles need to be added
                     self.numCircles += addCirc
                     self.accMagScale = self.numCircles*self.baseScale
                     shrinkTime = time.time()
 
-                if (time.time()-shrinkTime) >= self.shrinkTimeout: #Shrink the acceleration rings back to default if acceleration stays low
+                if (self.numCircles != gMBaseCircles) and (time.time()-shrinkTime) >= self.shrinkTimeout: #Shrink the acceleration rings back to default if acceleration stays low
                     self.numCircles = gMBaseCircles
                     self.accMagScale = self.numCircles*self.baseScale
                     
