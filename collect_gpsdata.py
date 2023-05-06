@@ -397,6 +397,7 @@ class piScreen(tr.Thread):
                 accY = accData[3]
                 #This is different from the acceleration magnitude that will show on the other screen, because that one includes the z axis
                 accXYMagnitude = math.sqrt(accX*accX + accY*accY)
+                print('accXYMagnitude:',accXYMagnitude) #DEBUG
                 
                 #max diameter for circles is about 120px, default is 1g at 120px diameter and 3 circles, so 1px = 1/120g at default
                 #add another circle and rescale if our magnitude would be outside of the range
@@ -418,8 +419,8 @@ class piScreen(tr.Thread):
                 circlesIn = (circlesDiam,circlesColor)
                 
                 #Translate our acceleration values into pixel locations
-                accXpx = round(accX*120/self.accMagScale,0)
-                accYpx = round(accY*120/self.accMagScale,0) 
+                accXpx = round(accX*120/(2*self.accMagScale),0) #divide by 2 because we need + and - direction acceleration
+                accYpx = round(accY*120/(2*self.accMagScale),0) 
 
                 gForceimg = gForceMeter(accPos=[accXpx,accYpx],circles=circlesIn,linewidth=3,backColor='#000000') #black background
                 gFString = str(round(accXYMagnitude,2))+'G' #I am resisting the urge to name this variable 'gstring'
