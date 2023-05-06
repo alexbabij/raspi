@@ -35,7 +35,7 @@ else:
 #from my testing we can get like 29 fps at max speed
 
 
-def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,width=diwidth,height=diheight,backColor=[0,0,0],
+def dispText(textIn,textLoc='center',fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,width=diwidth,height=diheight,backColor=[0,0,0],
              refreshRate=False,updateScreen=True,imgIn=False):
     #updateScreen = True : sends the new image to the screen, if False, returns image that would be sent to screen
     #backColor = False : skips drawing the background

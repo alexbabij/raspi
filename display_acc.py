@@ -81,9 +81,10 @@ def gForceMeter(accPos=[0,0],width=diwidth,height=diheight,circles=([120],[]),ax
     draw.ellipse([(accPosX-accDiam/2+relwidth/2+shift,accPosY-accDiam/2+height/2),(accPosX+accDiam/2+relwidth/2+shift,accPosY+accDiam/2+height/2)], 
                  fill = accFill, outline='#ffffff', width=1)
 
-    # Display image.
-    disp.image(image)
-    print('displayed image') #DEBUG
+    ## Display image.
+    #disp.image(image)
+    return image
+    #print('displayed image') #DEBUG
 
 
 def dispBackground(backColor='#ffffff',width=diwidth,height=diheight):
@@ -124,7 +125,8 @@ while 1:
     counter += 1
     cc += 1
     cc2 += 2
-    gForceMeter(accPos=[counter,counter],circles=([120,80,40],['#FF0000','#FF5D00','#FFFF00']),justification ='right',backColor=rgb_to_hex(cc,cc2,cc2))
+    img = gForceMeter(accPos=[counter,counter],circles=([120,80,40],['#FF0000','#FF5D00','#FFFF00']),justification ='right',backColor=rgb_to_hex(cc,cc2,cc2))
+    disp.image(img)
     print('fps:', 1/(time.time()-start))
     start = time.time()
     if counter > 60:

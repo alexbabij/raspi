@@ -336,6 +336,7 @@ class piScreen(tr.Thread):
         self.running = True
         self.refreshRate = 1/screenRefreshRate #I dont think this is even necessary
         self.accMagMax = 1.0 #Set starting maximum acceleration magnitude value. Used to determine what the scaling for the acceleration meter circle is
+        self.mode = 'timer' #set the mode the of the screen to control what it will display
 
     global gpsData #We dont need to define it as global in here if we dont want to change it 
     
@@ -373,23 +374,27 @@ class piScreen(tr.Thread):
                 string = "Time: "+str(round(elapsedTime,2))+"s"
                 backgroundColor = [0,0,0] #Black
                 fontColor = [255,255,255,255]
-
-            #determine g - force meter stuff
-            with accLock:
-                #extract data from the accelerometer
-                accData = accDataMag.copy()
-                #print("accDataMag",accDataMag[0]) #DEBUG
-
-
-            string+="\nVelocity: "+str(round(velocity,1))+" "+displayUnits
-            string += "\nAcceleration: "+str(round(acceleration,2))+"g" #dont forget you can't use commas to combine strings like you could in print()
-            string += "\nTarget: "+str(round(cutoffSpeed*conversionDict[displayUnits],0))+"mph"
             
-            satsString = str(int(gpsThread.usedSats))+" sats"
-            satsfontColor = [255,255,255,255] #White
-            satsImg = dispText(satsString,textLoc='sw',fontColor=satsfontColor,backColor=backgroundColor,FONTSIZE=11,refreshRate=False,updateScreen=False)
 
-            dispText(string,"nw",FONTSIZE=14,fontColor=fontColor,backColor=False,refreshRate=refresh,imgIn=satsImg)
+            #Choose which view to display to the screen. There is probably a cleaner way to do this than with just an if statement
+
+            if self.mode == 'gForceViewer':
+            #determine g-force meter stuff
+                with accLock:
+                    #extract data from the accelerometer
+                    accData = accDataMag.copy()
+                fpsImg = dispText(textIn='',textLoc='center',refreshRate=refresh)
+
+            elif self.mode == 'timer':
+                string+="\nVelocity: "+str(round(velocity,1))+" "+displayUnits
+                string += "\nAcceleration: "+str(round(acceleration,2))+"g" #dont forget you can't use commas to combine strings like you could in print()
+                string += "\nTarget: "+str(round(cutoffSpeed*conversionDict[displayUnits],0))+"mph"
+                
+                satsString = str(int(gpsThread.usedSats))+" sats"
+                satsfontColor = [255,255,255,255] #White
+                satsImg = dispText(satsString,textLoc='sw',fontColor=satsfontColor,backColor=backgroundColor,FONTSIZE=11,refreshRate=False,updateScreen=False)
+
+                dispText(string,textLoc='nw',FONTSIZE=14,fontColor=fontColor,backColor=False,refreshRate=refresh,imgIn=satsImg)
             elapsedR = time.time()-startTime
             #attempt to refresh at the selected rate, if not possible, refresh as fast as possible
 
@@ -437,10 +442,10 @@ accInitTimeWhole, accInitTimeRem = divmod(accInitTime,1)
 
 #have the accelerometer script start first so the values in it can start to even out since it is running a madgwick filter
 for i in range(int(accInitTimeWhole),0,-1):
-    dispText("Initializing IMU, \ndon't move \nsensor ("+str(round(i+accInitTimeRem,1))+")","center",fontColor=[255,255,255,255],FONTSIZE=15)
+    dispText("Initializing IMU, \ndon't move \nsensor ("+str(round(i+accInitTimeRem,1))+")",textLoc="center",fontColor=[255,255,255,255],FONTSIZE=15)
     time.sleep(1)
     
-dispText("Initializing IMU, \ndon't move \nsensor ("+str(round(0.01+accInitTimeRem,1))+")","center",fontColor=[255,255,255,255],FONTSIZE=15)
+dispText("Initializing IMU, \ndon't move \nsensor ("+str(round(0.01+accInitTimeRem,1))+")",textLoc="center",fontColor=[255,255,255,255],FONTSIZE=15)
 time.sleep(accInitTimeRem+0.01)
 
 gpsThread.start()
