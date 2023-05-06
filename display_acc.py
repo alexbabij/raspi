@@ -37,7 +37,7 @@ else:
 #from my testing we can get like 29 fps at max speed
 
 
-def gForceMeter(accVector,width=diwidth,height=diheight,circles=[120],axes=True,linewidth=2,backColor='#5d1fa3',border=4,justification='center'):
+def gForceMeter(accVector,width=diwidth,height=diheight,circles=[120],axes=True,linewidth=1,backColor='#5d1fa3',border=4,justification='center'):
     #circles = [] list of diameter of each circle to be drawn
     fillColor = '#ffffff'
     outlineColor = '#000000'
