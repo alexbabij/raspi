@@ -57,8 +57,8 @@ def gForceMeter(accVector,width=diwidth,height=diheight,circles=[120],axes=True,
         draw.ellipse([(width/2-diam/2,height/2-diam/2),(width/2+diam/2,height/2+diam/2)],width = linewidth, outline = outlineColor)
 
     if axes:
-        draw.line([(width/2,0),(width/2,height)],width = linewidth, outline = outlineColor)
-        draw.line([(0,height/2),(width,height/2)],width = linewidth, outline = outlineColor)
+        draw.line([(width/2,0),(width/2,height)],width = linewidth, fill = outlineColor)
+        draw.line([(0,height/2),(width,height/2)],width = linewidth, fill = outlineColor)
     
     # Display image.
     disp.image(image)
