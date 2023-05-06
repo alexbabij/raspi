@@ -19,7 +19,9 @@ BAUDRATE = 24000000
 spi = board.SPI()
 
 
-disp = st7735.ST7735S(spi, rotation=0, cs=cs_pin, bl=bl_pin, dc=dc_pin, rst=reset_pin, baudrate=BAUDRATE, width=160,height=128,x_offset=0,y_offset=0) #invert=False, 
+disp = st7735.ST7735S(spi, rotation=0, cs=cs_pin, bl=bl_pin, dc=dc_pin, rst=reset_pin, baudrate=BAUDRATE, width=160,height=128,x_offset=0,y_offset=0) 
+#Yes I changed to the actually correct display which fixes the issue of the rgb color values being swapped because the bits in the register are set differently
+#no I will not be going back to fix the old one
 # Create blank image for drawing.
 # Make sure to create image with mode 'RGB' for full color.
 if disp.rotation % 180 == 90:
@@ -34,13 +36,8 @@ else:
 #The max frame rate is theoretically around 24 fps
 #from my testing we can get like 29 fps at max speed
 
-# class piDisplay:
-#     def __init__(self):
-#         self.input = ""
 
-
-
-def gForceMeter(accVector,width=diwidth,height=diheight,circles=[120],axes=True,linewidth=2,backColor='#91ffff'):
+def gForceMeter(accVector,width=diwidth,height=diheight,circles=[120],axes=True,linewidth=2,backColor='#5d1fa3'):
     #circles = [] list of diameter of each circle to be drawn
     fillColor = '#ffffff'
     outlineColor = '#000000'
