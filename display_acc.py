@@ -12,7 +12,7 @@ dc_pin = digitalio.DigitalInOut(board.D25)
 reset_pin = digitalio.DigitalInOut(board.D24)
 
 # Config for display baudrate (default max is 24mhz):
-BAUDRATE = 24000000
+BAUDRATE = 16000000
 
 # Setup SPI bus using hardware SPI:
 spi = board.SPI()
