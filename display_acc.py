@@ -54,11 +54,11 @@ def gForceMeter(accVector,width=diwidth,height=diheight,circles=[120],axes=True,
   
     #its pretty self explanatory what these do just by the names
     for diam in circles:
-        draw.ellipse((width/2-diam/2,height/2-diam/2),(width/2+diam/2,height/2+diam/2),width = linewidth, outline = outlineColor)
+        draw.ellipse([(width/2-diam/2,height/2-diam/2),(width/2+diam/2,height/2+diam/2)],width = linewidth, outline = outlineColor)
 
     if axes:
-        draw.line((width/2,0),(width/2,height),width = linewidth, outline = outlineColor)
-        draw.line((0,height/2),(width,height/2),width = linewidth, outline = outlineColor)
+        draw.line([(width/2,0),(width/2,height)],width = linewidth, outline = outlineColor)
+        draw.line([(0,height/2),(width,height/2)],width = linewidth, outline = outlineColor)
     
     # Display image.
     disp.image(image)
