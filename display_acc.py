@@ -42,7 +42,7 @@ def gForceMeter(accPos=[0,0],width=diwidth,height=diheight,circles=[[120],[]],ax
     accDiam = 9 #diameter of acceleration dot in pixels
     accFill = '#ff0000' #Red #Fill color of acceleration dot
     fillColor = '#ffffff' #White
-    outlineColor = '#000000' #Black Default circle outline color
+    outlineColor = '#3d3d3d' #almost Black Default circle outline color
     image = Image.new("RGB", (width, height))
 
     # Get drawing object to draw on image.
@@ -53,9 +53,10 @@ def gForceMeter(accPos=[0,0],width=diwidth,height=diheight,circles=[[120],[]],ax
 
     #If there isnt a color for each circle entry, sets all circles to the default color of white
     if len(circles[0]) != len(circles[1]):
-        print('\n\nerror checking\n\n') #DEBUG
+        #print('\n\nerror checking\n\n') #DEBUG
         circles[1] = [outlineColor] * len(circles[0])
-    print('circles in function:', circles) #DEBUG
+    #print('circles in function:', circles) #DEBUG
+
     #basically we are shifting a 128x128 box left, right, or center
     relwidth = height
     if justification == 'center':

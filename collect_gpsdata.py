@@ -416,6 +416,7 @@ class piScreen(tr.Thread):
                 circlesDiam = [int(120-i*120/self.numCircles) for i in range(0,self.numCircles)] #equally spaced diameters of each circle
                 circlesColor = ['#ffffff'] * gMBaseCircles #default color is white, 
                 circlesColor.extend(['#ff0000'] * int(gMBaseCircles-self.numCircles)) #additional circles are red
+                print('int(gMBaseCircles-self.numCircles)',int(gMBaseCircles-self.numCircles))
                 circlesIn = [circlesDiam,circlesColor]
                 print('circlesIn',circlesIn)
                 
