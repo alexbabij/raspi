@@ -442,10 +442,10 @@ class piScreen(tr.Thread):
 
                 #lets us blink background of text every 1 second ish
                 self.blinker += 1
-                if self.blinker > refresh*2:
+                if self.blinker > float(refresh)*2:
                     self.blinker = 0 
                 if gpsThread.usedSats < 6:
-                    if self.blinker <= refresh:
+                    if self.blinker <= float(refresh):
                         satsBackColor = [196, 0, 0] #Darkish red
                     else: 
                         satsBackColor = False
