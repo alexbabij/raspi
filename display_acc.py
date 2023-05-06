@@ -101,4 +101,4 @@ def dispBackground(backColor=[0,0,255],width=diwidth,height=diheight):
  
 
 dispBackground()
-gForceMeter(1,circles=[120,80,40],justification ='right')
+gForceMeter(accPos=[0,0],circles=[120,80,40],justification ='right')
