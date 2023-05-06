@@ -12,13 +12,13 @@ dc_pin = digitalio.DigitalInOut(board.D25)
 reset_pin = digitalio.DigitalInOut(board.D24)
 
 # Config for display baudrate (default max is 24mhz):
-BAUDRATE = 16000000
+BAUDRATE = 24000000
 
 # Setup SPI bus using hardware SPI:
 spi = board.SPI()
 
 
-disp = st7735.ST7735S(spi, rotation=0, cs=cs_pin, bl=dc_pin, dc=dc_pin, rst=reset_pin, baudrate=BAUDRATE) #invert=False, 
+disp = st7735.ST7735S(spi, rotation=0, cs=cs_pin, bl=dc_pin, dc=dc_pin, rst=reset_pin, baudrate=BAUDRATE, width=160,height=128,x_offset=1,y_offset=2) #invert=False, 
 # Create blank image for drawing.
 # Make sure to create image with mode 'RGB' for full color.
 if disp.rotation % 180 == 90:
