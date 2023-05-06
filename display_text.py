@@ -156,7 +156,7 @@ def dispBackground(backColor=[0,0,255],width=diwidth,height=diheight):
     # Get drawing object to draw on image.
     draw = ImageDraw.Draw(image)
 
-    # Draw a green filled box as the background
+    #Draw rectangle with dimensions of entire screen
     draw.rectangle((0, 0, width, height), fill=(backColor[2],backColor[1],backColor[0]))
     #disp.image(image)
   
