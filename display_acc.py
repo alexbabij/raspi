@@ -18,7 +18,7 @@ BAUDRATE = 24000000
 spi = board.SPI()
 
 
-disp = st7735.ST7735S(spi, rotation=90, cs=cs_pin, bl=None, dc=dc_pin, rst=reset_pin, baudrate=BAUDRATE) #invert=False, 
+disp = st7735.ST7735S(spi, rotation=90, cs=cs_pin, bl=dc_pin, dc=dc_pin, rst=reset_pin, baudrate=BAUDRATE) #invert=False, 
 # Create blank image for drawing.
 # Make sure to create image with mode 'RGB' for full color.
 if disp.rotation % 180 == 90:
