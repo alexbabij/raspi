@@ -61,7 +61,7 @@ try:
     time.sleep(2.0)
     while goodFix == False: #& self.running:
         #print("running")        
-        print('goodFix',goodFix)
+        #print('goodFix',goodFix) #DEBUG
         #print(report) 
         prevString = ""
         
