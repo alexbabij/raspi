@@ -84,7 +84,7 @@ try:
                 
             elif usedSats < 6:
 
-                newString = str(int(usedSats))+"/6 sats"+" ("+str(round((time.time()-startTime),1))+")s"
+                newString = str(int(usedSats))+"/6 sats"+" ("+str(round((time.time()-startTime),1))+"s)"
                 # if len(prevString)>len(newString):
                 #     padding = " " * (len(prevString) + 1) #blank character for overwriting varying length string with carriage return
                 # else:
