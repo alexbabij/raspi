@@ -35,7 +35,7 @@ else:
 #from my testing we can get like 29 fps at max speed
 
 
-def dispText(textIn,textLoc='center',fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,width=diwidth,height=diheight,backColor=[0,0,0],
+def dispText(textIn,textLoc='center',fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,width=diwidth,height=diheight,backColor=False,
              refreshRate=False,updateScreen=True,imgIn=False):
     #updateScreen = True : sends the new image to the screen, if False, returns image that would be sent to screen
     #backColor = False : skips drawing the background
@@ -83,7 +83,7 @@ def dispText(textIn,textLoc='center',fontColor=[255,255,255,255],FONTSIZE=15,BOR
     #debugString = "time to process output: "+str(time.time()-startTime)+"\n"#DEBUG
     
 
-    if textLoc == "center":
+    if textLoc in ["center", "c"]:
         (font_width, font_height) = font.getsize_multiline(textIn)
         draw.text(
             (width // 2 - font_width // 2, height // 2 - font_height // 2),

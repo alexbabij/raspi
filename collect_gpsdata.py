@@ -34,7 +34,9 @@ accMin = float(config["acceleration threshold"]) #minimum acceleration to start 
 #This includes a buffer of data taken before reaching this acceleration value. Intended use is to set minimum 
 #acceleration threshold to be considered as having actually started your 0-60 run
 screenRefreshRate = float(config["screen refresh rate"])
-
+gMBaseRange = float(config["gmeter base range"])
+gMBaseCircles = int(config["gmeter base circles"])
+gMShrinkTime = float(config["gmeter shrink timeout"]) #How long before gmeter can try to shrink back to original base state
 maxSpeed = False #Set to true upon reaching our configured cutoff speed, ends the while loop and data collection
 
 
@@ -335,8 +337,11 @@ class piScreen(tr.Thread):
         super().__init__()
         self.running = True
         self.refreshRate = 1/screenRefreshRate #I dont think this is even necessary
-        self.accMagMax = 1.0 #Set starting maximum acceleration magnitude value. Used to determine what the scaling for the acceleration meter circle is
-        self.mode = 'timer' #set the mode the of the screen to control what it will display
+        self.accMagScale = gMBaseRange #Set starting maximum acceleration magnitude value. Used to determine what the scaling for the acceleration meter circle is
+        self.numCircles = gMBaseCircles #Initial number of circles to draw for acceleration meter
+        self.baseScale = gMBaseRange/gMBaseCircles #g's/circle
+        self.shrinkTimeout = gMShrinkTime
+        self.mode = 'gForceViewer'#'timer' #set the mode the of the screen to control what it will display
 
     global gpsData #We dont need to define it as global in here if we dont want to change it 
     
@@ -385,9 +390,36 @@ class piScreen(tr.Thread):
                     accData = accDataMag.copy()
                 accX = accData[4]
                 accY = accData[5]
-                #max diameter is about 120px 
-                gForceimg = gForceMeter(linewidth=3)
-                fpsImg = dispText(textIn='',textLoc='center',refreshRate=refresh)
+                #This is different from the acceleration magnitude that will show on the other screen, because that one includes the z axis
+                accXYMagnitude = math.sqrt(accX*accX + accY*accY)
+                
+                #max diameter for circles is about 120px, default is 1g at 120px diameter and 3 circles, so 1px = 1/120g at default
+                #add another circle and rescale if our magnitude would be outside of the range
+                if accXYMagnitude > self.accMagScale:
+                    rem = accXYMagnitude-self.accMagScale
+                    addCirc = math.ceil(rem/self.baseScale) #Determine how many additional circles need to be added
+                    self.numCircles += addCirc
+                    self.accMagScale = self.numCircles*self.baseScale
+                    shrinkTime = time.time()
+
+                if (time.time()-shrinkTime) >= self.shrinkTimeout: #Shrink the acceleration rings back to default if acceleration stays low
+                    self.numCircles = gMBaseCircles
+                    self.accMagScale = self.numCircles*self.baseScale
+                    
+                #Generate circles to display
+                circlesDiam = [int(120-i*120/self.numCircles) for i in range(0,self.numCircles)] #equally spaced diameters of each circle
+                circlesColor = ['#ffffff'] * gMBaseCircles #default color is white, 
+                circlesColor.extend(['#ff0000'] * int(gMBaseCircles-self.numCircles)) #additional circles are red
+                circlesIn = (circlesDiam,circlesColor)
+                
+                #Translate our acceleration values into pixel locations
+                accXpx = round(accX*120/self.accMagScale,0)
+                accYpx = round(accY*120/self.accMagScale,0) 
+
+                gForceimg = gForceMeter(accPos=[accXpx,accYpx],circles=circlesIn,linewidth=3,backColor='#000000') #black background
+                gFString = str(round(accXYMagnitude,2))+'G' #I am resisting the urge to name this variable 'gstring'
+                dispText(textIn=gFString,FONTSIZE=14,textLoc='ne',backColor=False,fontColor=fontColor,
+                         refreshRate=refresh,updateScreen=True,imgIn=gForceimg)
 
             elif self.mode == 'timer':
                 string+="\nVelocity: "+str(round(velocity,1))+" "+displayUnits
@@ -446,10 +478,12 @@ accInitTimeWhole, accInitTimeRem = divmod(accInitTime,1)
 
 #have the accelerometer script start first so the values in it can start to even out since it is running a madgwick filter
 for i in range(int(accInitTimeWhole),0,-1):
-    dispText("Initializing IMU, \ndon't move \nsensor ("+str(round(i+accInitTimeRem,1))+")",textLoc="center",fontColor=[255,255,255,255],FONTSIZE=15)
+    dispText("Initializing IMU, \ndon't move \nsensor ("+str(round(i+accInitTimeRem,1))+")",textLoc="center"
+             ,fontColor=[255,255,255,255],FONTSIZE=15,backColor=[0,0,0])
     time.sleep(1)
     
-dispText("Initializing IMU, \ndon't move \nsensor ("+str(round(0.01+accInitTimeRem,1))+")",textLoc="center",fontColor=[255,255,255,255],FONTSIZE=15)
+dispText("Initializing IMU, \ndon't move \nsensor ("+str(round(0.01+accInitTimeRem,1))+")",textLoc="center"
+         ,fontColor=[255,255,255,255],FONTSIZE=15,backColor=[0,0,0])
 time.sleep(accInitTimeRem+0.01)
 
 gpsThread.start()
