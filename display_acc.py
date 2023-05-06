@@ -1,33 +1,33 @@
 #! /usr/bin/python
-if __name__ == '__main__':
-    import digitalio
-    import board
-    import time
-    from PIL import Image, ImageDraw, ImageFont
+#if __name__ == '__main__':
+import digitalio
+import board
+import time
+from PIL import Image, ImageDraw, ImageFont
 
-    from adafruit_rgb_display import st7735  # pylint: disable=unused-import
+from adafruit_rgb_display import st7735  # pylint: disable=unused-import
 
-    # Configuration for CS and DC pins (these are PiTFT defaults):
-    cs_pin = digitalio.DigitalInOut(board.CE0)
-    dc_pin = digitalio.DigitalInOut(board.D25)
-    reset_pin = digitalio.DigitalInOut(board.D24)
-    bl_pin = digitalio.DigitalInOut(board.D23)
+# Configuration for CS and DC pins (these are PiTFT defaults):
+cs_pin = digitalio.DigitalInOut(board.CE0)
+dc_pin = digitalio.DigitalInOut(board.D25)
+reset_pin = digitalio.DigitalInOut(board.D24)
+bl_pin = digitalio.DigitalInOut(board.D23)
 
-    # Config for display baudrate (default max is 24mhz):
-    BAUDRATE = 24000000
+# Config for display baudrate (default max is 24mhz):
+BAUDRATE = 24000000
 
-    # Setup SPI bus using hardware SPI:
-    spi = board.SPI()
+# Setup SPI bus using hardware SPI:
+spi = board.SPI()
 
 
-    disp = st7735.ST7735S(spi, rotation=0, cs=cs_pin, bl=bl_pin, dc=dc_pin, rst=reset_pin, baudrate=BAUDRATE, width=160,height=128,x_offset=0,y_offset=0) 
+disp = st7735.ST7735S(spi, rotation=0, cs=cs_pin, bl=bl_pin, dc=dc_pin, rst=reset_pin, baudrate=BAUDRATE, width=160,height=128,x_offset=0,y_offset=0) 
 
-    if disp.rotation % 180 == 90:
-        diheight = disp.width  # we swap height/width to rotate it to landscape!
-        diwidth = disp.height
-    else:
-        diwidth = disp.width  # we swap height/width to rotate it to landscape!
-        diheight = disp.height
+if disp.rotation % 180 == 90:
+    diheight = disp.width  # we swap height/width to rotate it to landscape!
+    diwidth = disp.height
+else:
+    diwidth = disp.width  # we swap height/width to rotate it to landscape!
+    diheight = disp.height
 
 #The screen will continue to display the last image sent to it, until it recieves something new
 #according to this: https://arduino.stackexchange.com/questions/74624/slow-refresh-rate-of-1-8-tft-display
