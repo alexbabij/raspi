@@ -76,7 +76,8 @@ def gForceMeter(accPos=[0,0],width=diwidth,height=diheight,circles=([120],[]),ax
     
     #Draw the acceleration vector dot
     accPosX, accPosY = accPos[:]
-    draw.ellipse([(accPosX-accDiam/2+relwidth/2+shift,accPosY-accDiam/2+height/2),(accPosX+accDiam/2+relwidth/2+shift,accPosY+accDiam/2+height/2)], fill = accFill)
+    draw.ellipse([(accPosX-accDiam/2+relwidth/2+shift,accPosY-accDiam/2+height/2),(accPosX+accDiam/2+relwidth/2+shift,accPosY+accDiam/2+height/2)], 
+                 fill = accFill, outline='#ffffff', width=1)
 
     # Display image.
     disp.image(image)
@@ -105,4 +106,4 @@ def dispBackground(backColor=[0,0,255],width=diwidth,height=diheight):
  
 
 dispBackground()
-gForceMeter(accPos=[45,-23],circles=([120,80,40],['#FF0000','#FF7F00','#FFFF00']),justification ='center')
+gForceMeter(accPos=[45,-23],circles=([120,80,40],['#FF0000','#FF5D00','#FFFF00']),justification ='right')
