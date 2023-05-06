@@ -329,7 +329,11 @@ class gpsThr(tr.Thread):
 print("gps class done")
 
 from display_text import *
-from display_acc import gForceMeter
+from display_acc import gForceMeter 
+"""
+figure out why it is running the while loop in display_acc even though only importing gForceMeter
+"""
+
 #This is our display class, we can call the function dispText to write text to the screen with a few input parameters
 #Our display connection was setup when we imported the display_text file. Probably not the bet way to do this.
 class piScreen(tr.Thread):
