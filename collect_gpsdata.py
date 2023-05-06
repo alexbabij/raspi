@@ -393,11 +393,14 @@ class piScreen(tr.Thread):
                 with accLock:
                     #extract data from the accelerometer
                     accData = accDataMag.copy()
+                #The issue with these is that we can either get earth frame or pi frame, each have their own issues. What we really want is a 3rd reference frame of 
+                #the car itself. You might be able to do this somehow since the gps knows its heading (via displacement/time from lat/long) and so does the IMU, 
+                #but this is not worth the work to implement right now, so we will instead just use the pi frame, and have the pi mostly aligned with the car
                 accX = accData[2]
                 accY = accData[3]
                 #This is different from the acceleration magnitude that will show on the other screen, because that one includes the z axis
                 accXYMagnitude = math.sqrt(accX*accX + accY*accY)
-                print('accXYMagnitude:',accXYMagnitude) #DEBUG
+                #print('accXYMagnitude:',accXYMagnitude) #DEBUG
                 
                 #max diameter for circles is about 120px, default is 1g at 120px diameter and 3 circles, so 1px = 1/120g at default
                 #add another circle and rescale if our magnitude would be outside of the range
