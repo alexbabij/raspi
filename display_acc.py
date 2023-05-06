@@ -48,19 +48,24 @@ def gForceMeter(accVector,width=diwidth,height=diheight,circles=[120],axes=True,
 
     draw.rectangle((0, 0, width, height), fill=backColor)
     
+    #basically we are shifting a 128x128 box left, right, or center
+    relwidth = height
     if justification == 'center':
-        relwidth = width
+        shift = 16
     elif justification == 'left':
-        relwidth = height
+        shift = 0
     elif justification == 'right':
-        relwidth = width + 32 #shift 32 pixels right
+        shift = 32
+    else:
+        shift = 16
+        
     #its pretty self explanatory what these do just by the names
     for diam in circles:
-        draw.ellipse([(relwidth/2-diam/2,height/2-diam/2),(relwidth/2+diam/2,height/2+diam/2)],width = linewidth, outline = outlineColor)
+        draw.ellipse([(height/2-diam/2+shift,height/2-diam/2),(relwidth/2+diam/2+shift,height/2+diam/2)],width = linewidth, outline = outlineColor)
 
     if axes:
-        draw.line([((relwidth-border)/2,border),((relwidth-border)/2,(height-border))],width = linewidth, fill = outlineColor)
-        draw.line([(relwidth-width+border,(height-border)/2),((relwidth-border),(height-border)/2)],width = linewidth, fill = outlineColor)
+        draw.line([(relwidth/2+shift, border+shift),(relwidth/2+shift, height-border+shift)], width = linewidth, fill = outlineColor)
+        draw.line([(shift+border, height/2+shift),(relwidth-border+shift, height/2+shift)], width = linewidth, fill = outlineColor)
     
     # Display image.
     disp.image(image)
@@ -89,4 +94,4 @@ def dispBackground(backColor=[0,0,255],width=diwidth,height=diheight):
  
 
 dispBackground()
-gForceMeter(1,circles=[120,80,40],justification ='right')
+gForceMeter(1,circles=[120,80,40,10],justification ='right')
