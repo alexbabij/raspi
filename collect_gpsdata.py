@@ -495,6 +495,19 @@ class piScreen(tr.Thread):
         return runTime
 
 
+#This is to let us swap between screen views by pushing a pushbutton
+def screenSwapButton():
+    if dispThread.mode == 'timer':
+        print('\n\nscreen swap button pressed, setting to:','gForceViewer','\n\n') #DEBUG
+        dispThread.mode = 'gForceViewer'
+    else:
+        print('\n\nscreen swap button pressed, setting to:','timer','\n\n') #DEBUG
+        dispThread.mode = 'timer'
+    
+
+buttonscreenSwap = Button(20)    
+buttonscreenSwap.when_pressed = screenSwapButton
+
 
 dispBackground([0,0,0]) #Set display screen to black background
 
@@ -527,6 +540,7 @@ try: #since both our gps and accelerometer are running in separate threads, we u
 except KeyboardInterrupt:
     print("Attempting to close threads...")
     buttongps.close() #Release the button
+    buttonscreenSwap.close()
     accThread.running = False
     gpsThread.running = False
     dispThread.running = False

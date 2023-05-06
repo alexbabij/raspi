@@ -9,6 +9,6 @@ units:mph
 gmeter base range:0.25
 gmeter base circles:3
 gmeter shrink timeout:5
-screen refresh rate:15
+screen refresh rate:30
 global timeout:300
 accelerometer initialization time:3.2
