@@ -33,7 +33,11 @@ cutoffSpeed = float(config["max speed"])/conversionDict[config["units"]]
 accMin = float(config["acceleration threshold"]) #minimum acceleration to start actually recording the data we read.
 #This includes a buffer of data taken before reaching this acceleration value. Intended use is to set minimum 
 #acceleration threshold to be considered as having actually started your 0-60 run
+
 screenRefreshRate = float(config["screen refresh rate"])
+#We are rarely able to get above ~10fps when running accelerometer + gps because the processor is saturated reading/writing to the slow devices.
+#There might be a way to speed this up with mutliprocessing, but I'm not sure
+
 gMBaseRange = float(config["gmeter base range"])
 gMBaseCircles = int(config["gmeter base circles"])
 gMShrinkTime = float(config["gmeter shrink timeout"]) #How long before gmeter can try to shrink back to original base state
@@ -438,10 +442,10 @@ class piScreen(tr.Thread):
 
                 #lets us blink background of text every 1 second ish
                 self.blinker += 1
-                if self.blinker > screenRefreshRate*2:
+                if self.blinker > refresh*2:
                     self.blinker = 0 
                 if gpsThread.usedSats < 6:
-                    if self.blinker <= screenRefreshRate:
+                    if self.blinker <= refresh:
                         satsBackColor = [196, 0, 0] #Darkish red
                     else: 
                         satsBackColor = False
