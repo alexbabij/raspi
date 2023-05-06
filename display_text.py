@@ -10,6 +10,7 @@ from adafruit_rgb_display import st7735  # pylint: disable=unused-import
 cs_pin = digitalio.DigitalInOut(board.CE0)
 dc_pin = digitalio.DigitalInOut(board.D25)
 reset_pin = digitalio.DigitalInOut(board.D24)
+bl_pin = digitalio.DigitalInOut(board.D23)
 
 # Config for display baudrate (default max is 24mhz):
 BAUDRATE = 24000000
@@ -18,9 +19,9 @@ BAUDRATE = 24000000
 spi = board.SPI()
 
 
-disp = st7735.ST7735R(spi, rotation=90, invert=False, cs=cs_pin, dc=dc_pin, rst=reset_pin, baudrate=BAUDRATE)
-# Create blank image for drawing.
-# Make sure to create image with mode 'RGB' for full color.
+disp = st7735.ST7735S(spi, rotation=0, cs=cs_pin, bl=bl_pin, dc=dc_pin, rst=reset_pin, baudrate=BAUDRATE, width=160,height=128,x_offset=0,y_offset=0) 
+
+
 if disp.rotation % 180 == 90:
     diheight = disp.width  # we swap height/width to rotate it to landscape!
     diwidth = disp.height
@@ -32,11 +33,6 @@ else:
 #according to this: https://arduino.stackexchange.com/questions/74624/slow-refresh-rate-of-1-8-tft-display
 #The max frame rate is theoretically around 24 fps
 #from my testing we can get like 29 fps at max speed
-
-# class piDisplay:
-#     def __init__(self):
-#         self.input = ""
-
 
 
 def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,width=diwidth,height=diheight,backColor=[0,0,0],
@@ -61,7 +57,7 @@ def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,wid
     draw = ImageDraw.Draw(image)
 
     if backColor != False:
-        draw.rectangle((0, 0, width, height), fill=(backColor[2],backColor[1],backColor[0]))
+        draw.rectangle((0, 0, width, height), fill=(backColor[0],backColor[1],backColor[2]))
 
     
     fstrt = time.time()
@@ -71,6 +67,7 @@ def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,wid
     #text = "Hello Worldaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!"
     # 0,0 = top left corner of display
     #fontColor = [0,0,0]
+    # Load a TTF Font
     dfont = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 8)
     if refreshRate != False:
         refreshString = refreshRate+" fps"
@@ -80,20 +77,19 @@ def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,wid
             (width-(dfont_width),height-(dfont_height)),
             refreshString,
             font=dfont,
-            fill=(fontColor[2], fontColor[1], fontColor[0], fontColor[3]),)
+            fill=(fontColor[0], fontColor[1], fontColor[2], fontColor[3]),)
 
 
     #debugString = "time to process output: "+str(time.time()-startTime)+"\n"#DEBUG
-    # Load a TTF Font
     
-    #For some reason, the R and B in the RGBA values are swapped, I have no idea why
+
     if textLoc == "center":
         (font_width, font_height) = font.getsize_multiline(textIn)
         draw.text(
             (width // 2 - font_width // 2, height // 2 - font_height // 2),
             textIn,
             font=font,
-            fill=(fontColor[2], fontColor[1], fontColor[0], fontColor[3]),
+            fill=(fontColor[0], fontColor[1], fontColor[2], fontColor[3]),
         )
     elif textLoc in ["northwest", "nw"]:
         (font_width, font_height) = font.getsize_multiline(textIn)
@@ -101,7 +97,7 @@ def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,wid
             (BORDER,BORDER),
             textIn,
             font=font,
-            fill=(fontColor[2], fontColor[1], fontColor[0], fontColor[3]),
+            fill=(fontColor[0], fontColor[1], fontColor[2], fontColor[3]),
         )
     elif textLoc in ["southeast", "se"]:
         (font_width, font_height) = font.getsize_multiline(textIn)
@@ -109,7 +105,7 @@ def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,wid
             (width-(BORDER+font_width),height-(BORDER+font_height)),
             textIn,
             font=font,
-            fill=(fontColor[2], fontColor[1], fontColor[0], fontColor[3]),
+            fill=(fontColor[0], fontColor[1], fontColor[2], fontColor[3]),
         )
     elif textLoc in ["southwest", "sw"]:
         (font_width, font_height) = font.getsize_multiline(textIn)
@@ -117,7 +113,7 @@ def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,wid
             (BORDER,height-(BORDER+font_height)),
             textIn,
             font=font,
-            fill=(fontColor[2], fontColor[1], fontColor[0], fontColor[3]),
+            fill=(fontColor[0], fontColor[1], fontColor[2], fontColor[3]),
         )
     elif textLoc in ["northeast", "ne"]:
         (font_width, font_height) = font.getsize_multiline(textIn)
@@ -125,7 +121,7 @@ def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,wid
             (width-(BORDER+font_width),BORDER),
             textIn,
             font=font,
-            fill=(fontColor[2], fontColor[1], fontColor[0], fontColor[3]),
+            fill=(fontColor[0], fontColor[1], fontColor[2], fontColor[3]),
         )    
     else: #Put text in center as default
         (font_width, font_height) = font.getsize_multiline(textIn)
@@ -133,7 +129,7 @@ def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,wid
             (width // 2 - font_width // 2, height // 2 - font_height // 2),
             textIn,
             font=font,
-            fill=(fontColor[2], fontColor[1], fontColor[0], fontColor[3]),
+            fill=(fontColor[0], fontColor[1], fontColor[2], fontColor[3]),
         )
     # Display image.
     if updateScreen:
@@ -147,17 +143,14 @@ def dispText(textIn,textLoc,fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,wid
 
 def dispBackground(backColor=[0,0,255],width=diwidth,height=diheight):
     startTime = time.time()
-    # First define some constants to allow easy resizing of shapes.
-    #BORDER = 20
-    #FONTSIZE = 20
-
+    
     image = Image.new("RGB", (width, height))
 
     # Get drawing object to draw on image.
     draw = ImageDraw.Draw(image)
 
     #Draw rectangle with dimensions of entire screen
-    draw.rectangle((0, 0, width, height), fill=(backColor[2],backColor[1],backColor[0]))
+    draw.rectangle((0, 0, width, height), fill=(backColor[0],backColor[1],backColor[2]))
     #disp.image(image)
   
     

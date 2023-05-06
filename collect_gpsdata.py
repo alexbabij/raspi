@@ -327,6 +327,7 @@ class gpsThr(tr.Thread):
 print("gps class done")
 
 from display_text import *
+from display_acc import gForceMeter
 #This is our display class, we can call the function dispText to write text to the screen with a few input parameters
 #Our display connection was setup when we imported the display_text file. Probably not the bet way to do this.
 class piScreen(tr.Thread):
@@ -334,6 +335,7 @@ class piScreen(tr.Thread):
         super().__init__()
         self.running = True
         self.refreshRate = 1/screenRefreshRate #I dont think this is even necessary
+        self.accMagMax = 1.0 #Set starting maximum acceleration magnitude value. Used to determine what the scaling for the acceleration meter circle is
 
     global gpsData #We dont need to define it as global in here if we dont want to change it 
     
@@ -372,7 +374,11 @@ class piScreen(tr.Thread):
                 backgroundColor = [0,0,0] #Black
                 fontColor = [255,255,255,255]
 
-
+            #determine g - force meter stuff
+            with accLock:
+                #extract data from the accelerometer
+                accData = accDataMag.copy()
+                #print("accDataMag",accDataMag[0]) #DEBUG
 
 
             string+="\nVelocity: "+str(round(velocity,1))+" "+displayUnits
@@ -386,6 +392,7 @@ class piScreen(tr.Thread):
             dispText(string,"nw",FONTSIZE=14,fontColor=fontColor,backColor=False,refreshRate=refresh,imgIn=satsImg)
             elapsedR = time.time()-startTime
             #attempt to refresh at the selected rate, if not possible, refresh as fast as possible
+
             if (self.refreshRate) > elapsedR:
                 time.sleep(self.refreshRate-elapsedR)
             totrefreshTime = time.time()-startTime
