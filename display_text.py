@@ -35,8 +35,8 @@ else:
 #from my testing we can get like 29 fps at max speed
 
 
-def dispText(textIn,textLoc='center',fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,width=diwidth,height=diheight,backColor=False,
-             refreshRate=False,updateScreen=True,imgIn=False):
+def dispText(textIn,textLoc='center',fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,width=diwidth,height=diheight,fontBackground=False,
+             backColor=False,refreshRate=False,updateScreen=True,imgIn=False):
     #updateScreen = True : sends the new image to the screen, if False, returns image that would be sent to screen
     #backColor = False : skips drawing the background
     #imgIn = ... :can use this in combination with updateScreen = False and drawBackground = False to stack/combine multiple images together
@@ -85,6 +85,9 @@ def dispText(textIn,textLoc='center',fontColor=[255,255,255,255],FONTSIZE=15,BOR
 
     if textLoc in ["center", "c"]:
         (font_width, font_height) = font.getsize_multiline(textIn)
+        if fontBackground != False:
+            draw.rectangle((width // 2 - font_width // 2, height // 2 - font_height // 2, width // 2 + font_width // 2, height // 2 + font_height // 2), 
+                           fill=(fontBackground[0],fontBackground[1],fontBackground[2]))
         draw.text(
             (width // 2 - font_width // 2, height // 2 - font_height // 2),
             textIn,
@@ -93,6 +96,9 @@ def dispText(textIn,textLoc='center',fontColor=[255,255,255,255],FONTSIZE=15,BOR
         )
     elif textLoc in ["northwest", "nw"]:
         (font_width, font_height) = font.getsize_multiline(textIn)
+        if fontBackground != False:
+            draw.rectangle((BORDER,BORDER,BORDER+font_width,BORDER+font_height), 
+                           fill=(fontBackground[0],fontBackground[1],fontBackground[2]))
         draw.text(
             (BORDER,BORDER),
             textIn,
@@ -101,6 +107,9 @@ def dispText(textIn,textLoc='center',fontColor=[255,255,255,255],FONTSIZE=15,BOR
         )
     elif textLoc in ["southeast", "se"]:
         (font_width, font_height) = font.getsize_multiline(textIn)
+        if fontBackground != False:
+            draw.rectangle((width-(BORDER+font_width),height-(BORDER+font_height),width-BORDER,height-BORDER), 
+                           fill=(fontBackground[0],fontBackground[1],fontBackground[2]))
         draw.text(
             (width-(BORDER+font_width),height-(BORDER+font_height)),
             textIn,
@@ -109,6 +118,9 @@ def dispText(textIn,textLoc='center',fontColor=[255,255,255,255],FONTSIZE=15,BOR
         )
     elif textLoc in ["southwest", "sw"]:
         (font_width, font_height) = font.getsize_multiline(textIn)
+        if fontBackground != False:
+            draw.rectangle((BORDER,height-(BORDER+font_height),BORDER+font_width,height-BORDER), 
+                           fill=(fontBackground[0],fontBackground[1],fontBackground[2]))
         draw.text(
             (BORDER,height-(BORDER+font_height)),
             textIn,
@@ -117,6 +129,9 @@ def dispText(textIn,textLoc='center',fontColor=[255,255,255,255],FONTSIZE=15,BOR
         )
     elif textLoc in ["northeast", "ne"]:
         (font_width, font_height) = font.getsize_multiline(textIn)
+        if fontBackground != False:
+            draw.rectangle((width-(BORDER+font_width),BORDER,width-BORDER,BORDER+font_height), 
+                           fill=(fontBackground[0],fontBackground[1],fontBackground[2]))
         draw.text(
             (width-(BORDER+font_width),BORDER),
             textIn,
@@ -125,6 +140,9 @@ def dispText(textIn,textLoc='center',fontColor=[255,255,255,255],FONTSIZE=15,BOR
         )    
     else: #Put text in center as default
         (font_width, font_height) = font.getsize_multiline(textIn)
+        if fontBackground != False:
+            draw.rectangle((width // 2 - font_width // 2, height // 2 - font_height // 2, width // 2 + font_width // 2, height // 2 + font_height // 2), 
+                           fill=(fontBackground[0],fontBackground[1],fontBackground[2]))
         draw.text(
             (width // 2 - font_width // 2, height // 2 - font_height // 2),
             textIn,

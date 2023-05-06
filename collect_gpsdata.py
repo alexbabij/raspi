@@ -427,7 +427,7 @@ class piScreen(tr.Thread):
                 accXpx = round(accX*120/(2*self.accMagScale),0) #divide by 2 because we need + and - direction acceleration
                 accYpx = round(accY*120/(2*self.accMagScale),0) 
 
-                gForceimg = gForceMeter(accPos=[accXpx,accYpx],circles=circlesIn,linewidth=3,backColor='#000000') #black background
+                gForceimg = gForceMeter(accPos=[accXpx,accYpx],circles=circlesIn,linewidth=3,backColor='#000000',justification='left') #black background
                 gFString = str(round(accXYMagnitude,2))+'G' #I am resisting the urge to name this variable 'gstring'
                 dispText(textIn=gFString,FONTSIZE=14,textLoc='ne',backColor=False,fontColor=fontColor,
                          refreshRate=refresh,updateScreen=True,imgIn=gForceimg)
@@ -439,7 +439,8 @@ class piScreen(tr.Thread):
                 
                 satsString = str(int(gpsThread.usedSats))+" sats"
                 satsfontColor = [255,255,255,255] #White
-                satsImg = dispText(satsString,textLoc='sw',fontColor=satsfontColor,backColor=backgroundColor,FONTSIZE=11,refreshRate=False,updateScreen=False)
+                satsImg = dispText(satsString,textLoc='sw',fontColor=satsfontColor,backColor=backgroundColor,FONTSIZE=11,
+                                   refreshRate=False,updateScreen=False,fontBackground=[0,238,255])
 
                 dispText(string,textLoc='nw',FONTSIZE=14,fontColor=fontColor,backColor=False,refreshRate=refresh,imgIn=satsImg)
             elapsedR = time.time()-startTime

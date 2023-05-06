@@ -6,8 +6,8 @@ acceleration threshold:0.25
 current vehicle:test1
 max speed:20
 units:mph
-gmeter base range:1
-gmeter base circles:2
+gmeter base range:0.25
+gmeter base circles:3
 gmeter shrink timeout:5
 screen refresh rate:15
 global timeout:300
