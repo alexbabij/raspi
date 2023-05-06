@@ -40,7 +40,7 @@ else:
 
 
 
-def gForceMeter(accVector,width=diwidth,height=diheight,circles=[120],axes=True,linewidth=2,backColor='#91ffff'):
+def gForceMeter(accVector,width=diwidth,height=diheight,circles=[120],axes=True,linewidth=2,backColor='#5d1fa3'):#91ffff
     #circles = [] list of diameter of each circle to be drawn
     fillColor = '#ffffff'
     outlineColor = '#000000'
@@ -86,5 +86,5 @@ def dispBackground(backColor=[0,0,255],width=diwidth,height=diheight):
     print("Elapsed time:",str(time.time()-startTime))
  
 
-dispBackground()
+#dispBackground()
 gForceMeter(1,circles=[120,80,40])
