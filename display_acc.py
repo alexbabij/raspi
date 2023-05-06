@@ -53,9 +53,9 @@ def gForceMeter(accPos=[0,0],width=diwidth,height=diheight,circles=[[120],[]],ax
 
     #If there isnt a color for each circle entry, sets all circles to the default color of white
     if len(circles[0]) != len(circles[1]):
-        print('\n\nerror checking\n\n')
+        print('\n\nerror checking\n\n') #DEBUG
         circles[1] = [outlineColor] * len(circles[0])
-
+    print('circles in function:', circles) #DEBUG
     #basically we are shifting a 128x128 box left, right, or center
     relwidth = height
     if justification == 'center':
