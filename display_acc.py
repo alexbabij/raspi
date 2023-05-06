@@ -37,9 +37,11 @@ else:
 #from my testing we can get like 29 fps at max speed
 
 
-def gForceMeter(accPos=[0,0],width=diwidth,height=diheight,circles=[120],axes=True,linewidth=5,backColor='#5d1fa3',border=4,justification='center'):
+def gForceMeter(accPos=[0,0],width=diwidth,height=diheight,circles=[120],axes=True,linewidth=3,backColor='#5d1fa3',border=4,justification='center'):
     #circles = [] list of diameter of each circle to be drawn
     #accPos = position of acceleration vector dot, relative to center of circle 
+    accDiam = 9 #diameter of acceleration dot in pixels
+    accFill = '#ff0000' #Fill color of acceleration dot
     fillColor = '#ffffff'
     outlineColor = '#000000'
     image = Image.new("RGB", (width, height))
@@ -69,7 +71,8 @@ def gForceMeter(accPos=[0,0],width=diwidth,height=diheight,circles=[120],axes=Tr
         draw.line([(shift+border, height/2),(relwidth-border+shift, height/2)], width = linewidth, fill = outlineColor)
     
     #Draw the acceleration vector dot
-
+    accPosX, accPosY = accPos
+    draw.ellipse([(accPosX-accDiam/2+shift,accPosY-accDiam/2),(accPosX+accDiam/2+shift,accPosY+accDiam/2)], fill = accFill)
 
     # Display image.
     disp.image(image)
