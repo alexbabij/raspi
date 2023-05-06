@@ -393,8 +393,8 @@ class piScreen(tr.Thread):
                 with accLock:
                     #extract data from the accelerometer
                     accData = accDataMag.copy()
-                accX = accData[4]
-                accY = accData[5]
+                accX = accData[2]
+                accY = accData[3]
                 #This is different from the acceleration magnitude that will show on the other screen, because that one includes the z axis
                 accXYMagnitude = math.sqrt(accX*accX + accY*accY)
                 

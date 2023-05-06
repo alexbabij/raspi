@@ -36,7 +36,8 @@ offset = imufusion.Offset(sample_rate)
 ahrs = imufusion.Ahrs()
 accLock = tr.Lock()
 accDataMag = [0.0,1.0,2.0,3.0,4.0,5.0,6.0] #This should probably be a dictionary instead of this
-#Format is: [magnitude of acceleration in earth frame, pi timestamp, earth frame linear acceleration x, y, z]
+#Format is: [magnitude of acceleration in earth frame, pi timestamp, earth frame linear acceleration x, y, z, 
+            # first acceleration magnitude past threshold, timestamp for first accel]
 
 ahrs.settings = imufusion.Settings(imufusion.CONVENTION_NWU,  # convention
                                    0.5,  # gain
