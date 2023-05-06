@@ -35,7 +35,7 @@ else:
 #from my testing we can get like 29 fps at max speed
 
 
-def gForceMeter(accPos=[0,0],width=diwidth,height=diheight,circles=([120],[]),axes=True,linewidth=3,backColor='#5d1fa3',border=4,justification='center'):
+def gForceMeter(accPos=[0,0],width=diwidth,height=diheight,circles=[[120],[]],axes=True,linewidth=3,backColor='#5d1fa3',border=4,justification='center'):
     #circles = ([],[]) list of diameter of each circle to be drawn, with color code for each. If there isnt a color for each circle entry, sets all circles
     #to the default color of black. There is no check that valid hex color strings are inputted.
     #accPos = position of acceleration vector dot, relative to center of circle 

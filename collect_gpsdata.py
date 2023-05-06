@@ -416,7 +416,7 @@ class piScreen(tr.Thread):
                 circlesDiam = [int(120-i*120/self.numCircles) for i in range(0,self.numCircles)] #equally spaced diameters of each circle
                 circlesColor = ['#ffffff'] * gMBaseCircles #default color is white, 
                 circlesColor.extend(['#ff0000'] * int(gMBaseCircles-self.numCircles)) #additional circles are red
-                circlesIn = (circlesDiam,circlesColor)
+                circlesIn = [circlesDiam,circlesColor]
                 
                 #Translate our acceleration values into pixel locations
                 accXpx = round(accX*120/(2*self.accMagScale),0) #divide by 2 because we need + and - direction acceleration
