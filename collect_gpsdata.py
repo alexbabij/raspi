@@ -345,7 +345,7 @@ class piScreen(tr.Thread):
         self.numCircles = gMBaseCircles #Initial number of circles to draw for acceleration meter
         self.baseScale = gMBaseRange/gMBaseCircles #g's/circle
         self.shrinkTimeout = gMShrinkTime
-        self.mode = 'gForceViewer'#'timer' #set the mode the of the screen to control what it will display
+        self.mode = 'timer' #set the mode the of the screen to control what it will display #'gForceViewer'
 
     global gpsData #We dont need to define it as global in here if we dont want to change it 
     
