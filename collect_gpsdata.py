@@ -416,6 +416,7 @@ class piScreen(tr.Thread):
                 circlesDiam = [int(120-i*120/self.numCircles) for i in range(0,self.numCircles)] #equally spaced diameters of each circle
                 circlesColor = ['#ffffff'] * gMBaseCircles #default color is white, 
                 circlesColor.extend(['#ff0000'] * int(self.numCircles-gMBaseCircles)) #additional circles are red
+                circlesColor.reverse() #extend adds to the end and our diameters are ordered from largest to smallest so one of these lists needs to flip
                 circlesIn = [circlesDiam,circlesColor]
                 
                 
