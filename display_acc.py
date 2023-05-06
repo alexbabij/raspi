@@ -118,15 +118,19 @@ def rgb_to_hex(r, g, b):
 counter = 0
 counter2 = 0 
 cc = 0
+cc2 = 0
 start = time.time()
 while 1: 
     counter += 1
     cc += 1
-    gForceMeter(accPos=[counter,counter],circles=([120,80,40],['#FF0000','#FF5D00','#FFFF00']),justification ='right',backColor=rgb_to_hex(cc,0,cc))
+    cc2 += 2
+    gForceMeter(accPos=[counter,counter],circles=([120,80,40],['#FF0000','#FF5D00','#FFFF00']),justification ='right',backColor=rgb_to_hex(cc,cc2,cc2))
     print('fps:', 1/(time.time()-start))
     start = time.time()
     if counter > 60:
         counter = -60 
     if cc > 253:
-        cc = 0 
+        cc = 0
+    if cc > 253:
+        cc = 0  
 #DEBUG
