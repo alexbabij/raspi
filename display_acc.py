@@ -122,7 +122,7 @@ start = time.time()
 while 1: 
     counter += 1
     cc += 1
-    gForceMeter(accPos=[counter,counter],circles=([120,80,40],['#FF0000','#FF5D00','#FFFF00']),justification ='right',backColor=rgb_to_hex(cc,cc,cc))
+    gForceMeter(accPos=[counter,counter],circles=([120,80,40],['#FF0000','#FF5D00','#FFFF00']),justification ='right',backColor=rgb_to_hex(cc,0,cc))
     print('fps:', 1/(time.time()-start))
     start = time.time()
     if counter > 60:
