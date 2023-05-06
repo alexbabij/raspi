@@ -107,4 +107,5 @@ def dispBackground(backColor='#ffffff',width=diwidth,height=diheight):
  
 
 dispBackground(backColor='#445afc')
+time.sleep(0.1) #if we dont wait, it will fail to write the background color to the screen
 gForceMeter(accPos=[45,-23],circles=([120,80,40],['#FF0000','#FF5D00','#FFFF00']),justification ='right')
