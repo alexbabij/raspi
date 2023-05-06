@@ -4,7 +4,8 @@ import board
 import time
 from PIL import Image, ImageDraw, ImageFont
 
-from adafruit_rgb_display import ST7735  # pylint: disable=unused-import
+#from adafruit_rgb_display 
+import ST7735  # pylint: disable=unused-import
 
 # Configuration for CS and DC pins (these are PiTFT defaults):
 cs_pin = digitalio.DigitalInOut(board.CE0)
