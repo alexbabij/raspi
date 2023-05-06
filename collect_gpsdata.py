@@ -346,6 +346,7 @@ class piScreen(tr.Thread):
         self.baseScale = gMBaseRange/gMBaseCircles #g's/circle
         self.shrinkTimeout = gMShrinkTime
         self.mode = 'timer' #set the mode the of the screen to control what it will display #'gForceViewer'
+        self.blinker = 0
 
     global gpsData #We dont need to define it as global in here if we dont want to change it 
     
@@ -380,6 +381,7 @@ class piScreen(tr.Thread):
                 string = "Completed in: "+str(round(self.finalTime(gpsData,cutoffSpeed),2))+"s"
                 backgroundColor = [50,168,82] #Green
                 fontColor = [255,255,255,255]
+
             else:
                 string = "Time: "+str(round(elapsedTime,2))+"s"
                 backgroundColor = [0,0,0] #Black
@@ -433,6 +435,20 @@ class piScreen(tr.Thread):
                          refreshRate=refresh,updateScreen=True,imgIn=gForceimg)
 
             elif self.mode == 'timer':
+
+                #lets us blink background of text every 1 second ish
+                self.blinker += 1
+                if self.blinker > screenRefreshRate*2:
+                    self.blinker = 0 
+                if gpsThread.usedSats < 6:
+                    if self.blinker <= screenRefreshRate:
+                        satsBackColor = [196, 0, 0] #Darkish red
+                    else: 
+                        satsBackColor = False
+
+                elif gpsThread.usedSats >= 6:
+                    satsBackColor = [0, 232, 31] #Green
+
                 string+="\nVelocity: "+str(round(velocity,1))+" "+displayUnits
                 string += "\nAcceleration: "+str(round(acceleration,2))+"g" #dont forget you can't use commas to combine strings like you could in print()
                 string += "\nTarget: "+str(round(cutoffSpeed*conversionDict[displayUnits],0))+"mph"
@@ -440,7 +456,7 @@ class piScreen(tr.Thread):
                 satsString = str(int(gpsThread.usedSats))+" sats"
                 satsfontColor = [255,255,255,255] #White
                 satsImg = dispText(satsString,textLoc='sw',fontColor=satsfontColor,backColor=backgroundColor,FONTSIZE=11,
-                                   refreshRate=False,updateScreen=False,fontBackground=[0,238,255])
+                                   refreshRate=False,updateScreen=False,fontBackground=satsBackColor)
 
                 dispText(string,textLoc='nw',FONTSIZE=14,fontColor=fontColor,backColor=False,refreshRate=refresh,imgIn=satsImg)
             elapsedR = time.time()-startTime
