@@ -69,7 +69,8 @@ def gForceMeter(accPos=[0,0],width=diwidth,height=diheight,circles=([120],[]),ax
     for diam, outlineColor in zip(*circles): #*circles is equivalent to: circles[0][:], circles[1][:]
         #outlineColor is already a variable name, but it gets continually overwritten inside of this loop.
         draw.ellipse([(height/2-diam/2+shift,height/2-diam/2),(relwidth/2+diam/2+shift,height/2+diam/2)],width = linewidth, outline = outlineColor)
-
+    
+    outlineColor = '#000000' #We just set it again here
     if axes:
         draw.line([(relwidth/2+shift, border),(relwidth/2+shift, height-border)], width = linewidth, fill = outlineColor)
         draw.line([(shift+border, height/2),(relwidth-border+shift, height/2)], width = linewidth, fill = outlineColor)
@@ -84,7 +85,7 @@ def gForceMeter(accPos=[0,0],width=diwidth,height=diheight,circles=([120],[]),ax
     print('displayed image') #DEBUG
 
 
-def dispBackground(backColor=[0,0,255],width=diwidth,height=diheight):
+def dispBackground(backColor='#ffffff',width=diwidth,height=diheight):
     startTime = time.time()
     # First define some constants to allow easy resizing of shapes.
     #BORDER = 20
@@ -96,7 +97,7 @@ def dispBackground(backColor=[0,0,255],width=diwidth,height=diheight):
     draw = ImageDraw.Draw(image)
 
     # Draw a green filled box as the background
-    draw.rectangle((0, 0, width, height), fill=(backColor[0],backColor[1],backColor[2]))
+    draw.rectangle((0, 0, width, height), fill=backColor)
     #disp.image(image)
   
     
