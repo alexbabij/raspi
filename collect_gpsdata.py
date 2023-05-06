@@ -434,7 +434,8 @@ class piScreen(tr.Thread):
                 accYpx = round(accY*120/(2*self.accMagScale),0) 
 
                 gForceimg = gForceMeter(accPos=[accXpx,accYpx],circles=circlesIn,linewidth=3,backColor='#000000',justification='left') #black background
-                gFString = str(round(accXYMagnitude,2))+'G' #I am resisting the urge to name this variable 'gstring'
+                gFString = "{:.2f}".format(accXYMagnitude)+'G' #I am resisting the urge to name this variable 'gstring'
+                #We're using string formatting like this so it will always show two decimal places
                 dispText(textIn=gFString,FONTSIZE=14,textLoc='ne',backColor=False,fontColor=fontColor,
                          refreshRate=refresh,updateScreen=True,imgIn=gForceimg)
 
