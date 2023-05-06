@@ -72,7 +72,7 @@ def gForceMeter(accPos=[0,0],width=diwidth,height=diheight,circles=[120],axes=Tr
     
     #Draw the acceleration vector dot
     accPosX, accPosY = accPos[:]
-    draw.ellipse([(accPosX-accDiam/2+shift,accPosY-accDiam/2),(accPosX+accDiam/2+shift,accPosY+accDiam/2)], fill = accFill)
+    draw.ellipse([(accPosX-accDiam/2+relwidth/2+shift,accPosY-accDiam/2+height/2),(accPosX+accDiam/2+relwidth/2+shift,accPosY+accDiam/2+height/2)], fill = accFill)
 
     # Display image.
     disp.image(image)
