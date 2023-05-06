@@ -48,7 +48,8 @@ def gForceMeter(accPos=[0,0],width=diwidth,height=diheight,circles=([120],[]),ax
     # Get drawing object to draw on image.
     draw = ImageDraw.Draw(image)
 
-    #draw.rectangle((0, 0, width, height), fill=backColor)
+    if backColor != False:
+        draw.rectangle((0, 0, width, height), fill=backColor)
 
     #If there isnt a color for each circle entry, sets all circles to the default color of white
     if len(circles[0]) != len(circles[1]):
@@ -110,9 +111,22 @@ dispBackground(backColor='#ffffff')
 time.sleep(1)
 gForceMeter(accPos=[45,-23],circles=([120,80,40],['#FF0000','#FF5D00','#FFFF00']),justification ='right')
 
-counter = 0 
+#DEBUG
+def rgb_to_hex(r, g, b):
+    return "#{:02x}{:02x}{:02x}".format(r, g, b)
+
+counter = 0
+counter2 = 0 
+cc = 0
+start = time.time()
 while 1: 
     counter += 1
-    gForceMeter(accPos=[counter,counter],circles=([120,80,40],['#FF0000','#FF5D00','#FFFF00']),justification ='right')
+    cc += 1
+    gForceMeter(accPos=[counter,counter],circles=([120,80,40],['#FF0000','#FF5D00','#FFFF00']),justification ='right',backColor=rgb_to_hex(cc,cc,cc))
+    print('fps:', 1/(time.time()-start))
+    start = time.time()
     if counter > 60:
-        counter = 0 
+        counter = -60 
+    if cc > 253:
+        cc = 0 
+#DEBUG
