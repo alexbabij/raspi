@@ -106,5 +106,5 @@ def dispBackground(backColor='#ffffff',width=diwidth,height=diheight):
     print("Elapsed time:",str(time.time()-startTime))
  
 
-dispBackground()
+dispBackground(backColor='#ffffff')
 gForceMeter(accPos=[45,-23],circles=([120,80,40],['#FF0000','#FF5D00','#FFFF00']),justification ='right')
