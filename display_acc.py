@@ -4,8 +4,7 @@ import board
 import time
 from PIL import Image, ImageDraw, ImageFont
 
-#from adafruit_rgb_display 
-import ST7735  # pylint: disable=unused-import
+from adafruit_rgb_display import st7735  # pylint: disable=unused-import
 
 # Configuration for CS and DC pins (these are PiTFT defaults):
 cs_pin = digitalio.DigitalInOut(board.CE0)
@@ -15,12 +14,11 @@ reset_pin = digitalio.DigitalInOut(board.D24)
 # Config for display baudrate (default max is 24mhz):
 BAUDRATE = 24000000
 
-
 # Setup SPI bus using hardware SPI:
 spi = board.SPI()
 
-disp = ST7735.ST7735(spi, rotation=90, backlight=None, invert=False, cs=cs_pin, dc=dc_pin, rst=reset_pin)
-#disp = st7735.ST7735R(spi, rotation=90, invert=False, cs=cs_pin, dc=dc_pin, rst=reset_pin, baudrate=BAUDRATE)
+
+disp = st7735.ST7735S(spi, rotation=90, invert=False, cs=cs_pin, dc=None, dc=dc_pin, rst=reset_pin, baudrate=BAUDRATE)
 # Create blank image for drawing.
 # Make sure to create image with mode 'RGB' for full color.
 if disp.rotation % 180 == 90:
@@ -41,7 +39,7 @@ else:
 
 
 
-def gForceMeter(accVector,width=diwidth,height=diheight,circles=[120],axes=True,linewidth=2,backColor='#5d1fa3'):#91ffff
+def gForceMeter(accVector,width=diwidth,height=diheight,circles=[120],axes=True,linewidth=2,backColor='#91ffff'):
     #circles = [] list of diameter of each circle to be drawn
     fillColor = '#ffffff'
     outlineColor = '#000000'
@@ -87,5 +85,5 @@ def dispBackground(backColor=[0,0,255],width=diwidth,height=diheight):
     print("Elapsed time:",str(time.time()-startTime))
  
 
-#dispBackground()
+dispBackground()
 gForceMeter(1,circles=[120,80,40])
