@@ -131,6 +131,6 @@ while 1:
         counter = -60 
     if cc > 253:
         cc = 0
-    if cc > 253:
-        cc = 0  
+    if cc2 > 253:
+        cc2 = 0  
 #DEBUG
