@@ -37,7 +37,7 @@ else:
 #from my testing we can get like 29 fps at max speed
 
 
-def gForceMeter(accVector,width=diwidth,height=diheight,circles=[120],axes=True,linewidth=2,backColor='#5d1fa3'):
+def gForceMeter(accVector,width=diwidth,height=diheight,circles=[120],axes=True,linewidth=2,backColor='#5d1fa3',border=4,justification='center'):
     #circles = [] list of diameter of each circle to be drawn
     fillColor = '#ffffff'
     outlineColor = '#000000'
@@ -47,15 +47,20 @@ def gForceMeter(accVector,width=diwidth,height=diheight,circles=[120],axes=True,
     draw = ImageDraw.Draw(image)
 
     draw.rectangle((0, 0, width, height), fill=backColor)
-
-      
+    
+    if justification == 'center':
+        relwidth = width
+    elif justification == 'left':
+        relwidth = height
+    elif justification == 'right':
+        relwidth = width + 32 #shift 32 pixels right
     #its pretty self explanatory what these do just by the names
     for diam in circles:
-        draw.ellipse([(width/2-diam/2,height/2-diam/2),(width/2+diam/2,height/2+diam/2)],width = linewidth, outline = outlineColor)
+        draw.ellipse([(relwidth/2-diam/2,height/2-diam/2),(relwidth/2+diam/2,height/2+diam/2)],width = linewidth, outline = outlineColor)
 
     if axes:
-        draw.line([(width/2,0),(width/2,height)],width = linewidth, fill = outlineColor)
-        draw.line([(0,height/2),(width,height/2)],width = linewidth, fill = outlineColor)
+        draw.line([((relwidth-border)/2,0),((relwidth-border)/2,(height-border))],width = linewidth, fill = outlineColor)
+        draw.line([(0,(height-border)/2),((relwidth-border),(height-border)/2)],width = linewidth, fill = outlineColor)
     
     # Display image.
     disp.image(image)
@@ -84,4 +89,4 @@ def dispBackground(backColor=[0,0,255],width=diwidth,height=diheight):
  
 
 dispBackground()
-gForceMeter(1,circles=[120,80,40])
+gForceMeter(1,circles=[120,80,40],justification ='right')
