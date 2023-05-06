@@ -1,32 +1,11 @@
 #! /usr/bin/python
-import digitalio
-import board
+
 import time
 from PIL import Image, ImageDraw, ImageFont
 
-from adafruit_rgb_display import st7735  # pylint: disable=unused-import
 
-# Configuration for CS and DC pins (these are PiTFT defaults):
-cs_pin = digitalio.DigitalInOut(board.CE0)
-dc_pin = digitalio.DigitalInOut(board.D25)
-reset_pin = digitalio.DigitalInOut(board.D24)
-
-# Config for display baudrate (default max is 24mhz):
-BAUDRATE = 24000000
-
-# Setup SPI bus using hardware SPI:
-spi = board.SPI()
-
-
-disp = st7735.ST7735R(spi, rotation=90, invert=False, cs=cs_pin, dc=dc_pin, rst=reset_pin, baudrate=BAUDRATE)
-# Create blank image for drawing.
-# Make sure to create image with mode 'RGB' for full color.
-if disp.rotation % 180 == 90:
-    diheight = disp.width  # we swap height/width to rotate it to landscape!
-    diwidth = disp.height
-else:
-    diwidth = disp.width  # we swap height/width to rotate it to landscape!
-    diheight = disp.height
+diwidth = 160  # we swap height/width to rotate it to landscape!
+diheight = 128
 
 #The screen will continue to display the last image sent to it, until it recieves something new
 #according to this: https://arduino.stackexchange.com/questions/74624/slow-refresh-rate-of-1-8-tft-display
@@ -39,7 +18,7 @@ else:
 
 
 
-def gForceMeter(accVector,width=diwidth,height=diheight,circles=[120],axes=True,linewidth=2,backColor='#91ffff'):
+def gForceMeter(accVector,width=diwidth,height=diheight,circles=[120,80,40],axes=True,linewidth=2,backColor='#fcd8ac'):
     #circles = [] list of diameter of each circle to be drawn
     fillColor = '#ffffff'
     outlineColor = '#000000'
@@ -47,10 +26,11 @@ def gForceMeter(accVector,width=diwidth,height=diheight,circles=[120],axes=True,
 
     # Get drawing object to draw on image.
     draw = ImageDraw.Draw(image)
-
     draw.rectangle((0, 0, width, height), fill=backColor)
+    # Draw a green filled box as the background
 
-      
+    #disp.image(image)
+  
     #its pretty self explanatory what these do just by the names
     for diam in circles:
         draw.ellipse([(width/2-diam/2,height/2-diam/2),(width/2+diam/2,height/2+diam/2)],width = linewidth, outline = outlineColor)
@@ -60,7 +40,8 @@ def gForceMeter(accVector,width=diwidth,height=diheight,circles=[120],axes=True,
         draw.line([(0,height/2),(width,height/2)],width = linewidth, fill = outlineColor)
     
     # Display image.
-    disp.image(image)
+    
+    image.show()
     print('displayed image') #DEBUG
 
 
@@ -81,9 +62,9 @@ def dispBackground(backColor=[0,0,255],width=diwidth,height=diheight):
   
     
     # Display image.
-    disp.image(image)
+    
     print("Elapsed time:",str(time.time()-startTime))
  
 
 dispBackground()
-gForceMeter(1,circles=[120,80,40])
+gForceMeter(1)
