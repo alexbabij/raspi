@@ -383,6 +383,10 @@ class piScreen(tr.Thread):
                 with accLock:
                     #extract data from the accelerometer
                     accData = accDataMag.copy()
+                accX = accData[4]
+                accY = accData[5]
+                #max diameter is about 120px 
+                gForceimg = gForceMeter(linewidth=3)
                 fpsImg = dispText(textIn='',textLoc='center',refreshRate=refresh)
 
             elif self.mode == 'timer':

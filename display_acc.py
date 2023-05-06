@@ -125,7 +125,9 @@ while 1:
     counter += 1
     cc += 1
     cc2 += 2
+    imgstart = time.time()
     img = gForceMeter(accPos=[counter,counter],circles=([120,80,40],['#FF0000','#FF5D00','#FFFF00']),justification ='right',backColor=rgb_to_hex(cc,cc2,cc2))
+    print('image generation time:', time.time()-imgstart+'s')
     disp.image(img)
     print('fps:', 1/(time.time()-start))
     start = time.time()
