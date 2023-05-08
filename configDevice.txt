@@ -2,7 +2,7 @@ Units are Hz, seconds, g's, acceptable units; mph, kph :null
 updateRate:5
 timeout:20
 storage interval:1
-acceleration threshold:0.25
+acceleration threshold:0.15
 current vehicle:test2
 max speed:25
 units:mph

@@ -380,9 +380,10 @@ class piScreen(tr.Thread):
                 
             elif (gpsThread.timedOut == False) & (gpsThread.runComplete):
                 #print("\n\n\nrun complete\n\n\n") #DEBUG
-                #print("gpsdata",gpsData) #DEBUG
+                print("gpsdata",gpsData) #DEBUG
                 #print("Final Time",str(round(self.finalTime(gpsData,cutoffSpeed),2))) #DEBUG
                 string = "Completed in: "+str(round(self.finalTime(gpsData,cutoffSpeed),2))+"s"
+                
                 backgroundColor = [50,168,82] #Green
                 fontColor = [255,255,255,255]
 
@@ -403,7 +404,7 @@ class piScreen(tr.Thread):
                 #the car itself. You might be able to do this somehow since the gps knows its heading (via displacement/time from lat/long) and so does the IMU, 
                 #but this is not worth the work to implement right now, so we will instead just use the pi frame, and have the pi mostly aligned with the car
                 accX = accData[2]
-                accY = accData[3]
+                accY = -accData[3] #we flip this so our screen aligns with our pi 
                 #This is different from the acceleration magnitude that will show on the other screen, because that one includes the z axis
                 accXYMagnitude = math.sqrt(accX*accX + accY*accY)
                 #print('accXYMagnitude:',accXYMagnitude) #DEBUG
@@ -472,27 +473,28 @@ class piScreen(tr.Thread):
             totrefreshTime = time.time()-startTime
 
     #Calculates final time from data using accelerometer offsets and linear interpolation of last 2 gps readings
-    def finalTime(self,gpsData,cutoffSpeed):
+    def finalTime(self,gpsDataIn,cutoffSpeed):
         
         #Our format is: [gps time(yyyy-mm-ddThr:min:ms), gps speed(m/s), pi time offset(s), accelerometer acceleration magnitude in earth frame(G), 
                                                                 # difference between time of this measurement and accel measurement(s)] (5 elements long)
                                                                 #our last value here is a negative number, since our data was taken before it was logged.
 
-        finVel_2 = gpsData[-1][1] #This should be the first velocity past the threshold since data recording should stop after this point
-        finVel_1 = gpsData[-2][1] #This should always be below the next measurement or it would have completed already
-        finTime_2 = gpsData[-1][2]
-        finTime_1 = gpsData[-2][2]
+        finVel_2 = gpsDataIn[-1][1] #This should be the first velocity past the threshold since data recording should stop after this point
+        finVel_1 = gpsDataIn[-2][1] #This should always be below the next measurement or it would have completed already
+        finTime_2 = gpsDataIn[-1][2]
+        finTime_1 = gpsDataIn[-2][2]
         if abs(finVel_2-finVel_1) < 1E-5: #dont use == for floats :)
             #We dont want to divide by 0:
             finTime = finTime_2
         else:
-            finTime = finTime_1 + (cutoffSpeed-finVel_1) * (finTime_2-finTime_1)/(finVel_2-finVel_1)#linear interpolation
+            finTime = finTime_1 + (cutoffSpeed-finVel_1) * ((finTime_2-finTime_1)/(finVel_2-finVel_1))#linear interpolation
 
-        startVel = gpsData[0][1] #we just kinda assume they started at 0 mph instead of actually using this
+        startVel = gpsDataIn[0][1] #we just kinda assume they started at 0 mph instead of actually using this
         #We could average the rolling data we keep before this starting velocity to try to mitigate the gps noise, but for the purposes of getting 0-60, its not really worth it, since a car doing a 0-60
         #run doesn't have a nice linear acceleration curve, and this curve is different between naturally aspirated, supercharged, turbocharged cars, etc. 
         #The alternative to doing this would be to fit a curve to the entire 0-60 run and then interpolate on that. 
-        startTime = gpsData[0][2] -gpsData[0][4]#pi time offset starts from when we turn enable data collection not start the run
+        startTime = gpsDataIn[0][2] + gpsDataIn[0][3] #time offset is a negative number, so we add it
+        #pi time offset starts from when we turn enable data collection not start the run
         #That means this doesnt start at 0, we also add in the time offset from the accelerometer which should be at best 0 or 
         #usually negative, meaning it pushes back our starttime
             
