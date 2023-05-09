@@ -58,7 +58,7 @@ gpsThread.start()
 
 try:
     print("Waiting for data")
-    time.sleep(2.0)
+    time.sleep(5.0)
     while goodFix == False: #& self.running:
         #print("running")        
         #print('goodFix',goodFix) #DEBUG
