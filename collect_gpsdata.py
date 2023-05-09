@@ -548,12 +548,19 @@ try: #since both our gps and accelerometer are running in separate threads, we u
 except KeyboardInterrupt:
     print("Attempting to close threads...")
     buttongps.close() #Release the button
+    print("1")
     buttonscreenSwap.close()
+    print("2")
     accThread.running = False
+    print("3")
     gpsThread.running = False
+    print("4")
     dispThread.running = False
+    print("5")
     accThread.join()
+    print("6")
     gpsThread.join()
+    print("7")
     dispThread.join()
     print("Threads successfully closed.")
 
