@@ -314,6 +314,7 @@ class gpsThr(tr.Thread):
             print("\nExiting.")
             if self.collectingData:
                 self.filePath, self.fileCreated = writeFile(vehicle,self.rollingGpsData,self.fileCreated,self.filePath)
+                
         except exitGps:
             print('Restarting')
             if self.collectingData:
@@ -559,9 +560,10 @@ except KeyboardInterrupt:
     print("5")
     accThread.join()
     print("6")
-    gpsThread.join()
-    print("7")
     dispThread.join()
+    print("7")
+    gpsThread.join()
+    
     print("Threads successfully closed.")
 
 
