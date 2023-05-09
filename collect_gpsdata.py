@@ -214,14 +214,16 @@ class gpsThr(tr.Thread):
                         #we want to have the acceleration value variable locked for as little time as possible
 
 
-                        # #DEBUG
-                        # #print('self.collectingData',self.collectingData) #DEBUG
-                        # if debug1 & (self.collectingData & (time.time() > self.runStart+5)):
-                        #     #Run this after 10 seconds of data collection
-                        #     self.currentData = ['debug',(cutoffSpeed+1),(time.time()-self.totstart),curAccDataMag,(accTime-time.time())]
-                        #     debug1 = False
-                        #     print("\n\nran once\n\n") 
-                        # #DEBUG 
+                        #DEBUG
+                        #print('self.collectingData',self.collectingData) #DEBUG
+                        if debug1 & (self.collectingData & (time.time() > self.runStart+5)):
+                            #Run this after 10 seconds of data collection
+                            self.currentData = ['debug',(cutoffSpeed-1),(time.time()-self.totstart),curAccDataMag,(accTime-time.time())]
+                            gpsData.append(self.currentData)
+                            self.currentData = ['debug',(cutoffSpeed+1),(time.time()-self.totstart+0.2),curAccDataMag,(accTime-time.time()+0.2)]
+                            debug1 = False
+                            print("\n\nran once\n\n") 
+                        #DEBUG 
 
 
                         
@@ -381,9 +383,12 @@ class piScreen(tr.Thread):
                 
             elif (gpsThread.timedOut == False) & (gpsThread.runComplete):
                 #print("\n\n\nrun complete\n\n\n") #DEBUG
-                print("gpsdata",gpsData) #DEBUG
+                #print("gpsdata",gpsData) #DEBUG
+                print('gpsData[0]',gpsData[0]) #DEBUG
+                print('gpsData[-1]',gpsData[-1]) #DEBUG
+                print('gpsData[-2]',gpsData[-2]) #DEBUG
                 #print("Final Time",str(round(self.finalTime(gpsData,cutoffSpeed),2))) #DEBUG
-                string = "Completed in: "+str(round(self.finalTime(gpsData,cutoffSpeed),2))+"s"
+                string = "Completed in: "+str(round(self.finalTime(gpsData.copy(),cutoffSpeed),2))+"s"
                 
                 backgroundColor = [50,168,82] #Green
                 fontColor = [255,255,255,255]
@@ -477,12 +482,14 @@ class piScreen(tr.Thread):
             totrefreshTime = time.time()-startTime
 
     #Calculates final time from data using accelerometer offsets and linear interpolation of last 2 gps readings
-    def finalTime(self,gpsDataIn,cutoffSpeed):
+    def finalTime(self,gpsDataIn,cutoffSpeedMS):
         
         #Our format is: [gps time(yyyy-mm-ddThr:min:ms), gps speed(m/s), pi time offset(s), accelerometer acceleration magnitude in earth frame(G), 
                                                                 # difference between time of this measurement and accel measurement(s)] (5 elements long)
                                                                 #our last value here is a negative number, since our data was taken before it was logged.
-
+        print('gpsDataIn[0]',gpsDataIn[0])
+        print('gpsDataIn[-1]',gpsDataIn[-1])
+        print('gpsDataIn[-2]',gpsDataIn[-2])
         finVel_2 = gpsDataIn[-1][1] #This should be the first velocity past the threshold since data recording should stop after this point
         finVel_1 = gpsDataIn[-2][1] #This should always be below the next measurement or it would have completed already
         finTime_2 = gpsDataIn[-1][2]
@@ -491,7 +498,7 @@ class piScreen(tr.Thread):
             #We dont want to divide by 0:
             finTime = finTime_2
         else:
-            finTime = finTime_1 + (cutoffSpeed-finVel_1) * ((finTime_2-finTime_1)/(finVel_2-finVel_1))#linear interpolation
+            finTime = finTime_1 + (cutoffSpeedMS-finVel_1) * ((finTime_2-finTime_1)/(finVel_2-finVel_1))#linear interpolation
 
         startVel = gpsDataIn[0][1] #we just kinda assume they started at 0 mph instead of actually using this
         #We could average the rolling data we keep before this starting velocity to try to mitigate the gps noise, but for the purposes of getting 0-60, its not really worth it, since a car doing a 0-60
