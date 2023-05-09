@@ -7,7 +7,7 @@ current vehicle:test2
 max speed:25
 units:mph
 gmeter base range:1
-gmeter base circles:3
+gmeter base circles:5
 gmeter shrink timeout:5
 screen refresh rate:30
 global timeout:300
