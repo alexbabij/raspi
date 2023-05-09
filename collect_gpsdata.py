@@ -130,15 +130,17 @@ class gpsThr(tr.Thread):
         self.debug1 = True #DEBUG
         global gpsData
         gpsData = []
-        self.restartNow = False
+        
         #We need to clear previous instance of single acceleration value:
         with accLock:
             accDataMag[5] = 0.0
             accDataMag[6] = 0.0 # - 100 #DEBUG
             accThread.accStarted = False
+            print('accDataMag reset:', accDataMag)
 
         print('gps data restarted')
         print("gps rec started")
+        self.restartNow = False
 
     def run(self):
         #this function definition of run(self) is a special method from threading. this function will automatically run when .start() is used 
