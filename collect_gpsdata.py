@@ -142,12 +142,12 @@ class gpsThr(tr.Thread):
 
         try:
             self.restart()
-            global gpsData
-            gpsData = []
+            #global gpsData
+            #gpsData = []
             start = time.time() #DEBUG
             gpsd = gps(mode=WATCH_ENABLE|WATCH_NEWSTYLE)
             
-            self.debug1 = True #DEBUG
+            #self.debug1 = True #DEBUG
 
             #global accDataMag
             while (self.running == True):
