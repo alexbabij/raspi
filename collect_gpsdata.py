@@ -153,7 +153,7 @@ class gpsThr(tr.Thread):
             while (self.running == True):
                 #print('gps running') #DEBUG
                 report = gpsd.next()
-
+                print('running gps')
                 if report['class'] == 'SKY':
                     self.usedSats = getattr(report,'uSat',-1)
                     #print('self.usedSats',self.usedSats) #DEBUG
