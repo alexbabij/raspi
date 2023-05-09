@@ -22,9 +22,11 @@ class gpsDataT(tr.Thread):
         super().__init__()
         self.running = True    
         self.report = []
+        self.report = gpsd.next()
 
     def run(self):
         t1 = time.time()
+        self.report = gpsd.next()
         while self.running:
             self.report = gpsd.next()
             time.sleep(0.02)

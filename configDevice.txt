@@ -3,11 +3,11 @@ updateRate:5
 timeout:20
 storage interval:1
 acceleration threshold:0.15
-current vehicle:test2
+current vehicle:test3
 max speed:25
 units:mph
 gmeter base range:1
-gmeter base circles:5
+gmeter base circles:3
 gmeter shrink timeout:5
 screen refresh rate:30
 global timeout:300
