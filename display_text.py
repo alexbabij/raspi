@@ -74,7 +74,7 @@ def dispText(textIn,textLoc='center',fontColor=[255,255,255,255],FONTSIZE=15,BOR
 
         (dfont_width, dfont_height) = dfont.getsize_multiline(refreshString)
         draw.text(
-            (width-(dfont_width),height-(dfont_height)),
+            (0,height-(dfont_height)), #width-(dfont_width)
             refreshString,
             font=dfont,
             fill=(fontColor[0], fontColor[1], fontColor[2], fontColor[3]),)
