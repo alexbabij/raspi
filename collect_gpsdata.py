@@ -277,41 +277,44 @@ class gpsThr(tr.Thread):
                             #I think this entire thing is no longer needed
                         """
                             
-                    # end = time.time()
-                    # elapsed = (end-start)
-                    # start = time.time()
-                    #print('\nTime/refresh',elapsed)
-                    if self.collectingData:
-                        if (self.counter >= self.samplesC):
-                            self.filePath, self.fileCreated = writeFile(vehicle,self.rollingGpsData,self.fileCreated,self.filePath)
-                            #I wrote this before I knew about classes. This is basically the exact use case of a class where we are setting a file
-                            #path once and then reusing it in the same function an indeterminate amount of times.
-                            self.counter = 0
-                            print("Saved data:",self.rollingGpsData)
-                            self.rollingGpsData = []
-                            
-                        if self.finSampCounter >=5 :
-                            
-                            self.filePath, self.fileCreated = writeFile(vehicle,self.rollingGpsData,self.fileCreated,self.filePath) #Write last data chunk
-                            self.collectingData = False
-                            self.runComplete = True #should be redundant I think #investigate
-                            #This is to allow us to write 5 more samples to the file but not have them in gpsData
-                            #self.running = False
-                        print('if gpsData[-1][1] >= (cutoffSpeed):', gpsData)
-                        if gpsData[-1][1] >= (cutoffSpeed):
-                            self.totSamplesC = time.time()+100 #Basically disable the timeouts if we get to here so we don't get a weird edge case where we finish 
-                            self.globalTimeout = time.time()+100 #our run less than 5 measurements before either of our timeout periods
-                            #self.collectingData = False
-                            self.runComplete = True
-                            #self.running = False
-                            
-                        if self.runComplete: #and self.collectingData:#investigate if necessary, shouldnt be
-                            self.finSampCounter +=1
-                            #print("\nFinsample self.counter:\n", self.finSampCounter) #DEBUG
-                        if (time.time() > self.totSamplesC) or (time.time() > self.globalTimeout):
-                            self.collectingData = False
-                            self.runComplete = True
-                            self.timedOut = True
+                        # end = time.time()
+                        # elapsed = (end-start)
+                        # start = time.time()
+                        #print('\nTime/refresh',elapsed)
+                        """
+                        #HAS BEEN INDENTED
+                        """
+                        if self.collectingData:
+                            if (self.counter >= self.samplesC):
+                                self.filePath, self.fileCreated = writeFile(vehicle,self.rollingGpsData,self.fileCreated,self.filePath)
+                                #I wrote this before I knew about classes. This is basically the exact use case of a class where we are setting a file
+                                #path once and then reusing it in the same function an indeterminate amount of times.
+                                self.counter = 0
+                                print("Saved data:",self.rollingGpsData)
+                                self.rollingGpsData = []
+                                
+                            if self.finSampCounter >=5 :
+                                
+                                self.filePath, self.fileCreated = writeFile(vehicle,self.rollingGpsData,self.fileCreated,self.filePath) #Write last data chunk
+                                self.collectingData = False
+                                self.runComplete = True #should be redundant I think #investigate
+                                #This is to allow us to write 5 more samples to the file but not have them in gpsData
+                                #self.running = False
+                            print('if gpsData[-1][1] >= (cutoffSpeed):', gpsData)
+                            if gpsData[-1][1] >= (cutoffSpeed):
+                                self.totSamplesC = time.time()+100 #Basically disable the timeouts if we get to here so we don't get a weird edge case where we finish 
+                                self.globalTimeout = time.time()+100 #our run less than 5 measurements before either of our timeout periods
+                                #self.collectingData = False
+                                self.runComplete = True
+                                #self.running = False
+                                
+                            if self.runComplete: #and self.collectingData:#investigate if necessary, shouldnt be
+                                self.finSampCounter +=1
+                                #print("\nFinsample self.counter:\n", self.finSampCounter) #DEBUG
+                            if (time.time() > self.totSamplesC) or (time.time() > self.globalTimeout):
+                                self.collectingData = False
+                                self.runComplete = True
+                                self.timedOut = True
 
                         #Record data up until reaching slightly past (10%) target speed, or 1 second after reaching target speed, whichever is first
                 #print("\n\ncollecting data:",self.collectingData) #DEBUG
