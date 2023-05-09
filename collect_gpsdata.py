@@ -440,7 +440,7 @@ class piScreen(tr.Thread):
                 velString = "{:.1f}".format(velocity)+"\n"+displayUnits
                 #We're using string formatting like this so it will always show two decimal places
                 velimg = dispText(textIn=velString,textLoc='se',fontColor=fontColor,backColor=False,FONTSIZE=12,
-                                   refreshRate=False,updateScreen=False,imgIn=gForceimg)
+                                   refreshRate=False,updateScreen=False,imgIn=gForceimg,tAlign='center')
                 dispText(textIn=gFString,FONTSIZE=14,textLoc='ne',backColor=False,fontColor=fontColor,
                          refreshRate=refresh,updateScreen=True,imgIn=velimg)
 
@@ -531,11 +531,11 @@ accInitTimeWhole, accInitTimeRem = divmod(accInitTime,1)
 #have the accelerometer script start first so the values in it can start to even out since it is running a madgwick filter
 for i in range(int(accInitTimeWhole),0,-1):
     dispText("Initializing IMU, \ndon't move \nsensor ("+str(round(i+accInitTimeRem,1))+")",textLoc="center"
-             ,fontColor=[255,255,255,255],FONTSIZE=15,backColor=[0,0,0])
+             ,fontColor=[255,255,255,255],FONTSIZE=15,backColor=[0,0,0],tAlign='center')
     time.sleep(1)
     
 dispText("Initializing IMU, \ndon't move \nsensor ("+str(round(0.01+accInitTimeRem,1))+")",textLoc="center"
-         ,fontColor=[255,255,255,255],FONTSIZE=15,backColor=[0,0,0])
+         ,fontColor=[255,255,255,255],FONTSIZE=15,backColor=[0,0,0],tAlign='center')
 time.sleep(accInitTimeRem+0.01)
 
 gpsThread.start()
