@@ -235,7 +235,9 @@ class gpsThr(tr.Thread):
 
 
                         print('self.prevData', self.prevData) #DEBUG
-                        print('self.currentData',self.currentData)
+                        print('self.currentData',self.currentData) #DEBUG
+                        print('gpsData 1 ',gpsData)
+                        
 
                         if self.prevData == False: #store previous data if we don't have any yet
                             self.rollingGpsData.append(self.currentData)
