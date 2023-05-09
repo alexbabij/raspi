@@ -36,7 +36,7 @@ else:
 
 
 def dispText(textIn,textLoc='center',fontColor=[255,255,255,255],FONTSIZE=15,BORDER=5,width=diwidth,height=diheight,fontBackground=False,
-             backColor=False,refreshRate=False,updateScreen=True,imgIn=False):
+             backColor=False,refreshRate=False,updateScreen=True,imgIn=False,tAlign='left'):
     #updateScreen = True : sends the new image to the screen, if False, returns image that would be sent to screen
     #backColor = False : skips drawing the background
     #imgIn = ... :can use this in combination with updateScreen = False and drawBackground = False to stack/combine multiple images together
@@ -77,7 +77,7 @@ def dispText(textIn,textLoc='center',fontColor=[255,255,255,255],FONTSIZE=15,BOR
             (0,height-(dfont_height)), #width-(dfont_width)
             refreshString,
             font=dfont,
-            fill=(fontColor[0], fontColor[1], fontColor[2], fontColor[3]),)
+            fill=(fontColor[0], fontColor[1], fontColor[2], fontColor[3]),align=tAlign)
 
 
     #debugString = "time to process output: "+str(time.time()-startTime)+"\n"#DEBUG
@@ -92,7 +92,7 @@ def dispText(textIn,textLoc='center',fontColor=[255,255,255,255],FONTSIZE=15,BOR
             (width // 2 - font_width // 2, height // 2 - font_height // 2),
             textIn,
             font=font,
-            fill=(fontColor[0], fontColor[1], fontColor[2], fontColor[3]),
+            fill=(fontColor[0], fontColor[1], fontColor[2], fontColor[3]),align=tAlign
         )
     elif textLoc in ["northwest", "nw"]:
         (font_width, font_height) = font.getsize_multiline(textIn)
@@ -103,7 +103,7 @@ def dispText(textIn,textLoc='center',fontColor=[255,255,255,255],FONTSIZE=15,BOR
             (BORDER,BORDER),
             textIn,
             font=font,
-            fill=(fontColor[0], fontColor[1], fontColor[2], fontColor[3]),
+            fill=(fontColor[0], fontColor[1], fontColor[2], fontColor[3]),align=tAlign
         )
     elif textLoc in ["southeast", "se"]:
         (font_width, font_height) = font.getsize_multiline(textIn)
@@ -114,7 +114,7 @@ def dispText(textIn,textLoc='center',fontColor=[255,255,255,255],FONTSIZE=15,BOR
             (width-(BORDER+font_width),height-(BORDER+font_height)),
             textIn,
             font=font,
-            fill=(fontColor[0], fontColor[1], fontColor[2], fontColor[3]),
+            fill=(fontColor[0], fontColor[1], fontColor[2], fontColor[3]),align=tAlign
         )
     elif textLoc in ["southwest", "sw"]:
         (font_width, font_height) = font.getsize_multiline(textIn)
@@ -125,7 +125,7 @@ def dispText(textIn,textLoc='center',fontColor=[255,255,255,255],FONTSIZE=15,BOR
             (BORDER,height-(BORDER+font_height)),
             textIn,
             font=font,
-            fill=(fontColor[0], fontColor[1], fontColor[2], fontColor[3]),
+            fill=(fontColor[0], fontColor[1], fontColor[2], fontColor[3]),align=tAlign
         )
     elif textLoc in ["northeast", "ne"]:
         (font_width, font_height) = font.getsize_multiline(textIn)
@@ -136,7 +136,7 @@ def dispText(textIn,textLoc='center',fontColor=[255,255,255,255],FONTSIZE=15,BOR
             (width-(BORDER+font_width),BORDER),
             textIn,
             font=font,
-            fill=(fontColor[0], fontColor[1], fontColor[2], fontColor[3]),
+            fill=(fontColor[0], fontColor[1], fontColor[2], fontColor[3]),align=tAlign
         )    
     else: #Put text in center as default
         (font_width, font_height) = font.getsize_multiline(textIn)
@@ -147,7 +147,7 @@ def dispText(textIn,textLoc='center',fontColor=[255,255,255,255],FONTSIZE=15,BOR
             (width // 2 - font_width // 2, height // 2 - font_height // 2),
             textIn,
             font=font,
-            fill=(fontColor[0], fontColor[1], fontColor[2], fontColor[3]),
+            fill=(fontColor[0], fontColor[1], fontColor[2], fontColor[3]),align=tAlign
         )
     # Display image.
     if updateScreen:

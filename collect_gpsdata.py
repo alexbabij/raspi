@@ -560,13 +560,10 @@ except KeyboardInterrupt:
     print("4")
     dispThread.running = False
     print("5")
-    time.sleep(0.5)
     accThread.join()
     print("6")
-    time.sleep(0.5)
     dispThread.join()
     print("7")
-    time.sleep(0.5)
     gpsThread.join()
     
     print("Threads successfully closed.")
