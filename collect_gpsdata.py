@@ -72,7 +72,8 @@ class exitGps(Exception): #currently unused
 
 def gpsRestartButton():
     print('\n\nbutton pressed\n\n') #DEBUG
-    gpsThread.restart()
+    gpsThread.restartNow = True
+    #This is basically like 'scheduling' a restart because otherwise, we could clear these variables inside of an if statement and error out
     ##buttonEnabled = False 
     #gpsThread.
 
@@ -93,6 +94,7 @@ class gpsThr(tr.Thread):
         # self.timedOut = False
         # self.restart()
         gpsSampTS = [time.time()]
+        self.restartNow = False
 
         
     def restart(self):
@@ -310,6 +312,11 @@ class gpsThr(tr.Thread):
 
                         #Record data up until reaching slightly past (10%) target speed, or 1 second after reaching target speed, whichever is first
                 #print("\n\ncollecting data:",self.collectingData) #DEBUG
+
+                if self.restartNow:
+                    self.restart() #We do this in here so we are basically scheduling a restart so all our stuff can finish
+                    self.restartNow = False
+
                 time.sleep(sleepInterval) 
             
         except KeyError:
