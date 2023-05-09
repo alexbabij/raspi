@@ -125,7 +125,9 @@ class gpsThr(tr.Thread):
         #while using + creates a new variable with the same name
         self.prevData = False
         self.usedSats = -1
-
+        self.debug1 = True #DEBUG
+        global gpsData
+        gpsData = []
         #We need to clear previous instance of single acceleration value:
         with accLock:
             accDataMag[5] = 0.0
@@ -145,7 +147,7 @@ class gpsThr(tr.Thread):
             start = time.time() #DEBUG
             gpsd = gps(mode=WATCH_ENABLE|WATCH_NEWSTYLE)
             
-            debug1 = True #DEBUG
+            self.debug1 = True #DEBUG
 
             #global accDataMag
             while (self.running == True):
@@ -216,12 +218,12 @@ class gpsThr(tr.Thread):
 
                         #DEBUG
                         #print('self.collectingData',self.collectingData) #DEBUG
-                        if debug1 & (self.collectingData & (time.time() > self.runStart+5)):
+                        if self.debug1 & (self.collectingData & (time.time() > self.runStart+5)):
                             #Run this after 10 seconds of data collection
                             self.currentData = ['debug',(cutoffSpeed-1),(time.time()-self.totstart),curAccDataMag,(accTime-time.time())]
                             gpsData.append(self.currentData)
                             self.currentData = ['debug',(cutoffSpeed+1),(time.time()-self.totstart+0.2),curAccDataMag,(accTime-time.time()+0.2)]
-                            debug1 = False
+                            self.debug1 = False
                             print("\n\nran once\n\n") 
                         #DEBUG 
 
