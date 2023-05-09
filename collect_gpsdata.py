@@ -440,7 +440,7 @@ class piScreen(tr.Thread):
                 velString = "{:.1f}".format(velocity)+"\n"+displayUnits
                 #We're using string formatting like this so it will always show two decimal places
                 velimg = dispText(textIn=velString,textLoc='se',fontColor=fontColor,backColor=False,FONTSIZE=12,
-                                   refreshRate=False,updateScreen=False,imgIn=gForceimg,tAlign='center')
+                                   refreshRate=False,updateScreen=False,imgIn=gForceimg,tAlign='right')
                 dispText(textIn=gFString,FONTSIZE=14,textLoc='ne',backColor=False,fontColor=fontColor,
                          refreshRate=refresh,updateScreen=True,imgIn=velimg)
 
