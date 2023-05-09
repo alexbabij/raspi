@@ -130,6 +130,7 @@ class gpsThr(tr.Thread):
         self.debug1 = True #DEBUG
         global gpsData
         gpsData = []
+        self.restartNow = False
         #We need to clear previous instance of single acceleration value:
         with accLock:
             accDataMag[5] = 0.0
@@ -314,6 +315,7 @@ class gpsThr(tr.Thread):
                 #print("\n\ncollecting data:",self.collectingData) #DEBUG
 
                 if self.restartNow:
+                    print('\n\nRESTARTING\n\n') #DEBUG
                     self.restart() #We do this in here so we are basically scheduling a restart so all our stuff can finish
                     self.restartNow = False
 
