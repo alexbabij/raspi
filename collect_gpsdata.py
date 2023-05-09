@@ -234,8 +234,8 @@ class gpsThr(tr.Thread):
 
                             #print("Time since start:",time.time()-self.totstart)
                             #print(self.currentData) #debug
-                            with accLock:
-                                gpsSampTS[0] = time.time() #timestamp of when latest gps sample became available
+                            # with accLock:
+                            #     gpsSampTS[0] = time.time() #timestamp of when latest gps sample became available
 
                         elif (self.prevData[0] != self.currentData[0]):#position 0 is the timestamp which will always be present and unique 
                             #print("self.currentData", self.currentData) #DEBUG
