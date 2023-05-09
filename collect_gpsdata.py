@@ -261,9 +261,10 @@ class gpsThr(tr.Thread):
                                 #This in effect inserts the 1 second of data before we reach our target acceleration into our log txt file
                                 #print("len(self.rollingGpsData)",len(self.rollingGpsData)) #debug
                             if self.collectingData: 
+                                print('self.runComplete',self.runComplete)
                                 if self.runComplete==False:
                                     gpsData.append(self.currentData)
-
+                                    
                                 #add to counter to save to file after 1 second worth of data 
                                 self.counter += 1
                         """
@@ -301,6 +302,7 @@ class gpsThr(tr.Thread):
                                 #This is to allow us to write 5 more samples to the file but not have them in gpsData
                                 #self.running = False
                             print('if gpsData[-1][1] >= (cutoffSpeed):', gpsData)
+                            print('self.restartNow',self.restartNow)
                             if gpsData[-1][1] >= (cutoffSpeed):
                                 self.totSamplesC = time.time()+100 #Basically disable the timeouts if we get to here so we don't get a weird edge case where we finish 
                                 self.globalTimeout = time.time()+100 #our run less than 5 measurements before either of our timeout periods
