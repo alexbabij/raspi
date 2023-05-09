@@ -437,9 +437,9 @@ class piScreen(tr.Thread):
 
                 gForceimg = gForceMeter(accPos=[accXpx,accYpx],circles=circlesIn,linewidth=3,backColor='#000000',justification='left') #black background
                 gFString = "{:.2f}".format(accXYMagnitude)+'G' #I am resisting the urge to name this variable 'gstring'
-                velString = "{:.1f}".format(velocity)+"\n"+displayUnits+"\n"
+                velString = "{:.1f}".format(velocity)+"\n"+displayUnits+"\n\n"
                 #We're using string formatting like this so it will always show two decimal places
-                velimg = dispText(satsString,textLoc='se',fontColor=fontColor,backColor=False,FONTSIZE=13,
+                velimg = dispText(textIn=velString,textLoc='se',fontColor=fontColor,backColor=False,FONTSIZE=12,
                                    refreshRate=False,updateScreen=False,imgIn=gForceimg)
                 dispText(textIn=gFString,FONTSIZE=14,textLoc='ne',backColor=False,fontColor=fontColor,
                          refreshRate=refresh,updateScreen=True,imgIn=velimg)
@@ -560,10 +560,13 @@ except KeyboardInterrupt:
     print("4")
     dispThread.running = False
     print("5")
+    time.sleep(0.5)
     accThread.join()
     print("6")
+    time.sleep(0.5)
     dispThread.join()
     print("7")
+    time.sleep(0.5)
     gpsThread.join()
     
     print("Threads successfully closed.")
