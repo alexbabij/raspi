@@ -3,7 +3,7 @@ updateRate:5
 timeout:20
 storage interval:1
 acceleration threshold:0.15
-current vehicle:test5
+current vehicle:golf1
 max speed:25
 units:mph
 gmeter base range:1
