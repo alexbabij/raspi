@@ -4,7 +4,7 @@ timeout:20
 storage interval:1
 acceleration threshold:0.15
 current vehicle:test4
-max speed:25
+max speed:15
 units:mph
 gmeter base range:1
 gmeter base circles:3
