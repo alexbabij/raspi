@@ -10,5 +10,5 @@ gmeter base range:1
 gmeter base circles:3
 gmeter shrink timeout:5
 screen refresh rate:30
-global timeout:300
+global timeout:30000
 accelerometer initialization time:3.2
