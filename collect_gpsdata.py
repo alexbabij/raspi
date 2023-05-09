@@ -437,10 +437,12 @@ class piScreen(tr.Thread):
 
                 gForceimg = gForceMeter(accPos=[accXpx,accYpx],circles=circlesIn,linewidth=3,backColor='#000000',justification='left') #black background
                 gFString = "{:.2f}".format(accXYMagnitude)+'G' #I am resisting the urge to name this variable 'gstring'
-                velString = str(round(velocity,1))+"\n"+displayUnits
+                velString = "{:.1f}".format(velocity)+"\n"+displayUnits+"\n"
                 #We're using string formatting like this so it will always show two decimal places
-                dispText(textIn=gFString+"\n\n\n\n\n"+velString,FONTSIZE=14,textLoc='ne',backColor=False,fontColor=fontColor,
-                         refreshRate=refresh,updateScreen=True,imgIn=gForceimg)
+                velimg = dispText(satsString,textLoc='se',fontColor=fontColor,backColor=False,FONTSIZE=13,
+                                   refreshRate=False,updateScreen=False,imgIn=gForceimg)
+                dispText(textIn=gFString,FONTSIZE=14,textLoc='ne',backColor=False,fontColor=fontColor,
+                         refreshRate=refresh,updateScreen=True,imgIn=velimg)
 
             elif self.mode == 'timer':
 
