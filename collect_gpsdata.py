@@ -203,7 +203,7 @@ class gpsThr(tr.Thread):
                         #The problem with this is that we are basically hoping to "catch" our acceleration value in a stream that updates 50 times/second
                         #while we are only checking it 5 times/second. We fix this by just reassigning it with our special tracked acceleration and time 
                         #value which is stored in collect_accel_madgwick.py
-                        
+                        print('self.collectingData 1', self.collectingData) #DEBUG
                         self.accMag = curAccDataMag #We do this so we can use this value outside of gpsThr class (in the screen class piScreen)
                        
                         #Our format is: [gps time(yyyy-mm-ddThr:min:ms), gps speed(m/s), pi time offset(s), accelerometer acceleration magnitude in earth frame(G), 
