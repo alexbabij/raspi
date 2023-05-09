@@ -130,6 +130,7 @@ class gpsThr(tr.Thread):
         self.debug1 = True #DEBUG
         global gpsData
         gpsData = []
+        print('gpsData reset', gpsData)
         
         #We need to clear previous instance of single acceleration value:
         with accLock:
@@ -233,7 +234,8 @@ class gpsThr(tr.Thread):
                         #DEBUG 
 
 
-                        
+                        print('self.prevData', self.prevData) #DEBUG
+                        print('self.currentData',self.currentData)
 
                         if self.prevData == False: #store previous data if we don't have any yet
                             self.rollingGpsData.append(self.currentData)
@@ -245,7 +247,7 @@ class gpsThr(tr.Thread):
                             #print(self.currentData) #debug
                             # with accLock:
                             #     gpsSampTS[0] = time.time() #timestamp of when latest gps sample became available
-
+                        
                         elif (self.prevData[0] != self.currentData[0]):#position 0 is the timestamp which will always be present and unique 
                             #print("self.currentData", self.currentData) #DEBUG
                             self.prevData = self.currentData
@@ -260,6 +262,7 @@ class gpsThr(tr.Thread):
                                 #this covers the case where its randomly longer than 11 which it should never be
                                 #This in effect inserts the 1 second of data before we reach our target acceleration into our log txt file
                                 #print("len(self.rollingGpsData)",len(self.rollingGpsData)) #debug
+                                print('self.collectingData 1', self.collectingData)
                             if self.collectingData: 
                                 print('self.runComplete',self.runComplete)
                                 if self.runComplete==False:
